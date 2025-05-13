@@ -1,10 +1,9 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,9 +43,6 @@ public class UserEntity {
         this.tipo = tipo;
         this.enderecos = enderecos;
         this.senha = senha;
-    }
-
-    public UserEntity(String nome, String email, String login, LocalDate dataAlteracao, TypeEntityEnum typeEntityEnum, List<Address> address) {
     }
 
     // Getters and Setters
