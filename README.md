@@ -10,7 +10,7 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 
 1. **Camada de Configuração**:
    - Configurações globais da aplicação, como a configuração do OpenAPI para documentação da API.
-   - Arquivo: [`OpenApiConfig`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/configuration/OpenApiConfig.java).
+   - Arquivo: [`OpenApiConfig`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/configuration/OpenApiConfig.java).
 
 2. **Camada de Recursos**:
    - Contém os controladores responsáveis por expor os endpoints da API.
@@ -18,7 +18,7 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 
 3. **Camada de Repositórios**:
    - Responsável pela interação com o banco de dados.
-   - Exemplo: [`xxxxxxRepository`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/repositories/xxxxxxRepository.java).
+   - Exemplo: [`xxxxxxRepository`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/infrastructure/repositories/xxxxxxRepository.java).
 
 4. **Camada de Configuração de Propriedades**:
    - Configurações específicas da aplicação, como conexão com o banco de dados e propriedades do JPA.
