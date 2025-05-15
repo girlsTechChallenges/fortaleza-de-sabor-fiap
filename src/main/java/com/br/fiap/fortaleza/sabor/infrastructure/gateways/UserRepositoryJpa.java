@@ -47,4 +47,12 @@ public class UserRepositoryJpa implements UsersRepository {
         return mapper.toUserDomain(atualizado);
     }
 
+    @Override
+    public User getById(Long idUsuario) {
+        var findUser = userRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + idUsuario));
+
+        return mapper.toUserDomain(findUser);
+    }
+
 }

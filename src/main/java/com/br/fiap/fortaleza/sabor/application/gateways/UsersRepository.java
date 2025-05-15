@@ -12,4 +12,6 @@ public interface UsersRepository {
     User save(User user);
 
     User update(Long idUsuario, User userAtualizado);
+
+    User getById(Long idUsuario);
 }

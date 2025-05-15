@@ -4,14 +4,12 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class UpdateUseCase {
+public class GetByIdUseCase {
     private final UsersRepository usersRepository;
 
-    public UpdateUseCase(UsersRepository usersRepository) { this.usersRepository = usersRepository; }
+    public GetByIdUseCase(UsersRepository usersRepository) { this.usersRepository = usersRepository; }
 
-    public User update(Long idUsuario, User userAtualizado) { return usersRepository.update(idUsuario, userAtualizado); }
+    public User getById(Long idUsuario) { return usersRepository.getById(idUsuario); }
 
 }
