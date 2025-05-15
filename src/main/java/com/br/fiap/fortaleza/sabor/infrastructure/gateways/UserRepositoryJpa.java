@@ -26,9 +26,9 @@ public class UserRepositoryJpa implements UsersRepository {
     }
 
     @Override
-    public Long save(User user) {
+    public User save(User user) {
         UserEntity userEntity = mapper.toUserEntity(user);
         var resp = userRepository.save(userEntity);
-        return resp.getId();
+        return mapper.toUserDomain(resp);
     }
 }

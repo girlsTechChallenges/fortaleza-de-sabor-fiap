@@ -28,7 +28,8 @@ public class UserEntity {
     private TypeEntityEnum tipo;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<AddressEntity> enderecos;
 
     private String senha;

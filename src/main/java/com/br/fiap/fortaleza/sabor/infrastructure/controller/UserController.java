@@ -51,8 +51,8 @@ public class UserController {
     public ResponseEntity create(@RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST {} ", userRequestDto);
-        createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
+        var rep = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
 
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(null), HttpStatus.CREATED);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(rep), HttpStatus.CREATED);
     }
 }

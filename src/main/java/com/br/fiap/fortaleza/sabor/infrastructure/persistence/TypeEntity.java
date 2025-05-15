@@ -15,8 +15,7 @@ public class TypeEntity {
     @Column(nullable = false)
     private TypeEntityEnum tipo;
 
-    public TypeEntity(Long id, TypeEntityEnum tipo) {
-        this.id = id;
+    public TypeEntity(TypeEntityEnum tipo) {
         this.tipo = tipo;
     }
 

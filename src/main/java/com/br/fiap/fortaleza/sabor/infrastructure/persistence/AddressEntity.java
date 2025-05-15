@@ -1,7 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "enderecos")
@@ -25,13 +24,7 @@ public class AddressEntity {
 
     private int cep;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UserEntity usuario;
-
-    public AddressEntity(Long id, String rua, String bairro, String complemento, int numero, String estado, String cidade, int cep, UserEntity usuario) {
-        this.id = id;
+    public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, int cep) {
         this.rua = rua;
         this.bairro = bairro;
         this.complemento = complemento;
@@ -39,10 +32,10 @@ public class AddressEntity {
         this.estado = estado;
         this.cidade = cidade;
         this.cep = cep;
-        this.usuario = usuario;
     }
 
-    public AddressEntity() {}
+    public AddressEntity() {
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -107,13 +100,5 @@ public class AddressEntity {
 
     public void setCep(int cep) {
         this.cep = cep;
-    }
-
-    public UserEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(UserEntity usuario) {
-        this.usuario = usuario;
     }
 }
