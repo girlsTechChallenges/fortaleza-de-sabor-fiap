@@ -55,4 +55,10 @@ public class UserRepositoryJpa implements UsersRepository {
         return mapper.toUserDomain(findUser);
     }
 
+    @Override
+    public User deleteById(Long idUsuario) {
+        userRepository.deleteById(idUsuario);
+        return null;
+    }
+
 }

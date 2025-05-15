@@ -14,4 +14,6 @@ public interface UsersRepository {
     User update(Long idUsuario, User userAtualizado);
 
     User getById(Long idUsuario);
+
+    User deleteById(Long idUsuario);
 }

@@ -1,9 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetByIdUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.*;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
@@ -30,13 +27,15 @@ public class UserController {
     private final GetAllUseCase getAllUseCase;
     private final UpdateUseCase updateUseCase;
     private final GetByIdUseCase getByIdUseCase;
+    private final DeleteUseCase deleteUseCase;
     private final UserEntityMapper userEntityMapper;
 
-    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UpdateUseCase updateUseCase, GetByIdUseCase getByIdUseCase, UserEntityMapper userEntityMapper) {
+    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UpdateUseCase updateUseCase, GetByIdUseCase getByIdUseCase, DeleteUseCase deleteUseCase, UserEntityMapper userEntityMapper) {
         this.createUseCase = createUseCase;
         this.getAllUseCase = getAllUseCase;
         this.updateUseCase = updateUseCase;
         this.getByIdUseCase = getByIdUseCase;
+        this.deleteUseCase = deleteUseCase;
         this.userEntityMapper = userEntityMapper;
     }
 
@@ -84,7 +83,6 @@ public class UserController {
     @Operation(summary = "Resgata o usuario por Id", description = "Permite o resgate das informacoes de um usuario especifico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Usuário localizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro na estrutura dos dados"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -95,5 +93,20 @@ public class UserController {
         var rep = getByIdUseCase.getById(idUsuario);
         return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(rep), HttpStatus.ACCEPTED);
     }
+
+    @Operation(summary = "Deleta o usuário por ID", description = "Permite a exclusão das informações de um usuário específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam @NotNull Long idUsuario) {
+        log.info("DELETE USER BY ID REQUEST {}", idUsuario);
+
+        deleteUseCase.delete(idUsuario);
+
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
