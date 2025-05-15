@@ -7,6 +7,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -31,4 +32,19 @@ public class UserRepositoryJpa implements UsersRepository {
         var resp = userRepository.save(userEntity);
         return mapper.toUserDomain(resp);
     }
+
+    @Override
+    public User update(Long idUsuario, User userAtualizado) {
+        var findUser = userRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + idUsuario));
+
+        findUser.setNome(userAtualizado.getNome());
+        findUser.setSenha(userAtualizado.getSenha());
+        findUser.setDataAlteracao(LocalDate.now());
+        findUser.setEnderecos(mapper.toAddressEntityList(userAtualizado.getAddress()));
+
+        var atualizado = userRepository.save(findUser);
+        return mapper.toUserDomain(atualizado);
+    }
+
 }

@@ -2,12 +2,15 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,11 +27,13 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final CreateUseCase createUseCase;
     private final GetAllUseCase getAllUseCase;
+    private final UpdateUseCase updateUseCase;
     private final UserEntityMapper userEntityMapper;
 
-    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UserEntityMapper userEntityMapper) {
+    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UpdateUseCase updateUseCase, UserEntityMapper userEntityMapper) {
         this.createUseCase = createUseCase;
         this.getAllUseCase = getAllUseCase;
+        this.updateUseCase = updateUseCase;
         this.userEntityMapper = userEntityMapper;
     }
 
@@ -54,5 +59,21 @@ public class UserController {
         var rep = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
 
         return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(rep), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Atualiza um usuário", description = "Permite que o usuário atualize seus dados cadastrados a partir da identificação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na estrutura dos dados"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(
+            @RequestParam @NotNull Long idUsuario,
+            @RequestBody @Valid User user
+    ) {
+        log.info("UPDATE USER REQUEST {} ", user);
+        var rep = updateUseCase.update(idUsuario, user);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(rep), HttpStatus.ACCEPTED);
     }
 }
