@@ -13,7 +13,7 @@ public class CreateUseCase {
         this.usersRepository = usersRepository;
     }
 
-    public Long save (User user) {
+    public User save (User user) {
         return usersRepository.save(user);
     }
 }

@@ -18,12 +18,12 @@ public class UserEntityMapper {
 
         List<AddressEntity> addressEntities = user.getAddress()
                 .stream().map(address -> new AddressEntity(
-                        null, address.getRua(),
+                        address.getRua(),
                         address.getBairro(),
                         address.getComplemento(),
                         address.getNumero(),
                         address.getEstado(),
-                        address.getCidade(), address.getCep(), null)).toList();
+                        address.getCidade(), address.getCep())).toList();
 
         return new UserEntity(
                 user.getNome(),
