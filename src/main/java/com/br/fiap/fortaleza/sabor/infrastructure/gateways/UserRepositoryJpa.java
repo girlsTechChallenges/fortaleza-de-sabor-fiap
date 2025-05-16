@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserRepositoryJpa implements UsersRepository {
@@ -34,7 +35,7 @@ public class UserRepositoryJpa implements UsersRepository {
     }
 
     @Override
-    public User update(Long idUsuario, User userAtualizado) {
+    public Optional<User> update(Long idUsuario, User userAtualizado) {
         var findUser = userRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + idUsuario));
 
@@ -44,21 +45,22 @@ public class UserRepositoryJpa implements UsersRepository {
         findUser.setEnderecos(mapper.toAddressEntityList(userAtualizado.getAddress()));
 
         var atualizado = userRepository.save(findUser);
-        return mapper.toUserDomain(atualizado);
+        return Optional.ofNullable(mapper.toUserDomain(atualizado));
     }
 
     @Override
-    public User getById(Long idUsuario) {
+    public Optional<User> getById(Long idUsuario) {
         var findUser = userRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + idUsuario));
 
-        return mapper.toUserDomain(findUser);
+        return Optional.ofNullable(mapper.toUserDomain(findUser));
     }
 
     @Override
-    public User deleteById(Long idUsuario) {
+    public Optional<User> deleteById(Long idUsuario) {
+        Optional<UserEntity> user = userRepository.findById(idUsuario);
         userRepository.deleteById(idUsuario);
-        return null;
+        return user.map(mapper::toUserDomain);
     }
 
 }

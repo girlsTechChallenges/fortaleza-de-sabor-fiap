@@ -29,10 +29,10 @@ public class UserEntityMapper {
                 user.getNome(),
                 user.getEmail(),
                 user.getLogin(),
+                user.getSenha(),
                 user.getDataAlteracao(),
                 TypeEntityEnum.valueOf(user.getTipo().name()),
-                addressEntities,
-                user.getSenha());
+                addressEntities);
     }
 
     public User toUserDomain(UserEntity userEntity) {

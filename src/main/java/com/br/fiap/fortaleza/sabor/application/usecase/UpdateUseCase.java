@@ -5,6 +5,7 @@ import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UpdateUseCase {
@@ -12,6 +13,6 @@ public class UpdateUseCase {
 
     public UpdateUseCase(UsersRepository usersRepository) { this.usersRepository = usersRepository; }
 
-    public User update(Long idUsuario, User userAtualizado) { return usersRepository.update(idUsuario, userAtualizado); }
+    public Optional<User> update(Long idUsuario, User userAtualizado) { return usersRepository.update(idUsuario, userAtualizado); }
 
 }

@@ -21,6 +21,8 @@ public class UserEntity {
 
     private String login;
 
+    private String senha;
+
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
@@ -32,18 +34,16 @@ public class UserEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<AddressEntity> enderecos;
 
-    private String senha;
-
     public UserEntity() {}
 
-    public UserEntity(String nome, String email, String login, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos, String senha) {
+    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
         this.nome = nome;
         this.email = email;
         this.login = login;
+        this.senha = senha;
         this.dataAlteracao = dataAlteracao;
         this.tipo = tipo;
         this.enderecos = enderecos;
-        this.senha = senha;
     }
 
     // Getters and Setters

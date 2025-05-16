@@ -10,8 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @NotNull(message = "Nome é obrigatório")

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -67,6 +68,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Usuário atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na estrutura dos dados"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,31 +77,33 @@ public class UserController {
             @RequestBody @Valid User user
     ) {
         log.info("UPDATE USER REQUEST {} ", user);
-        var rep = updateUseCase.update(idUsuario, user);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(rep), HttpStatus.ACCEPTED);
+        Optional<User> updatedUser = updateUseCase.update(idUsuario, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
     }
 
 
     @Operation(summary = "Resgata o usuario por Id", description = "Permite o resgate das informacoes de um usuario especifico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Usuário localizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{idUsuario}")
     public ResponseEntity update(
             @RequestParam @NotNull Long idUsuario
     ) {
         log.info("GET USER BY ID REQUEST {} ", idUsuario);
-        var rep = getByIdUseCase.getById(idUsuario);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(rep), HttpStatus.ACCEPTED);
+        Optional<User> user = getByIdUseCase.getById(idUsuario);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Operation(summary = "Deleta o usuário por ID", description = "Permite a exclusão das informações de um usuário específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    @DeleteMapping
+    @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> delete(@RequestParam @NotNull Long idUsuario) {
         log.info("DELETE USER BY ID REQUEST {}", idUsuario);
 

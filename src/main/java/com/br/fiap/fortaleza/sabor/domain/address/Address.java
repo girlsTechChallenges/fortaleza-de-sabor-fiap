@@ -2,10 +2,9 @@ package com.br.fiap.fortaleza.sabor.domain.address;
 
 import lombok.*;
 
-@Getter
-@Setter
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     private String rua;
     private String bairro;

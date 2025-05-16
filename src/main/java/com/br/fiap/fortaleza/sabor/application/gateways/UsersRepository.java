@@ -4,6 +4,7 @@ import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersRepository {
 
@@ -11,9 +12,9 @@ public interface UsersRepository {
 
     User save(User user);
 
-    User update(Long idUsuario, User userAtualizado);
+    Optional<User> update(Long idUsuario, User userAtualizado);
 
-    User getById(Long idUsuario);
+    Optional<User> getById(Long idUsuario);
 
-    User deleteById(Long idUsuario);
+    Optional<User> deleteById(Long idUsuario);
 }
