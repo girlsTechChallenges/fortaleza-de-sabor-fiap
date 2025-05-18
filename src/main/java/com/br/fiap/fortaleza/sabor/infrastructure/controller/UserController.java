@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody UserRequestDto userRequestDto) {
 
-        log.info("POST USER REQUEST {} ", userRequestDto);
+        log.info("POST USER REQUEST: {} ", userRequestDto);
         var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
         return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp)), HttpStatus.CREATED);
     }
