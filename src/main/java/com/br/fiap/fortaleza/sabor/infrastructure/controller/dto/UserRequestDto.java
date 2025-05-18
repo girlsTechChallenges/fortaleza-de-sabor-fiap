@@ -6,11 +6,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record UserRequestDto(
-       String nome,
+        String nome,
         String email,
         String login,
         String senha,
         LocalDate dataAlteracao,
         TypeEnum tipo,
-        List<AddressRequestDto> address) {
+        List<AddressDto> address) {
 }

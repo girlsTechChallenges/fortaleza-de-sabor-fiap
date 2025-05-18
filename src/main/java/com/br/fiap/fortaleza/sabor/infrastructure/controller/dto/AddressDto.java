@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto;
 
-public record AddressRequestDto(
+public record AddressDto(
         String rua,
         String bairro,
         String complemento,
