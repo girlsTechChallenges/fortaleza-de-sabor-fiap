@@ -8,6 +8,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST: {} ", userRequestDto);
         var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));

@@ -57,7 +57,7 @@ class UserControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         //GIVEN
-        var request = "{ \"nome\": \"string\", \"email\": \"string\", \"login\": \"string\", \"senha\": \"string\", \"dataAlteracao\": \"2025-05-17\", \"tipo\": \"DONO\", \"address\": [{ \"rua\": \"string\", \"bairro\": \"string\", \"complemento\": \"string\", \"numero\": 0, \"estado\": \"string\", \"cidade\": \"string\", \"cep\": 0 }] }";
+        var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
         var mapper = userEntityMapper.toUserDomain(requestDto);
 
