@@ -48,6 +48,7 @@ public class UserController {
     @Operation(summary = "Cria um usuário", description = "Cadastrar um usuário.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cadastra um usuário"),
+            @ApiResponse(responseCode = "400", description = "Preenchimento inválido: os critérios obrigatórios não foram satisfeitos."),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
