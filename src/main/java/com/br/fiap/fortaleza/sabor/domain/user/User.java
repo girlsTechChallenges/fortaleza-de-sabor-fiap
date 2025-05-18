@@ -9,6 +9,7 @@ import java.util.List;
 public class User {
 
     private String nome;
+    private Long id;
     private String email;
     private String login;
     private String senha;
@@ -16,8 +17,9 @@ public class User {
     private TypeEnum tipo;
     private List<Address> address;
 
-    public User(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEnum tipo, List<Address> address) {
+    public User(String nome, Long id, String email, String login, String senha, LocalDate dataAlteracao, TypeEnum tipo, List<Address> address) {
         this.nome = nome;
+        this.id = id;
         this.email = email;
         this.login = login;
         this.senha = senha;
@@ -95,4 +97,11 @@ public class User {
                 '}';
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

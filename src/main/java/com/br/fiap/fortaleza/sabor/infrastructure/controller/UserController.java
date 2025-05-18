@@ -2,8 +2,8 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,8 +38,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> getAll() {
-        return getAllUseCase.getAll();
+    public List<UserResponseDto> getAll() {
+        log.info("START GET ALL USERS");
+        var resp = getAllUseCase.getAll();
+        return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
     }
 
     @Operation(summary = "Cria um usuário", description = "Cadastrar um usuário.")
@@ -51,8 +53,7 @@ public class UserController {
     public ResponseEntity create(@RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST {} ", userRequestDto);
-        var rep = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
-
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(rep), HttpStatus.CREATED);
+        var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp)), HttpStatus.CREATED);
     }
 }

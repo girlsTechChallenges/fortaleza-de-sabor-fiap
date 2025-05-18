@@ -3,11 +3,9 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +20,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -66,7 +63,7 @@ class UserControllerTest {
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(createUseCase.save(mapper)).thenReturn(userMockOne());
+        when(createUseCase.save(mapper)).thenReturn(MockUser.userMockOne());
 
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,40 +78,31 @@ class UserControllerTest {
     @Test
     @DisplayName("Should return a list of users - return response HTTP 200 OK")
     void getAll() throws Exception {
-        //GIVEN
-        var userOne = userMockOne();
-        var userTwo = userMockTwo();
+        // GIVEN
+        var userOne = MockUser.userMockOne();
+        var userTwo = MockUser.userMockTwo();
 
-        //WHEN
+        // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-
-        when(getAllUseCase.getAll()).thenReturn(List.of(userOne,userTwo));
+        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(MockUser.responseDtoMockOne());
+        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(MockUser.responseDtoMockTwo());
+        when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
+        when(getAllUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
         mockMvc.perform(get("/usuarios")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                    [
-                        {"nome":"João Silva"},
-                        {"nome":"Maria Oliveira"}
-                    ]
-                """));
+                [
+                    { "nome": "João Silva" },
+                    { "nome": "Maria Oliveira" }
+                ]
+            """));
 
-        //THEN
+        // THEN
         verify(getAllUseCase, times(1)).getAll();
     }
-
-    private User userMockOne(){
-        return new User("João Silva", "email", "login", "senha",
-                LocalDate.of(2025,5,16), TypeEnum.DONO,
-                List.of(new Address("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
-    }
-
-    private User userMockTwo(){
-        return new User("Maria Oliveira", "email", "login", "senha",
-                LocalDate.of(2025,5,16), TypeEnum.CLIENTE,
-                List.of(new Address("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
-    }
 }
+
+
+
