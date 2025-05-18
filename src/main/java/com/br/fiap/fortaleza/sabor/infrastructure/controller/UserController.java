@@ -2,10 +2,13 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -35,8 +38,8 @@ public class UserController {
 
     @Operation(summary = "Busca todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+            @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso."),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserResponseDto> getAll() {
@@ -47,9 +50,9 @@ public class UserController {
 
     @Operation(summary = "Cria um usuário", description = "Cadastrar um usuário.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cadastra um usuário"),
-            @ApiResponse(responseCode = "400", description = "Preenchimento inválido: os critérios obrigatórios não foram satisfeitos."),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+            @ApiResponse(responseCode = "200", description = "Cadastra um usuário.", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Preenchimento inválido: os critérios obrigatórios não foram satisfeitos.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
