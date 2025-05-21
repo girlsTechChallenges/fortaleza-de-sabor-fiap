@@ -11,21 +11,21 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-
     @Mapping(source = "address", target = "enderecos")
     UserEntity toUserEntity(User user);
 
     @Mapping(source = "enderecos", target = "address")
     User toUserDomain(UserEntity userEntity);
 
+    @Mapping(target = "id", ignore = true)
     User toUserDomain(UserRequestDto userRequestDto);
 
     UserResponseDto toUserResponseDto(User user);
 
+    @Mapping(target = "id", ignore = true)
     AddressEntity toAddressEntity(Address address);
 
     Address toAddressDomain(AddressEntity addressEntity);
