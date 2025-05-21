@@ -6,13 +6,17 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserEntityMapperTest {
+@SpringBootTest
+public class UserMapperTest {
 
-    private final UserEntityMapper mapper = new UserEntityMapper();
+    @Autowired
+    UserMapper mapper;
 
     @Test
     @DisplayName("Class Mapper -  ToUserEntity")

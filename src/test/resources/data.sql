@@ -1,3 +1,8 @@
+-- Limpeza de dados existentes para evitar erros de chave duplicada
+DELETE FROM enderecos WHERE id IN (1, 2, 3);
+DELETE FROM usuarios WHERE id IN (1, 2, 3);
+DELETE FROM tipos WHERE id IN (1, 2);
+
 -- Inserção de dados na tabela de tipos
 INSERT INTO tipos (id, tipo)
 VALUES

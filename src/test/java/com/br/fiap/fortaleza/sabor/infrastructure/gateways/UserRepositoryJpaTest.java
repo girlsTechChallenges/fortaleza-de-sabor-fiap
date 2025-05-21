@@ -1,7 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
@@ -28,7 +28,7 @@ class UserRepositoryJpaTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserEntityMapper mapper;
+    private UserMapper mapper;
 
     @BeforeEach
     public void setUp() {

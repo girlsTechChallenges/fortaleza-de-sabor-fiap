@@ -5,7 +5,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,12 +28,12 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final CreateUseCase createUseCase;
     private final GetAllUseCase getAllUseCase;
-    private final UserEntityMapper userEntityMapper;
+    private final UserMapper userMapper;
 
-    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UserEntityMapper userEntityMapper) {
+    public UserController(CreateUseCase createUseCase, GetAllUseCase getAllUseCase, UserMapper userMapper) {
         this.createUseCase = createUseCase;
         this.getAllUseCase = getAllUseCase;
-        this.userEntityMapper = userEntityMapper;
+        this.userMapper = userMapper;
     }
 
     @Operation(summary = "Busca todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema.")
@@ -45,7 +45,7 @@ public class UserController {
     public List<UserResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getAllUseCase.getAll();
-        return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
+        return resp.stream().map(userMapper::toUserResponseDto).toList();
     }
 
     @Operation(summary = "Cria um usuário", description = "Cadastrar um usuário.")
@@ -58,7 +58,7 @@ public class UserController {
     public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST: {} ", userRequestDto);
-        var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp)), HttpStatus.CREATED);
+        var resp = createUseCase.save(userMapper.toUserDomain(userRequestDto));
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponseDto(resp)), HttpStatus.CREATED);
     }
 }

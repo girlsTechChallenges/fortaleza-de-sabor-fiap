@@ -4,7 +4,7 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -36,7 +36,7 @@ class UserControllerTest {
     private UserController userController;
 
     @MockitoBean
-    private UserEntityMapper userEntityMapper;
+    private UserMapper userMapper;
     @MockitoBean
     private UsersRepository usersRepository;
     @MockitoBean
@@ -46,7 +46,7 @@ class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase,getAllUseCase,userEntityMapper);
+        userController = new UserController(createUseCase,getAllUseCase,userMapper);
     }
 
     @Test
@@ -59,7 +59,7 @@ class UserControllerTest {
         //GIVEN
         var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
-        var mapper = userEntityMapper.toUserDomain(requestDto);
+        var mapper = userMapper.toUserDomain(requestDto);
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
@@ -84,8 +84,8 @@ class UserControllerTest {
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(MockUser.responseDtoMockOne());
-        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(MockUser.responseDtoMockTwo());
+        when(userMapper.toUserResponseDto(userOne)).thenReturn(MockUser.responseDtoMockOne());
+        when(userMapper.toUserResponseDto(userTwo)).thenReturn(MockUser.responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
         when(getAllUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
