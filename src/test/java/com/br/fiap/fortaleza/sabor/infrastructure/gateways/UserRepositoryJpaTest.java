@@ -1,155 +1,145 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
+import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
+import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserRepositoryJpaTest {
-
-    @Mock
-    private UserRepository userRepository;  // Mock do UserRepository
-
-    @Mock
-    private UserEntityMapper mapper;  // Mock do UserEntityMapper
+@ExtendWith(MockitoExtension.class)
+class UserRepositoryJpaTest {
 
     @InjectMocks
-    private UserRepositoryJpa userRepositoryJpa;  // A classe a ser testada
-
-    private User mockUser;
-    private UserEntity mockUserEntity;
+    UserRepositoryJpa userRepositoryJpa;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private UserEntityMapper mapper;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        // Preparando dados mockados
-        mockUser = new User("John Doe", "john@example.com", "john123", "password123", LocalDate.now(), null, null);
-        mockUserEntity = new UserEntity("John Doe", "john@example.com", "john123", "password123", LocalDate.now(), null, null);
+    public void setUp() {
+        userRepositoryJpa = new UserRepositoryJpa(userRepository,mapper);
     }
 
     @Test
-    void testGetAll() {
-        // Arrange
-        when(userRepository.findAll()).thenReturn(List.of(mockUserEntity));
-        when(mapper.toUserDomain(mockUserEntity)).thenReturn(mockUser);
+    @DisplayName("Service JPA - GetAll Users")
+    void getAll() {
+        // GIVEN
+        List<UserEntity> userEntities = List.of(MockUser.getUserEntityMock(), MockUser.getUserEntityMock());
+        List<User> expectedUsers = List.of(MockUser.userMockOne(), MockUser.userMockOne());
 
-        // Act
-        var result = userRepositoryJpa.getAll();
+        when(userRepository.findAll()).thenReturn(userEntities);
+        when(mapper.toUserDomain(any(UserEntity.class))).thenAnswer(invocation -> {
+            UserEntity entity = invocation.getArgument(0);
+            return MockUser.userMockOne();
+        });
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("John Doe", result.get(0).getNome());
+        // WHEN
+        List<User> response = userRepositoryJpa.getAll();
+
+        // THEN
+        assertNotNull(response);
+        assertEquals(expectedUsers.size(), response.size());
+        verify(userRepository).findAll();
+        verify(mapper, times(userEntities.size())).toUserDomain(any(UserEntity.class));
     }
 
     @Test
-    void testSave() {
-        // Arrange
-        when(mapper.toUserEntity(mockUser)).thenReturn(mockUserEntity);
-        when(userRepository.save(mockUserEntity)).thenReturn(mockUserEntity);
-        when(mapper.toUserDomain(mockUserEntity)).thenReturn(mockUser);
+    @DisplayName("Service JPA - Save a user in the database")
+    void save() {
+        // GIVEN
+        User user = MockUser.userMockOne();
+        UserEntity userEntity = MockUser.getUserEntityMock();
+        UserEntity savedEntity = MockUser.getUserEntityMock();
+        User expectedUser = MockUser.userMockOne();
 
-        // Act
-        User result = userRepositoryJpa.save(mockUser);
+        when(mapper.toUserEntity(user)).thenReturn(userEntity);
+        when(userRepository.save(userEntity)).thenReturn(savedEntity);
+        when(mapper.toUserDomain(savedEntity)).thenReturn(expectedUser);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("John Doe", result.getNome());
-        verify(userRepository, times(1)).save(mockUserEntity);
+        // WHEN
+        User response = userRepositoryJpa.save(user);
+
+        // THEN
+        assertNotNull(response);
+        assertEquals(expectedUser, response);
+        verify(mapper).toUserEntity(user);
+        verify(userRepository).save(userEntity);
+        verify(mapper).toUserDomain(savedEntity);
     }
 
     @Test
-    void testUpdate_UserFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserEntity));
-        when(mapper.toAddressEntityList(mockUser.getAddress())).thenReturn(mockUserEntity.getEnderecos());
-        when(userRepository.save(mockUserEntity)).thenReturn(mockUserEntity);
-        when(mapper.toUserDomain(mockUserEntity)).thenReturn(mockUser);
+    void shouldUpdateUserSuccessfully() {
+        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, TypeEnum.CLIENTE, List.of());
+        UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of());
 
-        // Act
-        var result = userRepositoryJpa.update(userId, mockUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
+        when(mapper.toAddressEntityList(user.getAddress())).thenReturn(List.of());
+        when(userRepository.save(any())).thenReturn(userEntity);
+        when(mapper.toUserDomain(userEntity)).thenReturn(user);
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("John Doe", result.get().getNome());
-        verify(userRepository, times(1)).findById(userId);
-        verify(userRepository, times(1)).save(mockUserEntity);
+        Optional<User> updated = userRepositoryJpa.update(1L, user);
+
+        assertTrue(updated.isPresent());
+        assertEquals("Carlos", updated.get().getNome());
     }
 
     @Test
-    void testUpdate_UserNotFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+    void shouldThrowExceptionWhenUserNotFoundToUpdate() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userRepositoryJpa.update(userId, mockUser));
-        assertEquals("Usuário não encontrado com id: " + userId, exception.getMessage());
+        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, TypeEnum.CLIENTE, List.of());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userRepositoryJpa.update(1L, user));
+        assertTrue(exception.getMessage().contains("Usuário não encontrado"));
     }
 
     @Test
-    void testGetById_UserFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserEntity));
-        when(mapper.toUserDomain(mockUserEntity)).thenReturn(mockUser);
+    void shouldFindUserById() {
+        UserEntity userEntity = new UserEntity("Joana", "joana@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.DONO, List.of());
+        User user = new User("Joana", "joana@email.com", "login", "senha", LocalDate.now(), TypeEnum.DONO, List.of());
 
-        // Act
-        var result = userRepositoryJpa.getById(userId);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(userEntity));
+        when(mapper.toUserDomain(userEntity)).thenReturn(user);
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("John Doe", result.get().getNome());
+        Optional<User> found = userRepositoryJpa.getById(2L);
+
+        assertTrue(found.isPresent());
+        assertEquals("Joana", found.get().getNome());
     }
 
     @Test
-    void testGetById_UserNotFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+    void shouldDeleteUserById() {
+        UserEntity userEntity = new UserEntity("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of());
+        User user = new User("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), TypeEnum.CLIENTE, List.of());
 
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userRepositoryJpa.getById(userId));
-        assertEquals("Usuário não encontrado com id: " + userId, exception.getMessage());
-    }
+        when(userRepository.findById(3L)).thenReturn(Optional.of(userEntity));
+        doNothing().when(userRepository).deleteById(3L);
+        when(mapper.toUserDomain(userEntity)).thenReturn(user);
 
-    @Test
-    void testDeleteById_UserFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserEntity));
-        when(mapper.toUserDomain(mockUserEntity)).thenReturn(mockUser);
+        Optional<User> deleted = userRepositoryJpa.deleteById(3L);
 
-        // Act
-        var result = userRepositoryJpa.deleteById(userId);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("John Doe", result.get().getNome());
-        verify(userRepository, times(1)).deleteById(userId);
-    }
-
-    @Test
-    void testDeleteById_UserNotFound() {
-        // Arrange
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertDoesNotThrow(() -> userRepositoryJpa.deleteById(userId));
-        verify(userRepository, times(1)).deleteById(userId);
+        assertTrue(deleted.isPresent());
+        assertEquals("Pedro", deleted.get().getNome());
+        verify(userRepository).deleteById(3L);
     }
 }

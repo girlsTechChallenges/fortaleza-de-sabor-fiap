@@ -1,8 +1,10 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +22,10 @@ public class OpenApiConfig {
                                 .name("Equipe Fortaleza de Sabor")
                                 .email("contato@fortalezadesabor.com")
                         )
+                )
+                .components(new Components()
+                        .addResponses("400", new ApiResponse().description("Bad Request"))
+                        .addResponses("500", new ApiResponse().description("Internal Server Error"))
                 );
     }
 }

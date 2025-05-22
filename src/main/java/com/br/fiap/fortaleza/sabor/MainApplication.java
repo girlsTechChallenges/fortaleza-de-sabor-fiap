@@ -18,3 +18,4 @@ public class MainApplication {
         return "redirect:/swagger-ui.html";
     }
 }
+

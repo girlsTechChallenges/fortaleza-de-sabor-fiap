@@ -2,7 +2,8 @@ package com.br.fiap.fortaleza.sabor.domain.address;
 
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {

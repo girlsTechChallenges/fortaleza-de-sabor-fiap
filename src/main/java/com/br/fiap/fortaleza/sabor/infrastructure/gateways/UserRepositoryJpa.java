@@ -2,9 +2,11 @@ package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,14 +37,16 @@ public class UserRepositoryJpa implements UsersRepository {
     }
 
     @Override
-    public Optional<User> update(Long idUsuario, User userAtualizado) {
-        var findUser = userRepository.findById(idUsuario)
+    public Optional<User> update(Long idUsuario, User user) {
+        UserEntity findUser = userRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + idUsuario));
 
-        findUser.setNome(userAtualizado.getNome());
-        findUser.setSenha(userAtualizado.getSenha());
+        findUser.setNome(user.getNome());
+        findUser.setEmail(user.getEmail());
+        findUser.setSenha(user.getSenha());
         findUser.setDataAlteracao(LocalDate.now());
-        findUser.setEnderecos(mapper.toAddressEntityList(userAtualizado.getAddress()));
+        findUser.setTipo(TypeEntityEnum.valueOf(user.getTipo().name()));
+        findUser.setEnderecos(mapper.toAddressEntityList(user.getAddress()));
 
         var atualizado = userRepository.save(findUser);
         return Optional.ofNullable(mapper.toUserDomain(atualizado));
