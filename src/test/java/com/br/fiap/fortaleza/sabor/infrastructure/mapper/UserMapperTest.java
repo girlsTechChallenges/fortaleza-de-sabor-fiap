@@ -6,17 +6,18 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mapstruct.factory.Mappers;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@AutoConfigureTestDatabase
 public class UserMapperTest {
 
-    @Autowired
-    UserMapper mapper;
+    private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @Test
     @DisplayName("Class Mapper -  ToUserEntity")

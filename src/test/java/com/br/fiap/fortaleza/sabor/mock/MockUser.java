@@ -40,13 +40,20 @@ public class MockUser {
                 LocalDate.of(2025,5,16),
                 TypeEntityEnum.CLIENTE, List.of(
                         new AddressEntity(
-                                "rua",
+                                "rua-01",
                                 "bairro",
                                 "complemento",
                                 0,
                                 "estado",
                                 "cidade",
-                                0)),
+                                0),new AddressEntity(
+                        "rua-02",
+                        "bairro",
+                        "complemento",
+                        0,
+                        "estado",
+                        "cidade",
+                        0)),
                 "123456");
     }
 
