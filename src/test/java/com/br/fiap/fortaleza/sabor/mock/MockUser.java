@@ -37,8 +37,10 @@ public class MockUser {
                 "João Silva",
                 "email",
                 "login",
-                LocalDate.of(2025,5,16),
-                TypeEntityEnum.CLIENTE, List.of(
+                "123",
+                LocalDate.of(2025, 5, 16),
+                TypeEntityEnum.CLIENTE,
+                List.of(
                         new AddressEntity(
                                 "rua",
                                 "bairro",
@@ -46,14 +48,17 @@ public class MockUser {
                                 0,
                                 "estado",
                                 "cidade",
-                                0)),
-                "123456");
+                                123456
+                        )
+                )
+        );
     }
+
 
     public static User userMockOne(){
         return new User(
                 "João Silva",
-                null, "email",
+                "email",
                 "login",
                 "senha",
                 LocalDate.of(2025,5,16),
@@ -65,7 +70,6 @@ public class MockUser {
     public static User userMockTwo(){
         return new User(
                 "Maria Oliveira",
-                null,
                 "email",
                 "login",
                 "senha",
@@ -77,17 +81,16 @@ public class MockUser {
 
     public static UserResponseDto responseDtoMockOne(){
         return new UserResponseDto(
-                1L,
                 "João Silva",
                 "login",
-                "email",TypeEnum.DONO,
+                "email",
+                TypeEnum.DONO,
                 List.of(new AddressDto("rua", "bairro", "complemento",
                         0, "estado", "cidade",0)));
     }
 
     public static UserResponseDto responseDtoMockTwo(){
         return new UserResponseDto(
-                2L,
                 "Maria Oliveira",
                 "login",
                 "email",

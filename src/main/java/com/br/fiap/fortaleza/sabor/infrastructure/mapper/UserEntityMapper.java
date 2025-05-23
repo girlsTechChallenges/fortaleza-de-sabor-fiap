@@ -4,6 +4,7 @@ import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
@@ -12,9 +13,55 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEn
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserEntityMapper {
+
+    //ENTRADA
+    public User toUserDomain(UserRequestDto userRequestDto) {
+
+        List<Address> addresses = userRequestDto.address().stream()
+                .map(addressEntity -> new Address(
+                        addressEntity.rua(),
+                        addressEntity.bairro(),
+                        addressEntity.complemento(),
+                        addressEntity.numero(),
+                        addressEntity.estado(),
+                        addressEntity.cidade(),
+                        addressEntity.cep()
+                )).toList();
+
+        return new User(
+                userRequestDto.nome(),
+                userRequestDto.email(),
+                userRequestDto.login(),
+                userRequestDto.senha(),
+                userRequestDto.dataAlteracao(),
+                TypeEnum.valueOf(userRequestDto.tipo().name()),
+                addresses);
+    }
+
+    public User updateToUserDomain(UpdateRequestDto updateRequestDto) {
+
+        List<Address> addresses = updateRequestDto.address().stream()
+                .map(addressEntity -> new Address(
+                        addressEntity.rua(),
+                        addressEntity.bairro(),
+                        addressEntity.complemento(),
+                        addressEntity.numero(),
+                        addressEntity.estado(),
+                        addressEntity.cidade(),
+                        addressEntity.cep()
+                )).toList();
+
+        return new User(
+                updateRequestDto.nome(),
+                updateRequestDto.email(),
+                updateRequestDto.senha(),
+                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                addresses);
+    }
 
     public UserEntity toUserEntity(User user) {
 
@@ -31,12 +78,14 @@ public class UserEntityMapper {
                 user.getNome(),
                 user.getEmail(),
                 user.getLogin(),
+                user.getSenha(),
                 user.getDataAlteracao(),
                 TypeEntityEnum.valueOf(user.getTipo().name()),
-                addressEntities,
-                user.getSenha());
+                addressEntities
+                );
     }
 
+    //SAIDA
     public User toUserDomain(UserEntity userEntity) {
 
         List<Address> addresses = userEntity.getEnderecos().stream()
@@ -52,36 +101,16 @@ public class UserEntityMapper {
 
         return new User(
                 userEntity.getNome(),
-                userEntity.getId(),
                 userEntity.getEmail(),
                 userEntity.getLogin(),
                 userEntity.getSenha(),
-                userEntity.getDataAlteracao(), TypeEnum.valueOf(userEntity.getTipo().name()),
-                addresses);
+                userEntity.getDataAlteracao(),
+                TypeEnum.valueOf(userEntity.getTipo().name()),
+                addresses
+                );
     }
 
-    public User toUserDomain(UserRequestDto userRequestDto) {
 
-        List<Address> addresses = userRequestDto.address().stream()
-                .map(addressEntity -> new Address(
-                        addressEntity.rua(),
-                        addressEntity.bairro(),
-                        addressEntity.complemento(),
-                        addressEntity.numero(),
-                        addressEntity.estado(),
-                        addressEntity.cidade(),
-                        addressEntity.cep()
-                )).toList();
-
-        return new User(
-                userRequestDto.nome(),
-               null,
-                userRequestDto.email(),
-                userRequestDto.login(),
-                userRequestDto.senha(),
-                userRequestDto.dataAlteracao(), TypeEnum.valueOf(userRequestDto.tipo().name()),
-                addresses);
-    }
 
     public UserResponseDto toUserResponseDto(User user) {
 
@@ -95,6 +124,44 @@ public class UserEntityMapper {
                         address.getEstado(),
                         address.getCep()))  .toList();
 
-        return new UserResponseDto(user.getId(), user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
     }
+
+    public UserResponseDto updateToUserResponseDto(Optional<User> optionalUser) {
+        if (optionalUser.isEmpty()) {
+            // Aqui você pode lançar uma exceção, retornar null, ou um DTO vazio, conforme sua regra de negócio
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+
+        User user = optionalUser.get();
+
+        List<AddressDto> addressDtos = user.getAddress().stream()
+                .map(address -> new AddressDto(
+                        address.getRua(),
+                        address.getBairro(),
+                        address.getComplemento(),
+                        address.getNumero(),
+                        address.getCidade(),
+                        address.getEstado(),
+                        address.getCep()))
+                .toList();
+
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+    }
+
+
+
+    public List<AddressEntity> toAddressEntityList(List<Address> addresses) {
+        return addresses.stream()
+                .map(address -> new AddressEntity(
+                        address.getRua(),
+                        address.getBairro(),
+                        address.getComplemento(),
+                        address.getNumero(),
+                        address.getEstado(),
+                        address.getCidade(),
+                        address.getCep()))
+                .toList();
+    }
+
 }

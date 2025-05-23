@@ -2,14 +2,21 @@ package com.br.fiap.fortaleza.sabor.domain.user;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     private String nome;
-    private Long id;
     private String email;
     private String login;
     private String senha;
@@ -17,70 +24,16 @@ public class User {
     private TypeEnum tipo;
     private List<Address> address;
 
-    public User(String nome, Long id, String email, String login, String senha, LocalDate dataAlteracao, TypeEnum tipo, List<Address> address) {
+    public User(
+            String nome,
+            String email,
+            String senha,
+            TypeEnum tipo,
+            List<Address> address) {
         this.nome = nome;
-        this.id = id;
         this.email = email;
-        this.login = login;
         this.senha = senha;
-        this.dataAlteracao = dataAlteracao;
         this.tipo = tipo;
-        this.address = address;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public LocalDate getDataAlteracao() {
-        return dataAlteracao;
-    }
-
-    public void setDataAlteracao(LocalDate dataAlteracao) {
-        this.dataAlteracao = dataAlteracao;
-    }
-
-    public TypeEnum getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TypeEnum tipo) {
-        this.tipo = tipo;
-    }
-
-    public List<Address> getAddress() {
-        return address;
-    }
-
-    public void setAddress(List<Address> address) {
         this.address = address;
     }
 
@@ -97,11 +50,4 @@ public class User {
                 '}';
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

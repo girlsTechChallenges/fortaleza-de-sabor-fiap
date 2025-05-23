@@ -2,7 +2,13 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetAllUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
+import com.br.fiap.fortaleza.sabor.domain.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
@@ -21,10 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,11 +48,15 @@ class UserControllerTest {
     @MockitoBean
     private CreateUseCase createUseCase;
     @MockitoBean
-    private GetAllUseCase getAllUseCase;
+    private GetUseCase getUseCase;
+    @MockitoBean
+    private UpdateUseCase updateUseCase;
+    @MockitoBean
+    private DeleteUseCase deleteUseCase;
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase,getAllUseCase,userEntityMapper);
+        userController = new UserController(createUseCase,getUseCase,updateUseCase, deleteUseCase,userEntityMapper);
     }
 
     @Test
@@ -87,7 +97,7 @@ class UserControllerTest {
         when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(MockUser.responseDtoMockOne());
         when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(MockUser.responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
-        when(getAllUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
+        when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
         mockMvc.perform(get("/usuarios")
                         .accept(MediaType.APPLICATION_JSON))
@@ -100,8 +110,42 @@ class UserControllerTest {
             """));
 
         // THEN
-        verify(getAllUseCase, times(1)).getAll();
+        verify(getUseCase, times(1)).getAll();
     }
+
+    @Test
+    @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
+    void getById() throws Exception {
+        // GIVEN
+        var user = MockUser.userMockOne();
+        var responseDto = MockUser.responseDtoMockOne();
+
+        // WHEN
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        when(getUseCase.getById(1L)).thenReturn(Optional.of(user));
+        when(userEntityMapper.updateToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
+
+        // THEN
+        mockMvc.perform(get("/usuarios/{idUsuario}", 1L)
+                        .param("idUsuario", "1"))
+                .andExpect(status().isCreated());
+
+        verify(getUseCase, times(1)).getById(1L);
+    }
+
+
+    @Test
+    @DisplayName("Should delete user by ID - return response HTTP 204 NO CONTENT")
+    void deleteById() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+
+        mockMvc.perform(delete("/usuarios/{idUsuario}", 1L)
+                        .param("idUsuario", "1"))
+                .andExpect(status().isNoContent());
+
+        verify(deleteUseCase, times(1)).delete(1L);
+    }
+
 }
 
 
