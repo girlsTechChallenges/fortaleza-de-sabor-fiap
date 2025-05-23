@@ -1,5 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +24,10 @@ public class AddressEntity {
     private String cidade;
 
     private int cep;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UserEntity usuario;
 
     public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, int cep) {
         this.rua = rua;
