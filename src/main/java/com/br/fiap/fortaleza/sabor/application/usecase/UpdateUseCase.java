@@ -14,6 +14,7 @@ public class UpdateUseCase {
 
     public UpdateUseCase(UsersRepository usersRepository) { this.usersRepository = usersRepository; }
 
-    public Optional<User> update(Long idUsuario, User user) { return usersRepository.update(idUsuario, user); }
-
+    public Optional<User> update(Long idUser, User user) {
+        return usersRepository.update(idUser, user);
+    }
 }

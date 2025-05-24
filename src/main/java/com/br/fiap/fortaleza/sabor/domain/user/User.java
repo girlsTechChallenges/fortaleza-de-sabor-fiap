@@ -2,11 +2,11 @@ package com.br.fiap.fortaleza.sabor.domain.user;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -36,18 +36,4 @@ public class User {
         this.tipo = tipo;
         this.address = address;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", login='" + login + '\'' +
-                ", senha='" + senha + '\'' +
-                ", dataAlteracao=" + dataAlteracao +
-                ", tipo=" + tipo +
-                ", address=" + address +
-                '}';
-    }
-
 }

@@ -18,7 +18,6 @@ import java.util.Optional;
 @Component
 public class UserEntityMapper {
 
-    //ENTRADA
     public User toUserDomain(UserRequestDto userRequestDto) {
 
         List<Address> addresses = userRequestDto.address().stream()
@@ -85,7 +84,6 @@ public class UserEntityMapper {
                 );
     }
 
-    //SAIDA
     public User toUserDomain(UserEntity userEntity) {
 
         List<Address> addresses = userEntity.getEnderecos().stream()
@@ -109,8 +107,6 @@ public class UserEntityMapper {
                 addresses
                 );
     }
-
-
 
     public UserResponseDto toUserResponseDto(User user) {
 
@@ -149,8 +145,6 @@ public class UserEntityMapper {
         return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
     }
 
-
-
     public List<AddressEntity> toAddressEntityList(List<Address> addresses) {
         return addresses.stream()
                 .map(address -> new AddressEntity(
@@ -163,5 +157,4 @@ public class UserEntityMapper {
                         address.getCep()))
                 .toList();
     }
-
 }

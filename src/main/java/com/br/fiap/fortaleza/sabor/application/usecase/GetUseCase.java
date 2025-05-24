@@ -20,5 +20,7 @@ public class GetUseCase {
         return usersRepository.getAll();
     }
 
-    public Optional<User> getById(Long idUsuario) { return usersRepository.getById(idUsuario); }
+    public Optional<User> getById(Long idUser) {
+        return usersRepository.getById(idUser);
+    }
 }
