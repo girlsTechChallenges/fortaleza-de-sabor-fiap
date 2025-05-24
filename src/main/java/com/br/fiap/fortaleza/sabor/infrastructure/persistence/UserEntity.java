@@ -1,7 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,9 +28,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private TypeEntityEnum tipo;
 
-    @JsonManagedReference
-    @JoinColumn(name = "id")
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario" , referencedColumnName = "id" )
     private List<AddressEntity> enderecos;
 
     public UserEntity() {}

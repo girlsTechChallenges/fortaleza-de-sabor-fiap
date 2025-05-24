@@ -13,6 +13,7 @@ public class DeleteUseCase {
 
     public DeleteUseCase(UsersRepository usersRepository) { this.usersRepository = usersRepository; }
 
-    public Optional<User> delete(Long idUsuario) { return usersRepository.deleteById(idUsuario); }
-
+    public Optional<User> delete(Long idUser) {
+        return usersRepository.deleteById(idUser);
+    }
 }

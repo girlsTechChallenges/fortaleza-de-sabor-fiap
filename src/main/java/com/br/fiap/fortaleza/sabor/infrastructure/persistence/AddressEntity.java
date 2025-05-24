@@ -24,6 +24,10 @@ public class AddressEntity {
 
     private int cep;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UserEntity usuario;
+
     public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, int cep) {
         this.rua = rua;
         this.bairro = bairro;
@@ -37,7 +41,6 @@ public class AddressEntity {
     public AddressEntity() {
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
