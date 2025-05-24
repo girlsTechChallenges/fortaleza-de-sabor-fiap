@@ -95,7 +95,6 @@ class UserRepositoryJpaTest {
         UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of());
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
-        when(mapper.toAddressEntityList(user.getAddress())).thenReturn(List.of());
         when(userRepository.save(any())).thenReturn(userEntity);
         when(mapper.toUserDomain(userEntity)).thenReturn(user);
 
