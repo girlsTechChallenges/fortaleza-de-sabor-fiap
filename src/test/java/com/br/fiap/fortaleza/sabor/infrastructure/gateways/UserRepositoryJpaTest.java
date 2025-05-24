@@ -2,6 +2,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
@@ -88,6 +89,7 @@ class UserRepositoryJpaTest {
     }
 
     @Test
+    @DisplayName("Should update user successfully.")
     void shouldUpdateUserSuccessfully() {
         User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, TypeEnum.CLIENTE, List.of());
         UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of());
@@ -104,16 +106,18 @@ class UserRepositoryJpaTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when user is not found for update.")
     void shouldThrowExceptionWhenUserNotFoundToUpdate() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, TypeEnum.CLIENTE, List.of());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userRepositoryJpa.update(1L, user));
-        assertTrue(exception.getMessage().contains("Usuário não encontrado"));
+        RuntimeException exception = assertThrows(UserNotFoundException.class, () -> userRepositoryJpa.update(1L, user));
+        assertTrue(exception.getMessage().contains(String.format("User %s not found", 1L)));
     }
 
     @Test
+    @DisplayName("Should find user by ID.")
     void shouldFindUserById() {
         UserEntity userEntity = new UserEntity("Joana", "joana@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.DONO, List.of());
         User user = new User("Joana", "joana@email.com", "login", "senha", LocalDate.now(), TypeEnum.DONO, List.of());
@@ -128,6 +132,7 @@ class UserRepositoryJpaTest {
     }
 
     @Test
+    @DisplayName("Should delete user by ID")
     void shouldDeleteUserById() {
         UserEntity userEntity = new UserEntity("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of());
         User user = new User("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), TypeEnum.CLIENTE, List.of());

@@ -3,7 +3,10 @@ package com.br.fiap.fortaleza.sabor.application.usecase;
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class GetUseCaseTest {
 
     private UsersRepository usersRepository;
@@ -23,9 +27,10 @@ class GetUseCaseTest {
     }
 
     @Test
+    @DisplayName("")
     void shouldReturnAllUsers() {
         // Arrange
-        User user1 = new User(); // ou use um método de mock: UserMock.getMock()
+        User user1 = new User();
         User user2 = new User();
         List<User> expectedUsers = List.of(user1, user2);
 
@@ -41,6 +46,7 @@ class GetUseCaseTest {
     }
 
     @Test
+    @DisplayName("Should return user by ID.")
     void shouldReturnUserById() {
         // Arrange
         Long userId = 1L;
@@ -57,6 +63,7 @@ class GetUseCaseTest {
     }
 
     @Test
+    @DisplayName("Should return empty when user is not found")
     void shouldReturnEmptyWhenUserNotFound() {
         // Arrange
         Long userId = 99L;

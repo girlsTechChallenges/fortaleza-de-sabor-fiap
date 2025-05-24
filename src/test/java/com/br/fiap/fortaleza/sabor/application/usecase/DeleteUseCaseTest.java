@@ -3,13 +3,17 @@ package com.br.fiap.fortaleza.sabor.application.usecase;
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class DeleteUseCaseTest {
 
     private UsersRepository usersRepository;
@@ -22,10 +26,11 @@ class DeleteUseCaseTest {
     }
 
     @Test
+    @DisplayName("Should delete user by ID successfully.")
     void shouldDeleteUserByIdSuccessfully() {
         // Arrange
         Long userId = 1L;
-        User mockUser = new User(); // ou use um mock ou método de mock UserMock.getMock()
+        User mockUser = new User();
         Optional<User> expected = Optional.of(mockUser);
 
         when(usersRepository.deleteById(userId)).thenReturn(expected);
@@ -40,6 +45,7 @@ class DeleteUseCaseTest {
     }
 
     @Test
+    @DisplayName("Should return empty when user is not found.")
     void shouldReturnEmptyWhenUserNotFound() {
         // Arrange
         Long userId = 2L;

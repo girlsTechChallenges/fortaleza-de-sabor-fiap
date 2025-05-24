@@ -5,13 +5,12 @@ import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
-import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
+import static com.br.fiap.fortaleza.sabor.mock.MockUser.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -73,7 +73,7 @@ class UserControllerTest {
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(createUseCase.save(mapper)).thenReturn(MockUser.userMockOne());
+        when(createUseCase.save(mapper)).thenReturn(userMockOne());
 
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,13 +89,13 @@ class UserControllerTest {
     @DisplayName("Should return a list of users - return response HTTP 200 OK")
     void getAll() throws Exception {
         // GIVEN
-        var userOne = MockUser.userMockOne();
-        var userTwo = MockUser.userMockTwo();
+        var userOne = userMockOne();
+        var userTwo = userMockTwo();
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(MockUser.responseDtoMockOne());
-        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(MockUser.responseDtoMockTwo());
+        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
+        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
         when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
@@ -117,8 +117,8 @@ class UserControllerTest {
     @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
     void getById() throws Exception {
         // GIVEN
-        var user = MockUser.userMockOne();
-        var responseDto = MockUser.responseDtoMockOne();
+        var user = userMockOne();
+        var responseDto = responseDtoMockOne();
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
@@ -128,7 +128,7 @@ class UserControllerTest {
         // THEN
         mockMvc.perform(get("/usuarios/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isAccepted());
 
         verify(getUseCase, times(1)).getById(1L);
     }
@@ -144,6 +144,29 @@ class UserControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(deleteUseCase, times(1)).delete(1L);
+    }
+
+    @Test
+    @DisplayName("Should update user successfully - return HTTP 202 response")
+    void shouldUpdateUserSuccessfully() throws Exception {
+
+        // GIVEN
+        UpdateRequestDto dto = new UpdateRequestDto(
+                "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
+                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", 123456))
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
+
+        // WHEN
+        mockMvc.perform(put("/usuarios/1")
+                        .content(new ObjectMapper().writeValueAsString(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
+
+        // THEN
+        verify(updateUseCase, times(1)).update(eq(1L), any(User.class));
     }
 
 }

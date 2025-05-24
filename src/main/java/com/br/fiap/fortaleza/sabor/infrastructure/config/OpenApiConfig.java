@@ -24,7 +24,11 @@ public class OpenApiConfig {
                         )
                 )
                 .components(new Components()
+                        .addResponses("200", new ApiResponse().description("Success"))
+                        .addResponses("202", new ApiResponse().description("Accepted"))
+                        .addResponses("204", new ApiResponse().description("No Content"))
                         .addResponses("400", new ApiResponse().description("Bad Request"))
+                        .addResponses("404", new ApiResponse().description("Not Found"))
                         .addResponses("500", new ApiResponse().description("Internal Server Error"))
                 );
     }
