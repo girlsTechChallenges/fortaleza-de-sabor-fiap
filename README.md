@@ -10,19 +10,31 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 
 1. **Camada de Configuração**:
    - Configurações globais da aplicação, como a configuração do OpenAPI para documentação da API.
-   - Arquivo: [`OpenApiConfig`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/configuration/OpenApiConfig.java).
+   - Arquivo: [`OpenApiConfig`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/config/OpenApiConfig.java).
 
-2. **Camada de Recursos**:
+2. **Camada de Controladores**:
    - Contém os controladores responsáveis por expor os endpoints da API.
-   - Exemplo: Controladores Spring MVC.
+   - Exemplo: [`UserController`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/UserController.java).
 
-3. **Camada de Repositórios**:
+3. **Camada de Casos de Uso**:
+   - Implementa a lógica de negócios da aplicação.
+   - Exemplo: [`CreateUseCase`](src/main/java/com/br/fiap/fortaleza/sabor/application/usecase/CreateUseCase.java).
+
+4. **Camada de Repositórios**:
    - Responsável pela interação com o banco de dados.
-   - Exemplo: [`xxxxxxRepository`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/infrastructure/repositories/xxxxxxRepository.java).
+   - Exemplo: [`UserRepositoryJpa`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/gateways/UserRepositoryJpa.java).
 
-4. **Camada de Configuração de Propriedades**:
-   - Configurações específicas da aplicação, como conexão com o banco de dados e propriedades do JPA.
-   - Arquivo: [`application.properties`](src/main/resources/application.properties).
+5. **Camada de Persistência**:
+   - Contém as entidades e repositórios JPA.
+   - Exemplo: [`UserEntity`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/persistence/UserEntity.java).
+
+6. **Camada de DTOs e Mapeamento**:
+   - Define os objetos de transferência de dados e realiza o mapeamento entre entidades e domínios.
+   - Exemplo: [`UserRequestDto`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/dto/UserRequestDto.java) e [`UserEntityMapper`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/mapper/UserEntityMapper.java).
+
+7. **Camada de Exceções**:
+   - Gerencia os erros e exceções da aplicação.
+   - Exemplo: [`UserNotFoundException`](src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/config/exception/UserNotFoundException.java).
 
 ---
 
@@ -35,6 +47,7 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 - **SpringDoc OpenAPI**: Ferramenta para geração automática de documentação da API.
 - **H2 Database**: Banco de dados em memória utilizado para testes.
 - **Maven**: Gerenciador de dependências e build.
+- **Docker**: Utilizado para containerização da aplicação e banco de dados.
 
 ---
 
@@ -52,15 +65,78 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 │   │   │           └── fiap/
 │   │   │               └── fortaleza/
 │   │   │                   └── sabor/
-│   │   │                       ├── [MainApplication.java](http://_vscodecontentref_/0)
+│   │   │                       ├── MainApplication.java
+│   │   │                       ├── application/
+│   │   │                       │   └── usecase/   # Casos de uso
+│   │   │                       ├── domain/       # Domínios
 │   │   │                       ├── infrastructure/
-│   │   │                       │   ├── configuration/
-│   │   │                       │   │   └── [OpenApiConfig.java](http://_vscodecontentref_/1)
-│   │   │                       │   └── repositories/
-│   │   │                       │       └── [xxxxxxRepository.java](http://_vscodecontentref_/2)
+│   │   │                       │   ├── config/   # Configurações
+│   │   │                       │   ├── controller/ # Controladores
+│   │   │                       │   ├── dto/      # DTOs
+│   │   │                       │   ├── gateways/ # Repositórios customizados
+│   │   │                       │   ├── mapper/   # Mapeamento de entidades
+│   │   │                       │   └── persistence/ # Entidades JPA
 │   │   └── resources/        # Recursos como arquivos de configuração
-│   │       └── [application.properties](http://_vscodecontentref_/3)
+│   │       ├── application.properties
+│   │       └── application-test.properties
 │   └── test/                 # Código de testes
 ├── target/                  # Arquivos gerados pelo build
-├── [pom.xml](http://_vscodecontentref_/4)                  # Configuração do Maven
-└── [README.md](http://_vscodecontentref_/5)                # Documentação do projeto
+├── Dockerfile               # Dockerfile para a aplicação
+├── docker-compose.yml       # Configuração do Docker Compose
+├── pom.xml                  # Configuração do Maven
+└── README.md                # Documentação do projeto
+```
+
+---
+
+## Como Executar o Projeto
+
+### Pré-requisitos
+
+- **Java 21** instalado.
+- **Maven** instalado.
+- **Docker** e **Docker Compose** instalados.
+
+### Passos
+
+1. **Clonar o repositório**:
+   ```bash
+   git clone https://github.com/seu-usuario/fortaleza-de-sabor.git
+   cd fortaleza-de-sabor
+   ```
+
+2. **Construir o projeto**:
+   ```bash
+   ./mvnw clean install
+   ```
+
+3. **Executar com Docker Compose**:
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Acessar a aplicação**:
+   - A API estará disponível em: [http://localhost:8080](http://localhost:8080).
+   - A documentação do Swagger estará em: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
+
+---
+
+## Testes
+
+Os testes estão localizados no diretório `src/test`. Para executá-los, utilize o comando:
+
+```bash
+./mvnw test
+```
+
+---
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+---
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo `LICENSE` para mais informações.
