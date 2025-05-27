@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,12 +64,10 @@ public class UserController {
     @Operation(summary = "Resgata o usuario por Id", description = "Permite o resgate das informacoes de um usuario especifico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Usuário localizado com sucesso", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping("/{idUser}")
-    @PreAuthorize("hasAuthority('SCOPE_DONO')")
     public ResponseEntity getUserByID(
             @PathVariable @NotNull Long idUser
     ) {
@@ -82,11 +79,9 @@ public class UserController {
     @Operation(summary = "Busca todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso."),
-            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('SCOPE_DONO')")
     public List<UserResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getUseCase.getAll();
@@ -115,11 +110,9 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @DeleteMapping("/{idUser}")
-    @PreAuthorize("hasAuthority('SCOPE_DONO')")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long idUser) {
         log.info("DELETE USER BY ID REQUEST {}", idUser);
         deleteUseCase.delete(idUser);
