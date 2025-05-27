@@ -131,6 +131,44 @@ Os testes estão localizados no diretório `src/test`. Para executá-los, utiliz
 
 ---
 
+## Testing with Postman
+
+1. Import the collection from `postman/fortaleza-de-sabor.postman_collection.json`
+2. Import the environment from `postman/local-environment.postman_environment.json`
+3. Select the "Local Environment" in Postman
+4. Execute the requests in the following order:
+   - Create User
+   - Login Validation
+   - Change Password
+
+---
+
+## Testando com Postman
+
+1. Importe a collection do arquivo `postman/fortaleza-de-sabor.postman_collection.json`
+2. Importe o ambiente do arquivo `postman/local-environment.postman_environment.json`
+3. Selecione o ambiente "Local Environment" no Postman
+4. Execute as requisições na seguinte ordem:
+   - Criar Usuário
+   - Validação de Login
+   - Alteração de Senha
+
+---
+
+## Endpoints Disponíveis
+
+### Usuários
+- **POST** `/api/users` - Criar novo usuário
+- **PUT** `/api/users/{id}` - Atualizar usuário existente
+- **GET** `/api/users/{id}` - Buscar usuário por ID
+- **DELETE** `/api/users/{id}` - Remover usuário
+
+### Autenticação
+- **POST** `/api/auth/login` - Validar login
+- **PUT** `/api/auth/password` - Alterar senha
+
+---
+
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
