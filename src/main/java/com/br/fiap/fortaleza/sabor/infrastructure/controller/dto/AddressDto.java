@@ -1,9 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record AddressDto(
         @NotBlank @Size(min = 2, max = 100) String rua,
@@ -12,6 +9,8 @@ public record AddressDto(
         @NotNull @Positive int numero,
         @NotBlank @Size(min = 2, max = 50) String estado,
         @NotBlank @Size(min = 2, max = 50) String cidade,
-        @NotNull @Positive @Size(min = 8, max = 8) int cep
+        @NotNull
+        @Pattern(regexp = "^\\d{8}$", message = "O CEP deve conter exatamente 8 dígitos")
+        String cep
 ) {}
 

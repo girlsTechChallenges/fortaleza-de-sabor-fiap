@@ -13,5 +13,5 @@ public class Address {
     private int numero;
     private String estado;
     private String cidade;
-    private int cep;
+    private String cep;
 }
