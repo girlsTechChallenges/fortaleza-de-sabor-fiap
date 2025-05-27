@@ -81,8 +81,10 @@ public class UserEntity {
         return dataAlteracao;
     }
 
-    public void setDataAlteracao(LocalDate dataAlteracao) {
-        this.dataAlteracao = dataAlteracao;
+    @PrePersist
+    @PreUpdate
+    public void setDataAlteracao() {
+        this.dataAlteracao = LocalDate.now();
     }
 
     public TypeEntityEnum getTipo() {

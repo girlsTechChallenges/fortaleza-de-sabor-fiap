@@ -123,7 +123,7 @@ class UserControllerTest {
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(getUseCase.getById(1L)).thenReturn(Optional.of(user));
-        when(userEntityMapper.updateToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
+        when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
 
         // THEN
         mockMvc.perform(get("/usuarios/{idUsuario}", 1L)
@@ -153,7 +153,7 @@ class UserControllerTest {
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(
                 "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
-                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", 123456))
+                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();

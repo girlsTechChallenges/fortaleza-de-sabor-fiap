@@ -22,13 +22,13 @@ public class AddressEntity {
 
     private String cidade;
 
-    private int cep;
+    private String cep;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UserEntity usuario;
 
-    public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, int cep) {
+    public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
         this.rua = rua;
         this.bairro = bairro;
         this.complemento = complemento;
@@ -97,11 +97,11 @@ public class AddressEntity {
         this.cidade = cidade;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 }

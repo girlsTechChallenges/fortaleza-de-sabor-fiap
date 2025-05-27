@@ -30,7 +30,7 @@ public class MockUser {
                                 0,
                                 "estado",
                                 "cidade",
-                                123456
+                                "03565000"
                         )
                 )
         );
@@ -46,7 +46,7 @@ public class MockUser {
                 LocalDate.of(2025,5,16),
                 TypeEnum.DONO,
                 List.of(new Address("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
+                        0, "estado", "cidade","03565000")));
     }
 
     public static User userMockTwo(){
@@ -58,7 +58,7 @@ public class MockUser {
                 LocalDate.of(2025,5,16),
                 TypeEnum.CLIENTE,
                 List.of(new Address("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
+                        0, "estado", "cidade","03565000")));
     }
 
     public static UserResponseDto responseDtoMockOne(){
@@ -68,7 +68,7 @@ public class MockUser {
                 "email",
                 TypeEnum.DONO,
                 List.of(new AddressDto("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
+                        0, "estado", "cidade","03565000")));
     }
 
     public static UserResponseDto responseDtoMockTwo(){
@@ -78,6 +78,6 @@ public class MockUser {
                 "email",
                 TypeEnum.CLIENTE,
                 List.of(new AddressDto("rua", "bairro", "complemento",
-                        0, "estado", "cidade",0)));
+                        0, "estado", "cidade","03565000")));
     }
 }
