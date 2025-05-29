@@ -46,12 +46,12 @@ public class UserController {
         this.userEntityMapper = userEntityMapper;
     }
 
-    @Operation(summary = "Cria um usuário", description = "Cadastrar um usuário.")
+    @Operation(summary = "Create a user", description = "Register a user.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cadastra um usuário.", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Preenchimento inválido: os critérios obrigatórios não foram satisfeitos.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "409", description = "Usuário já cadastrado.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "200", description = "Register a user.", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid field: mandatory criteria were not met.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "409", description = "User already registered.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
@@ -61,11 +61,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp));
     }
 
-    @Operation(summary = "Resgata o usuario por Id", description = "Permite o resgate das informacoes de um usuario especifico")
+    @Operation(summary = "Rescue the user by Id", description = "Allows the retrieval of information from a specific user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Usuário localizado com sucesso", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "202", description = "User successfully located", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping("/{idUser}")
     public ResponseEntity getUserByID(
@@ -76,10 +76,10 @@ public class UserController {
         return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "Busca todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema.")
+    @Operation(summary = "Search all users", description = "Returns a list of all users registered in the system.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso."),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "200", description = "User list returned successfully."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserResponseDto> getAll() {
@@ -88,12 +88,12 @@ public class UserController {
         return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
     }
 
-    @Operation(summary = "Atualiza um usuário", description = "Permite que o usuário atualize seus dados cadastrados a partir da identificação")
+    @Operation(summary = "Update a user", description = "Allows the user to update their registered data from identification")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Usuário atualizado com sucesso", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Erro na estrutura dos dados", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "202", description = "User updated successfully", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Data structure error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
 
     @PutMapping(value = "/{idUser}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,11 +106,11 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "Deleta o usuário por ID", description = "Permite a exclusão das informações de um usuário específico")
+    @Operation(summary = "Delete user by ID", description = "Allows deletion of a specific user's information")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @DeleteMapping("/{idUser}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long idUser) {
