@@ -10,7 +10,7 @@ public record AddressDto(
         @NotBlank @Size(min = 2, max = 50) String estado,
         @NotBlank @Size(min = 2, max = 50) String cidade,
         @NotNull
-        @Pattern(regexp = "^\\d{8}$", message = "O CEP deve conter exatamente 8 dígitos")
+        @Pattern(regexp = "^\\d{8}$", message = "The zip code must contain exactly 8 digits")
         String cep
 ) {}
 
