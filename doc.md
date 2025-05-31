@@ -16,17 +16,47 @@ Desenvolver um backend completo e robusto utilizando Spring Boot, com foco no ge
 
 ## 2. Arquitetura do Sistema
 ### Descrição da Arquitetura
-O projeto segue uma arquitetura modular e organizada, com as seguintes camadas principais:
-- **Configuração**: Configurações globais da aplicação, como OpenAPI.
-- **Controladores**: Exposição de endpoints da API.
-- **Casos de Uso**: Lógica de negócios.
-- **Repositórios**: Interação com o banco de dados.
-- **Persistência**: Entidades e repositórios JPA.
-- **DTOs e Mapeamento**: Transferência de dados e mapeamento.
-- **Exceções**: Gerenciamento de erros.
+O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Architecture e DDD (Domain-Driven Design), organizada da seguinte forma:
+
+#### Camada de Apresentação
+- **Controllers**: Exposição dos endpoints REST da API (`UserController`, `AuthController`).
+- **DTOs**: Objetos de transferência de dados para request/response.
+- **Exception Handlers**: Tratamento centralizado de exceções (`UserExceptionHandler`).
+
+#### Camada de Domínio
+- **Use Cases**: Implementação das regras de negócio.
+  - `AuthUseCase`: Autenticação e gestão de senhas
+  - `CreateUseCase`: Criação de usuários
+  - `UpdateUseCase`: Atualização de usuários
+  - `DeleteUseCase`: Remoção de usuários
+  - `GetUseCase`: Consulta de usuários
+- **Entidades**: Classes que representam o domínio (`User`, `Address`).
+
+#### Camada de Infraestrutura
+- **Gateways**: Interfaces de acesso a dados.
+- **Repositórios**: Implementações JPA para persistência.
+- **Mappers**: Conversão entre entidades e DTOs.
+
+#### Banco de Dados
+- PostgreSQL para persistência dos dados.
 
 ### Diagrama da Arquitetura
+O diagrama abaixo ilustra a interação entre as camadas da aplicação:
+
 ![Diagrama de Arquitetura](diagram.png)
+
+O fluxo típico de uma requisição é:
+1. O cliente faz uma requisição HTTP que é recebida pelos Controllers
+2. Os Controllers convertem os dados usando DTOs e Mappers
+3. Os Use Cases implementam a lógica de negócio usando as Entidades
+4. Os Repositories realizam as operações no banco de dados
+5. O resultado volta pela mesma cadeia até o cliente
+
+Esta arquitetura garante:
+- Separação clara de responsabilidades
+- Baixo acoplamento entre os componentes
+- Facilidade de teste e manutenção
+- Escalabilidade e flexibilidade
 
 ---
 
@@ -34,18 +64,18 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 ### Tabela de Endpoints
 | Endpoint               | Método  | Descrição                        |
 |------------------------|---------|----------------------------------|
-| `/usuarios`            | POST    | Criar novo usuário               |
-| `/usuarios/{idUser}`   | PUT     | Atualizar usuário                |
-| `/usuarios/{idUser}`   | GET     | Buscar usuário por ID            |
-| `/usuarios`            | GET     | Buscar todos os usuários         |
-| `/usuarios/{idUser}`   | DELETE  | Remover usuário                  |
+| `/users`               | POST    | Criar novo usuário               |
+| `/users/{id}`          | PUT     | Atualizar usuário                |
+| `/users/{id}`          | GET     | Buscar usuário por ID            |
+| `/users`               | GET     | Buscar todos os usuários         |
+| `/users/{id}`          | DELETE  | Remover usuário                  |
 | `/auth/login`          | POST    | Validar login                    |
 | `/auth/password`       | PATCH   | Alterar senha                    |
 
 ### Exemplos de requisição e resposta
 
 #### Criar Usuário
-**POST** `/usuarios`
+**POST** `/users`
 
 Request:
 ```json
@@ -91,7 +121,7 @@ Response (201 Created):
 ```
 
 #### Buscar Usuário por ID
-**GET** `/usuarios/{idUser}`
+**GET** `/users/{id}`
 
 Response (202 Accepted):
 ```json
@@ -115,7 +145,7 @@ Response (202 Accepted):
 ```
 
 #### Buscar Todos os Usuários
-**GET** `/usuarios`
+**GET** `/users`
 
 Response (200 OK):
 ```json
@@ -136,29 +166,12 @@ Response (200 OK):
         "cep": 85965000
       }
     ]
-  },
-  {
-    "nome": "Maria Oliveira",
-    "login": "mariaoliveira",
-    "email": "maria@email.com",
-    "tipo": "CLIENTE",
-    "address": [
-      {
-        "rua": "Rua das Flores",
-        "bairro": "Centro",
-        "complemento": "apto 101",
-        "numero": 50,
-        "estado": "Ceará",
-        "cidade": "Fortaleza",
-        "cep": 60000000
-      }
-    ]
   }
 ]
 ```
 
 #### Atualizar Usuário
-**PUT** `/usuarios/{idUser}`
+**PUT** `/users/{id}`
 
 Request:
 ```json
@@ -204,7 +217,7 @@ Response (202 Accepted):
 ```
 
 #### Remover Usuário
-**DELETE** `/usuarios/{idUser}`
+**DELETE** `/users/{id}`
 
 Response (204 No Content):
 
@@ -265,8 +278,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres   # Usuário do banco para o Spring
       - SPRING_DATASOURCE_PASSWORD=postgres   # Senha do banco para o Spring
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update  # Configuração do Hibernate para atualizar o schema automaticamente
-    ports:
-      - "8080:8081"         # Mapeia a porta 8081 do container para a 8080 do host
+    ports:      - "8080:8080"         # Mapeia a porta 8080 do container para a 8080 do host
 
   db:
     image: postgres:latest # Imagem oficial do PostgreSQL
@@ -314,6 +326,32 @@ services:
 - **DRY**: Código reutilizável e modular.
 - **SOLID**: Princípios de design orientado a objetos.
 - **Convenções do Spring Boot**: Seguindo padrões do framework.
+
+### Testes Implementados
+O projeto possui uma cobertura de testes abrangente, incluindo:
+
+#### Testes de Use Cases:
+- `AuthUseCaseTest`: Testes de autenticação e validação de login
+- `CreateUseCaseTest`: Testes de criação de usuários
+- `DeleteUseCaseTest`: Testes de remoção de usuários
+- `GetUseCaseTest`: Testes de busca de usuários
+- `UpdateUseCaseTest`: Testes de atualização de usuários
+
+#### Testes de Controllers:
+- `AuthControllerTest`: Testes dos endpoints de autenticação
+- `UserControllerTest`: Testes dos endpoints de CRUD de usuários
+
+#### Testes de Infraestrutura:
+- `UserExceptionHandlerTest`: Testes de tratamento de exceções
+- `UserRepositoryJpaTest`: Testes de persistência
+- `UserEntityMapperTest`: Testes de mapeamento entre entidades
+
+### Artefatos Gerados
+O projeto gera os seguintes artefatos após a build:
+- JAR executável: `fortaleza.sabor-0.0.1-SNAPSHOT.jar`
+- JAR original: `fortaleza.sabor-0.0.1-SNAPSHOT.jar.original`
+- Relatórios de teste: Disponíveis em `target/surefire-reports/`
+- Propriedades da aplicação: Configuradas em `target/classes/application.properties`
 
 ---
 

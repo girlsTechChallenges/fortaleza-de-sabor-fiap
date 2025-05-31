@@ -1,3 +1,6 @@
+# Diagrama de Arquitetura
+
+```mermaid
 graph TD
     %% Camadas da Aplicação
     subgraph Apresentação[Camada de Apresentação]
@@ -43,9 +46,4 @@ graph TD
     class UseCases,Entities domain
     class Gateways,Repositories,Mappers infrastructure
     class PostgreSQL database
-    Configuração --> Controladores
-    Controladores --> Casos_de_Uso
-    Casos_de_Uso --> Repositórios
-    Repositórios --> Persistência
-    Persistência --> DTOs_e_Mapeamento
-    DTOs_e_Mapeamento --> Exceções
+```
