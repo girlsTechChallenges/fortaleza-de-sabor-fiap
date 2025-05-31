@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -18,11 +20,13 @@ class UpdateUseCaseTest {
 
     private UsersRepository usersRepository;
     private UpdateUseCase updateUseCase;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         usersRepository = mock(UsersRepository.class);
-        updateUseCase = new UpdateUseCase(usersRepository);
+        passwordEncoder = mock(BCryptPasswordEncoder.class);
+        updateUseCase = new UpdateUseCase(usersRepository, passwordEncoder);
     }
 
     @Test

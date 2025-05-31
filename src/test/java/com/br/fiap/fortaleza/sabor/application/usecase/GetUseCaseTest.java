@@ -27,7 +27,7 @@ class GetUseCaseTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Should return all users")
     void shouldReturnAllUsers() {
         // Arrange
         User user1 = new User();

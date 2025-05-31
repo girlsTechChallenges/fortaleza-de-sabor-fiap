@@ -1,6 +1,9 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.*;
+import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
@@ -47,6 +50,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cadastra um usuário.", content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Preenchimento inválido: os critérios obrigatórios não foram satisfeitos.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Usuário já cadastrado.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,7 +58,7 @@ public class UserController {
 
         log.info("POST USER REQUEST: {} ", userRequestDto);
         var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp)), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp));
     }
 
     @Operation(summary = "Resgata o usuario por Id", description = "Permite o resgate das informacoes de um usuario especifico")
@@ -64,12 +68,12 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping("/{idUser}")
-    public ResponseEntity update(
+    public ResponseEntity getUserByID(
             @PathVariable @NotNull Long idUser
     ) {
         log.info("GET USER BY ID REQUEST {} ", idUser);
         Optional<User> user = getUseCase.getById(idUser);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.updateToUserResponseDto(user)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
     }
 
     @Operation(summary = "Busca todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema.")

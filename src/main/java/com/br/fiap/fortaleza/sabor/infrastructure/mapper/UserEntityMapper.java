@@ -2,11 +2,9 @@ package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
@@ -123,7 +121,7 @@ public class UserEntityMapper {
         return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
     }
 
-    public UserResponseDto updateToUserResponseDto(Optional<User> optionalUser) {
+    public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
         if (optionalUser.isEmpty()) {
             // Aqui você pode lançar uma exceção, retornar null, ou um DTO vazio, conforme sua regra de negócio
             throw new IllegalArgumentException("Usuário não encontrado");
@@ -157,4 +155,9 @@ public class UserEntityMapper {
                         address.getCep()))
                 .toList();
     }
+
+    public UserAuthDto toTokenResponseDto(Token token) {
+        return new UserAuthDto(token.getAccessToken(), token.getExpiresIn());
+    }
+
 }
