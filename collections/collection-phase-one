@@ -12,7 +12,7 @@ collection:
       modified: 1747442332155
       sortKey: -1747442332155
     children:
-      - url: http://localhost:8081/users
+      - url: http://localhost:8080/users
         name: Create User
         meta:
           id: req_d22394a3e7044a76aeb56c9133c4b05e
@@ -81,7 +81,7 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: http://localhost:8081/users/1
+      - url: http://localhost:8080/users/1
         name: Get ID User
         meta:
           id: req_9860d66316f04b72a06da84e761d631e
