@@ -32,36 +32,275 @@ O projeto segue uma arquitetura modular e organizada, com as seguintes camadas p
 
 ## 3. Descrição dos Endpoints da API
 ### Tabela de Endpoints
-| Endpoint               | Método | Descrição               |
-|------------------------|--------|-------------------------|
-| `/api/users`           | POST   | Criar novo usuário      |
-| `/api/users/{id}`      | PUT    | Atualizar usuário       |
-| `/api/users/{id}`      | GET    | Buscar usuário por ID   |
-| `/api/users/{id}`      | DELETE | Remover usuário         |
-| `/api/auth/login`      | POST   | Validar login           |
-| `/api/auth/password`   | PUT    | Alterar senha           |
+| Endpoint               | Método  | Descrição                        |
+|------------------------|---------|----------------------------------|
+| `/usuarios`            | POST    | Criar novo usuário               |
+| `/usuarios/{idUser}`   | PUT     | Atualizar usuário                |
+| `/usuarios/{idUser}`   | GET     | Buscar usuário por ID            |
+| `/usuarios`            | GET     | Buscar todos os usuários         |
+| `/usuarios/{idUser}`   | DELETE  | Remover usuário                  |
+| `/auth/login`          | POST    | Validar login                    |
+| `/auth/password`       | PATCH   | Alterar senha                    |
 
 ### Exemplos de requisição e resposta
-Descreva aqui exemplos de requisições e possíveis respostas.
+
+#### Criar Usuário
+**POST** `/usuarios`
+
+Request:
+```json
+{
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "login": "joaosilva",
+  "senha": "senha1234",
+  "dataAlteracao": "2025-05-17",
+  "tipo": "DONO",
+  "address": [
+    {
+      "rua": "Rua Alves Paulista",
+      "bairro": "Paulista Nova",
+      "complemento": "casa",
+      "numero": 130,
+      "estado": "São Paulo",
+      "cidade": "São Paulo",
+      "cep": 85965000
+    }
+  ]
+}
+```
+Response (201 Created):
+```json
+{
+  "nome": "João Silva",
+  "login": "joaosilva",
+  "email": "joao@email.com",
+  "tipo": "DONO",
+  "address": [
+    {
+      "rua": "Rua Alves Paulista",
+      "bairro": "Paulista Nova",
+      "complemento": "casa",
+      "numero": 130,
+      "estado": "São Paulo",
+      "cidade": "São Paulo",
+      "cep": 85965000
+    }
+  ]
+}
+```
+
+#### Buscar Usuário por ID
+**GET** `/usuarios/{idUser}`
+
+Response (202 Accepted):
+```json
+{
+  "nome": "João Silva",
+  "login": "joaosilva",
+  "email": "joao@email.com",
+  "tipo": "DONO",
+  "address": [
+    {
+      "rua": "Rua Alves Paulista",
+      "bairro": "Paulista Nova",
+      "complemento": "casa",
+      "numero": 130,
+      "estado": "São Paulo",
+      "cidade": "São Paulo",
+      "cep": 85965000
+    }
+  ]
+}
+```
+
+#### Buscar Todos os Usuários
+**GET** `/usuarios`
+
+Response (200 OK):
+```json
+[
+  {
+    "nome": "João Silva",
+    "login": "joaosilva",
+    "email": "joao@email.com",
+    "tipo": "DONO",
+    "address": [
+      {
+        "rua": "Rua Alves Paulista",
+        "bairro": "Paulista Nova",
+        "complemento": "casa",
+        "numero": 130,
+        "estado": "São Paulo",
+        "cidade": "São Paulo",
+        "cep": 85965000
+      }
+    ]
+  },
+  {
+    "nome": "Maria Oliveira",
+    "login": "mariaoliveira",
+    "email": "maria@email.com",
+    "tipo": "CLIENTE",
+    "address": [
+      {
+        "rua": "Rua das Flores",
+        "bairro": "Centro",
+        "complemento": "apto 101",
+        "numero": 50,
+        "estado": "Ceará",
+        "cidade": "Fortaleza",
+        "cep": 60000000
+      }
+    ]
+  }
+]
+```
+
+#### Atualizar Usuário
+**PUT** `/usuarios/{idUser}`
+
+Request:
+```json
+{
+  "nome": "João Silva Atualizado",
+  "email": "joao@email.com",
+  "login": "joaosilva",
+  "senha": "novaSenha123",
+  "dataAlteracao": "2025-06-01",
+  "tipo": "DONO",
+  "address": [
+    {
+      "rua": "Rua Nova",
+      "bairro": "Paulista Nova",
+      "complemento": "casa",
+      "numero": 130,
+      "estado": "São Paulo",
+      "cidade": "São Paulo",
+      "cep": 85965000
+    }
+  ]
+}
+```
+Response (202 Accepted):
+```json
+{
+  "nome": "João Silva Atualizado",
+  "login": "joaosilva",
+  "email": "joao@email.com",
+  "tipo": "DONO",
+  "address": [
+    {
+      "rua": "Rua Nova",
+      "bairro": "Paulista Nova",
+      "complemento": "casa",
+      "numero": 130,
+      "estado": "São Paulo",
+      "cidade": "São Paulo",
+      "cep": 85965000
+    }
+  ]
+}
+```
+
+#### Remover Usuário
+**DELETE** `/usuarios/{idUser}`
+
+Response (204 No Content):
+
+---
+
+#### Login
+**POST** `/auth/login`
+
+Request:
+```json
+{
+  "email": "joao@email.com",
+  "password": "senha1234"
+}
+```
+Response (200 OK):
+```json
+{
+  "token": "<jwt-token>",
+  "id": 5
+}
+```
+
+#### Alterar Senha
+**PATCH** `/auth/password`
+
+Request:
+```json
+{
+  "email": "joao@email.com",
+  "password": "novaSenha123"
+}
+```
+Response (204 No Content):
 
 ---
 
 ## 4. Configuração do Projeto
 ### Configuração do Docker Compose
-O arquivo `docker-compose.yml` orquestra a aplicação e o banco de dados PostgreSQL. Ele define os serviços necessários para execução do sistema.
+O arquivo `docker-compose.yml` orquestra a aplicação e o banco de dados PostgreSQL. Abaixo, cada comando e configuração do arquivo é explicado:
+
+#### Estrutura do docker-compose.yml
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .           # Define o diretório de build da aplicação (raiz do projeto)
+    container_name: app    # Nome do container da aplicação
+    depends_on:
+      - db                 # Garante que o banco de dados (db) será iniciado antes da aplicação
+    environment:
+      - POSTGRES_USER=postgres                # Usuário do banco de dados
+      - POSTGRES_PASSWORD=postgres            # Senha do banco de dados
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres  # URL de conexão do Spring para o banco
+      - SPRING_DATASOURCE_USERNAME=postgres   # Usuário do banco para o Spring
+      - SPRING_DATASOURCE_PASSWORD=postgres   # Senha do banco para o Spring
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update  # Configuração do Hibernate para atualizar o schema automaticamente
+    ports:
+      - "8080:8081"         # Mapeia a porta 8081 do container para a 8080 do host
+
+  db:
+    image: postgres:latest # Imagem oficial do PostgreSQL
+    container_name: db     # Nome do container do banco de dados
+    environment:
+      - POSTGRES_USER=postgres      # Usuário padrão do banco
+      - POSTGRES_PASSWORD=postgres  # Senha padrão do banco
+      - POSTGRES_DB=postgres        # Nome do banco de dados
+    ports:
+      - "5432:5432"        # Mapeia a porta 5432 do container para a 5432 do host
+```
+
+#### Explicação dos principais comandos e parâmetros:
+- `version`: Define a versão do Docker Compose utilizada.
+- `services`: Define os serviços que serão orquestrados (app e db).
+- `build.context`: Diretório onde está o Dockerfile da aplicação.
+- `container_name`: Nome do container para facilitar identificação.
+- `depends_on`: Garante a ordem de inicialização dos serviços.
+- `environment`: Variáveis de ambiente passadas para os containers (credenciais, URLs, configurações do Spring e do banco).
+- `ports`: Mapeamento de portas entre o host e o container.
+- `image`: Imagem Docker a ser utilizada (no caso do banco, a oficial do PostgreSQL).
 
 ### Instruções para execução local
 1. Clonar o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/fortaleza-de-sabor.git
-   cd fortaleza-de-sabor
+   ```powershell
+   git clone https://github.com/seu-usuario/fortaleza-de-sabor-fiap.git
+   cd fortaleza-de-sabor-fiap
    ```
 2. Construir o projeto:
-   ```bash
+   ```powershell
    ./mvnw clean install
    ```
 3. Executar com Docker Compose:
-   ```bash
+   ```powershell
    docker-compose up --build
    ```
 4. Acessar a aplicação:
@@ -80,20 +319,20 @@ O arquivo `docker-compose.yml` orquestra a aplicação e o banco de dados Postgr
 
 ## 6. Collections para Teste
 ### Link para a Collection do Postman
-[Inclua um link ou descreva como importar as collections.]
+Arquivo de collection não está presente no repositório. Para testar, utilize os exemplos de payload acima ou gere uma collection manualmente via Swagger.
 
 ### Descrição dos Testes Manuais
-1. Importar a collection do Postman.
-2. Validar os endpoints utilizando os exemplos fornecidos.
+1. Utilize os exemplos de payload acima para testar os endpoints via Postman ou outra ferramenta REST.
+2. Valide os endpoints conforme os exemplos fornecidos.
 
 ---
 
 ## 7. Repositório do Código
 ### URL do Repositório
-[Inclua o link para o repositório onde o código está hospedado.]
+[https://github.com/seu-usuario/fortaleza-de-sabor-fiap](https://github.com/seu-usuario/fortaleza-de-sabor-fiap)
 
 ---
 
 ### Notas
-Fiquem à vontade para modificar e ajustar este modelo às necessidades do projeto.  
+Fiquem à vontade para modificar e ajustar este modelo às necessidades do projeto.
 Não é necessário implementar a autenticação dos usuários mas fiquem à vontade para fazê-lo se assim desejarem.
