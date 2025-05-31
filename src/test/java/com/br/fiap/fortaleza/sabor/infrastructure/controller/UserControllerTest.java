@@ -75,7 +75,7 @@ class UserControllerTest {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(createUseCase.save(mapper)).thenReturn(userMockOne());
 
-        mockMvc.perform(post("/usuarios")
+        mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(request))
@@ -99,7 +99,7 @@ class UserControllerTest {
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
         when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
-        mockMvc.perform(get("/usuarios")
+        mockMvc.perform(get("/users")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -126,7 +126,7 @@ class UserControllerTest {
         when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
 
         // THEN
-        mockMvc.perform(get("/usuarios/{idUsuario}", 1L)
+        mockMvc.perform(get("/users/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
                 .andExpect(status().isAccepted());
 
@@ -139,7 +139,7 @@ class UserControllerTest {
     void deleteById() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        mockMvc.perform(delete("/usuarios/{idUsuario}", 1L)
+        mockMvc.perform(delete("/users/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
                 .andExpect(status().isNoContent());
 
@@ -160,7 +160,7 @@ class UserControllerTest {
         when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
 
         // WHEN
-        mockMvc.perform(put("/usuarios/1")
+        mockMvc.perform(put("/users/1")
                         .content(new ObjectMapper().writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
