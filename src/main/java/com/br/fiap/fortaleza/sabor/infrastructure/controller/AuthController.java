@@ -32,12 +32,12 @@ public class AuthController {
         this.userEntityMapper = userEntityMapper;
     }
 
-    @Operation(summary = "Login", description = "Permite que um usuário se autentica através de login com email e senha")
+    @Operation(summary = "Login", description = "Allows a user to authenticate by logging in with email and password")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Autenticado com sucesso", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "401", description = "E-mail ou senha inválidos", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "200", description = "Authenticated successfully", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "401", description = "Invalid email or password", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
@@ -45,12 +45,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(userEntityMapper.toTokenResponseDto(response));
     }
 
-    @Operation(summary = "Altera senha", description = "Permite que um usuário altere a senha já cadastrada")
+    @Operation(summary = "Change password", description = "Allows a user to change an already registered password")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+            @ApiResponse(responseCode = "204", description = "Password changed successfully", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse> updatePassword(@RequestBody UserCredentialsDto request) {
