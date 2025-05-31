@@ -1,0 +1,263 @@
+type: collection.insomnia.rest/5.0
+name: FIAP
+meta:
+  id: wrk_9979c8ded10d4b42bcf3c0f471b12320
+  created: 1747442313012
+  modified: 1747442313012
+collection:
+  - name: Tech Challenge - Phase One
+    meta:
+      id: fld_4967b66a43e44e30ae1b8d1f953e4b72
+      created: 1747442332155
+      modified: 1747442332155
+      sortKey: -1747442332155
+    children:
+      - url: http://localhost:8080/users
+        name: Create User
+        meta:
+          id: req_d22394a3e7044a76aeb56c9133c4b05e
+          created: 1747442339612
+          modified: 1748730720417
+          isPrivate: false
+          sortKey: -1747442353259
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "frajola",
+            	"email": "frajola@email.com.br",
+            	"login": "frajola",
+            	"senha": "senha1234",
+            	"dataAlteracao": null,
+            	"tipo": "CLIENTE",
+            	"address": [
+            		{
+            			"rua": "Rua Alves Paulista 1",
+            			"bairro": "Paulista Nova",
+            			"complemento": "casa",
+            			"numero": 130,
+            			"estado": "São Paulo",
+            			"cidade": "São Paulo",
+            			"cep": 580761571
+            		}
+            	]
+            }
+        headers:
+          - name: accept
+            value: application/json
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/users
+        name: Get All Users
+        meta:
+          id: req_90090d8e8af04910a72bf65ca8b452f3
+          created: 1747449622732
+          modified: 1748730704519
+          isPrivate: false
+          sortKey: -1747442353359
+        method: GET
+        parameters:
+          - id: pair_5df96a8f8d9143daae53e843aa4c4c84
+            disabled: false
+        headers:
+          - name: accept
+            value: application/json
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/users/1
+        name: Get ID User
+        meta:
+          id: req_9860d66316f04b72a06da84e761d631e
+          created: 1748041238365
+          modified: 1748730709060
+          isPrivate: false
+          sortKey: -1747442353309
+        method: GET
+        parameters:
+          - id: pair_97266c323fce4e3ba873ed5c1993dd53
+            disabled: false
+        headers:
+          - name: accept
+            value: application/json
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/users/1
+        name: Delete ID User
+        meta:
+          id: req_80c35d2896624c928e9a2b38574cda7c
+          created: 1748041369887
+          modified: 1748730714265
+          isPrivate: false
+          sortKey: -1747442353284
+        method: DELETE
+        parameters:
+          - id: pair_62f2debc6be243689751d0e442beb917
+            disabled: false
+        headers:
+          - name: accept
+            value: application/json
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/users/1
+        name: Update User
+        meta:
+          id: req_b9b8b77e5b0c49f3ad117ea59a8a95bb
+          created: 1748041764141
+          modified: 1748730725839
+          isPrivate: false
+          sortKey: -1746999689678.5
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "frajola",
+            	"email": "frajola@email.com.br",
+            	"senha": "senha1234",
+            	"tipo": "DONO",
+            	"address": [
+            		{
+            			"rua": "Rua Alves Paulista 1",
+            			"bairro": "Paulista Nova",
+            			"complemento": "casa",
+            			"numero": 130,
+            			"estado": "São Paulo",
+            			"cidade": "São Paulo",
+            			"cep": 85965000
+            		}
+            	]
+            }
+        parameters:
+          - id: pair_aebbd7c848dc4a6ea17bbc447f3ab096
+            disabled: false
+        headers:
+          - name: accept
+            value: application/json
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/auth/password
+        name: Update Password
+        meta:
+          id: req_07cee2ba010e4ad8b603ef2db1088773
+          created: 1748202670625
+          modified: 1748730566184
+          isPrivate: false
+          sortKey: -1747442353459
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email":"agatha@email.com.br",
+            	"password": "senha@1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/auth/login
+        name: Login User
+        meta:
+          id: req_5648a4560f414e5585467332e39d1258
+          created: 1748304959572
+          modified: 1748730548935
+          isPrivate: false
+          sortKey: -1747442353409
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email":"agatha@email.com.br",
+            	"password": "senha@1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_ca28f8ad9eeb446f9c7ee775ec5159c20e226417
+    created: 1747442313026
+    modified: 1748381703912
+  cookies:
+    - key: JSESSIONID
+      value: 40E479DBC7797A25A24BE0ADA6800B23
+      domain: localhost
+      path: /
+      httpOnly: true
+      hostOnly: true
+      creation: 2025-05-25T21:00:54.075Z
+      lastAccessed: 2025-05-27T21:35:03.911Z
+      id: 6aa6721a-dfb8-4b35-8fcf-f50979b9a109
+environments:
+  name: Base Environment
+  meta:
+    id: env_ca28f8ad9eeb446f9c7ee775ec5159c20e226417
+    created: 1747442313020
+    modified: 1747442313020
+    isPrivate: false
