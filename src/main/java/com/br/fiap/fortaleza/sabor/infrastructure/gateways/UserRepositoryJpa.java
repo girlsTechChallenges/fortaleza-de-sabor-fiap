@@ -42,7 +42,7 @@ public class UserRepositoryJpa implements UsersRepository {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(existingUser -> {
                     throw new UserAlreadyRegisteredException(
-                            "Este usuário já existe. Verifique suas credenciais ou recupere sua senha."
+                            "This user already exists. Check your credentials or recover your password."
                     );
                 });
 
