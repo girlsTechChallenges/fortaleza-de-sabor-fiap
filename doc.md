@@ -262,8 +262,6 @@ O arquivo `docker-compose.yml` orquestra a aplicação e o banco de dados Postgr
 #### Estrutura do docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   app:
     build:
@@ -328,40 +326,54 @@ services:
 - **Convenções do Spring Boot**: Seguindo padrões do framework.
 
 ### Testes Implementados
-O projeto possui uma cobertura de testes abrangente, incluindo:
+O projeto possui uma cobertura completa de testes unitários, incluindo:
 
-#### Testes de Use Cases:
-- `AuthUseCaseTest`: Testes de autenticação e validação de login
-- `CreateUseCaseTest`: Testes de criação de usuários
-- `DeleteUseCaseTest`: Testes de remoção de usuários
-- `GetUseCaseTest`: Testes de busca de usuários
-- `UpdateUseCaseTest`: Testes de atualização de usuários
+#### Testes de Use Cases
+- `AuthUseCaseTest`: Validação de autenticação e operações de senha
+- `CreateUseCaseTest`: Criação de novos usuários
+- `DeleteUseCaseTest`: Remoção de usuários
+- `GetUseCaseTest`: Busca e listagem de usuários
+- `UpdateUseCaseTest`: Atualização de dados de usuários
 
-#### Testes de Controllers:
-- `AuthControllerTest`: Testes dos endpoints de autenticação
-- `UserControllerTest`: Testes dos endpoints de CRUD de usuários
+#### Testes de Controllers
+- `AuthControllerTest`: Endpoints de autenticação
+- `UserControllerTest`: Endpoints CRUD de usuários
 
-#### Testes de Infraestrutura:
-- `UserExceptionHandlerTest`: Testes de tratamento de exceções
-- `UserRepositoryJpaTest`: Testes de persistência
-- `UserEntityMapperTest`: Testes de mapeamento entre entidades
+#### Testes de Infraestrutura
+- `UserExceptionHandlerTest`: Tratamento de exceções
+- `UserRepositoryJpaTest`: Operações de persistência
+- `UserEntityMapperTest`: Mapeamento entre DTOs e entidades
 
 ### Artefatos Gerados
-O projeto gera os seguintes artefatos após a build:
-- JAR executável: `fortaleza.sabor-0.0.1-SNAPSHOT.jar`
-- JAR original: `fortaleza.sabor-0.0.1-SNAPSHOT.jar.original`
-- Relatórios de teste: Disponíveis em `target/surefire-reports/`
-- Propriedades da aplicação: Configuradas em `target/classes/application.properties`
+Após a build, o projeto gera os seguintes artefatos:
+
+#### JARs
+- Executável: `fortaleza.sabor-0.0.1-SNAPSHOT.jar`
+- Original: `fortaleza.sabor-0.0.1-SNAPSHOT.jar.original`
+
+#### Relatórios e Configurações
+- Relatórios de testes: `/target/surefire-reports/`
+- Arquivos de propriedades:
+  - Produção: `/target/classes/application.properties`
+  - Testes: `/target/test-classes/application-test.properties`
+- Scripts SQL: `/target/test-classes/data.sql`
+- Chaves de aplicação: 
+  - `/target/classes/app.key`
+  - `/target/classes/app.pub`
 
 ---
 
 ## 6. Collections para Teste
 ### Link para a Collection do Postman
-Arquivo de collection não está presente no repositório. Para testar, utilize os exemplos de payload acima ou gere uma collection manualmente via Swagger.
+A collection para testes está disponível em:
+- Local: `/collections/collection-phase-one`
 
 ### Descrição dos Testes Manuais
-1. Utilize os exemplos de payload acima para testar os endpoints via Postman ou outra ferramenta REST.
-2. Valide os endpoints conforme os exemplos fornecidos.
+1. Importar a collection disponível no diretório `collections`
+2. Executar os endpoints seguindo a ordem:
+   - Criar usuário (POST `/users`)
+   - Login (POST `/auth/login`)
+   - Demais operações CRUD
 
 ---
 
