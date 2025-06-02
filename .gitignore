@@ -33,4 +33,3 @@ build/
 .vscode/
 .devcontainer/
 *.log
-mvnw
