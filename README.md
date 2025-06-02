@@ -6,61 +6,176 @@ Fortaleza de Sabor é uma API desenvolvida para gerenciar o restaurante Fortalez
 
 ## Arquitetura do Projeto
 
-O projeto segue uma arquitetura modular e organizada, com as seguintes camadas principais:
+O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Architecture e DDD (Domain-Driven Design). Para uma visualização detalhada da arquitetura, consulte o [diagrama de arquitetura](diagram.png).
 
-1. **Camada de Configuração**:
-   - Configurações globais da aplicação, como a configuração do OpenAPI para documentação da API.
-   - Arquivo: [`OpenApiConfig`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/configuration/OpenApiConfig.java).
+### Principais Camadas:
 
-2. **Camada de Recursos**:
-   - Contém os controladores responsáveis por expor os endpoints da API.
-   - Exemplo: Controladores Spring MVC.
+1. **Camada de Apresentação**:
+   - Controllers: Exposição dos endpoints REST da API
+   - DTOs: Objetos de transferência de dados
+   - Exception Handlers: Tratamento de exceções
 
-3. **Camada de Repositórios**:
-   - Responsável pela interação com o banco de dados.
-   - Exemplo: [`xxxxxxRepository`](src/main/java/com/br/fiap/fortaleza/sabor/naousar/infrastructure/repositories/xxxxxxRepository.java).
+2. **Camada de Domínio**:
+   - Use Cases: Implementação das regras de negócio
+   - Entities: Classes que representam o domínio
 
-4. **Camada de Configuração de Propriedades**:
-   - Configurações específicas da aplicação, como conexão com o banco de dados e propriedades do JPA.
-   - Arquivo: [`application.properties`](src/main/resources/application.properties).
+3. **Camada de Infraestrutura**:
+   - Gateways: Interfaces de acesso a dados
+   - Repositories: Implementações JPA
+   - Mappers: Conversão entre DTOs e entidades
 
 ---
 
 ## Tecnologias Utilizadas
 
-- **Java 21**: Linguagem principal do projeto.
-- **Spring Boot 3.4.5**: Framework para desenvolvimento rápido de aplicações Java.
-- **PostgreSQL**: Banco de dados relacional utilizado para persistência.
-- **Hibernate**: Implementação do JPA para mapeamento objeto-relacional.
-- **SpringDoc OpenAPI**: Ferramenta para geração automática de documentação da API.
-- **H2 Database**: Banco de dados em memória utilizado para testes.
-- **Maven**: Gerenciador de dependências e build.
+- **Java 21**: Linguagem principal do projeto
+- **Spring Boot 3.4.5**: Framework para desenvolvimento
+- **PostgreSQL**: Banco de dados relacional
+- **Hibernate**: Implementação JPA
+- **SpringDoc OpenAPI**: Documentação da API
+- **H2 Database**: Banco para testes
+- **JUnit 5**: Framework de testes
+- **Maven**: Gerenciamento de dependências
+- **Docker**: Containerização
 
 ---
 
-## Estrutura do Repositório
+## Estrutura do Projeto
 
 ```plaintext
 .
-├── .devcontainer/          # Configurações do Dev Container
-├── .mvn/                   # Configurações do Maven Wrapper
 ├── src/
 │   ├── main/
-│   │   ├── java/           # Código-fonte principal
-│   │   │   └── com/
-│   │   │       └── br/
-│   │   │           └── fiap/
-│   │   │               └── fortaleza/
-│   │   │                   └── sabor/
-│   │   │                       ├── [MainApplication.java](http://_vscodecontentref_/0)
-│   │   │                       ├── infrastructure/
-│   │   │                       │   ├── configuration/
-│   │   │                       │   │   └── [OpenApiConfig.java](http://_vscodecontentref_/1)
-│   │   │                       │   └── repositories/
-│   │   │                       │       └── [xxxxxxRepository.java](http://_vscodecontentref_/2)
-│   │   └── resources/        # Recursos como arquivos de configuração
-│   │       └── [application.properties](http://_vscodecontentref_/3)
-│   └── test/                 # Código de testes
-├── target/                  # Arquivos gerados pelo build
-├── [pom.xml](http://_vscodecontentref_/4)                  # Configuração do Maven
-└── [README.md](http://_vscodecontentref_/5)                # Documentação do projeto
+│   │   ├── java/com/br/fiap/fortaleza/sabor/
+│   │   │   ├── application/usecase/    # Casos de uso
+│   │   │   ├── domain/                 # Entidades de domínio
+│   │   │   └── infrastructure/
+│   │   │       ├── config/             # Configurações
+│   │   │       ├── controller/         # Controllers REST
+│   │   │       ├── dto/               # DTOs
+│   │   │       ├── mapper/            # Mappers
+│   │   │       └── persistence/       # Entidades JPA
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       ├── app.key
+│   │       └── app.pub
+│   └── test/
+│       ├── java/                      # Testes unitários
+│       └── resources/
+│           ├── application-test.properties
+│           └── data.sql
+├── target/                           # Artefatos gerados
+│   ├── fortaleza.sabor-0.0.1-SNAPSHOT.jar
+│   └── surefire-reports/            # Relatórios de testes
+├── collections/                      # Collections Postman
+├── docker-compose.yml               # Configuração Docker
+└── README.md
+```
+
+---
+
+## Execução do Projeto
+
+### Pré-requisitos
+- Java 21
+- Docker Desktop
+- Git
+
+### Passos para Execução
+
+1. **Clone o repositório**:
+   ```powershell
+   git clone https://github.com/seu-usuario/fortaleza-de-sabor-fiap.git
+   cd fortaleza-de-sabor-fiap
+   ```
+
+2. **Construa o projeto**:
+   ```powershell
+   ./mvnw clean install
+   ```
+
+3. **Execute com Docker**:
+   ```powershell
+   docker-compose up --build
+   ```
+
+4. **Acesse a aplicação**:
+   - API: [http://localhost:8080](http://localhost:8080)
+   - Swagger: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+---
+
+## Endpoints
+
+### Users
+- **POST** `/users` - Criar usuário
+- **PUT** `/users/{id}` - Atualizar usuário
+- **GET** `/users/{id}` - Buscar usuário por ID
+- **GET** `/users` - Listar usuários
+- **DELETE** `/users/{id}` - Remover usuário
+
+### Authentication
+- **POST** `/auth/login` - Realizar login
+- **PATCH** `/auth/password` - Alterar senha
+
+---
+
+## Testes
+
+### Testes Unitários
+O projeto possui cobertura de testes para:
+- Controllers
+- Use Cases
+- Repositories
+- Mappers
+- Exception Handlers
+
+### Executar Testes
+```powershell
+./mvnw test
+```
+
+### Relatórios de Testes
+Após a execução, os relatórios podem ser encontrados em:
+- `target/surefire-reports/`
+
+---
+
+## Collections para Teste
+
+### Collection do Postman
+Disponível em: `collections/collection-phase-one`
+
+### Execução dos Testes via Postman
+1. Importe a collection do diretório `collections`
+2. Execute os endpoints na seguinte ordem:
+   - Criar usuário (POST `/users`)
+   - Login (POST `/auth/login`)
+   - Outras operações CRUD conforme necessário
+
+---
+
+## Artefatos Gerados
+
+### JARs
+- Executável: `target/fortaleza.sabor-0.0.1-SNAPSHOT.jar`
+- Original: `target/fortaleza.sabor-0.0.1-SNAPSHOT.jar.original`
+
+### Configurações e Chaves
+- `target/classes/application.properties`
+- `target/classes/app.key`
+- `target/classes/app.pub`
+
+---
+
+## Contribuição
+
+Contribuições são bem-vindas! Para contribuir:
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/novaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/novaFeature`)
+5. Abra um Pull Request
+
+---
+

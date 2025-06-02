@@ -1,0 +1,49 @@
+# Diagrama de Arquitetura
+
+```mermaid
+graph TD
+    %% Camadas da Aplicação
+    subgraph Apresentação[Camada de Apresentação]
+        A[Controllers]
+        DTOs[DTOs]
+        ExceptionHandlers[Exception Handlers]
+    end
+
+    subgraph Domínio[Camada de Domínio]
+        UseCases[Use Cases]
+        Entities[Entidades]
+    end
+
+    subgraph Infraestrutura[Camada de Infraestrutura]
+        Gateways[Gateways]
+        Repositories[Repositórios JPA]
+        Mappers[Mappers]
+    end
+
+    subgraph Database[Banco de Dados]
+        PostgreSQL[(PostgreSQL)]
+    end
+
+    %% Relacionamentos
+    A --> DTOs
+    DTOs --> Mappers
+    A --> UseCases
+    ExceptionHandlers --> A
+    UseCases --> Entities
+    UseCases --> Gateways
+    Gateways --> Repositories
+    Repositories --> PostgreSQL
+    Mappers --> Entities
+    Mappers --> DTOs
+
+    %% Estilização
+    classDef presentation fill:#aef,stroke:#333,stroke-width:2px
+    classDef domain fill:#fda,stroke:#333,stroke-width:2px
+    classDef infrastructure fill:#dfa,stroke:#333,stroke-width:2px
+    classDef database fill:#fad,stroke:#333,stroke-width:2px
+
+    class A,DTOs,ExceptionHandlers presentation
+    class UseCases,Entities domain
+    class Gateways,Repositories,Mappers infrastructure
+    class PostgreSQL database
+```
