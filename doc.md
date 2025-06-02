@@ -379,7 +379,7 @@ A collection para testes está disponível em:
 
 ## 7. Repositório do Código
 ### URL do Repositório
-[https://github.com/seu-usuario/fortaleza-de-sabor-fiap](https://github.com/seu-usuario/fortaleza-de-sabor-fiap)
+[https://github.com/girlsTechChallenges/fortaleza-de-sabor-fiap.git](https://github.com/girlsTechChallenges/fortaleza-de-sabor-fiap.git)
 
 ---
 
