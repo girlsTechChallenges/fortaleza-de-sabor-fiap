@@ -8,6 +8,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.doc.AuthControllerDoc;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Validated
 public class AuthController implements AuthControllerDoc {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);

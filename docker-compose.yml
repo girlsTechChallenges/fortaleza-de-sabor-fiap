@@ -1,10 +1,13 @@
+version: '3.8'
+
 services:
   app:
     build:
       context: .
     container_name: app
     depends_on:
-      - db    environment:
+      - db
+    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
@@ -12,7 +15,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
     ports:
       - "8080:8080"
 
@@ -25,3 +27,8 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -14,6 +14,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController implements UserControllerDoc {    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final CreateUseCase createUseCase;
     private final GetUseCase getUseCase;

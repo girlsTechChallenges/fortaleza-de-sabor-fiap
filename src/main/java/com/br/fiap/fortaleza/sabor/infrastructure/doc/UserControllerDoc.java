@@ -9,9 +9,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Validated
 public interface UserControllerDoc {
     
     @Operation(summary = "Create a user", description = "Register a user.")
@@ -21,7 +26,7 @@ public interface UserControllerDoc {
             @ApiResponse(responseCode = "409", description = "User already registered.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<UserResponseDto> create(UserRequestDto userRequestDto);
+    ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userRequestDto);
 
     @Operation(summary = "Rescue the user by Id", description = "Allows the retrieval of information from a specific user")
     @ApiResponses(value = {
@@ -29,7 +34,7 @@ public interface UserControllerDoc {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<UserResponseDto> getUserByID(Long idUser);
+    ResponseEntity<UserResponseDto> getUserByID(@PathVariable @NotNull Long idUser);
 
     @Operation(summary = "Search all users", description = "Returns a list of all users registered in the system.")
     @ApiResponses(value = {
@@ -45,7 +50,7 @@ public interface UserControllerDoc {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<UserResponseDto> update(Long idUser, UpdateRequestDto updateRequestDto);
+    ResponseEntity<UserResponseDto> update(@PathVariable @NotNull Long idUser, @RequestBody @Valid UpdateRequestDto updateRequestDto);
 
     @Operation(summary = "Delete user by ID", description = "Allows deletion of a specific user's information")
     @ApiResponses(value = {
@@ -53,5 +58,5 @@ public interface UserControllerDoc {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<Void> delete(Long idUser);
+    ResponseEntity<Void> delete(@PathVariable @NotNull Long idUser);
 }

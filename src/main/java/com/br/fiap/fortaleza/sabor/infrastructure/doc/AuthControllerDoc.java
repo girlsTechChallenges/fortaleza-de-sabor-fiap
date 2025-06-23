@@ -8,8 +8,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
+@Validated
 public interface AuthControllerDoc {
 
     @Operation(summary = "Login", description = "Allows a user to authenticate by logging in with email and password")
@@ -19,7 +23,7 @@ public interface AuthControllerDoc {
             @ApiResponse(responseCode = "401", description = "Invalid email or password", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<UserAuthDto> login(UserCredentialsDto loginRequest);
+    ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest);
 
     @Operation(summary = "Change password", description = "Allows a user to change an already registered password")
     @ApiResponses(value = {
@@ -28,5 +32,5 @@ public interface AuthControllerDoc {
             @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<ApiResponse> updatePassword(UserCredentialsDto request);
+    ResponseEntity<ApiResponse> updatePassword(@Valid @RequestBody UserCredentialsDto request);
 }
