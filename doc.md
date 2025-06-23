@@ -20,6 +20,7 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
 
 #### Camada de Apresentação
 - **Controllers**: Exposição dos endpoints REST da API (`UserController`, `AuthController`).
+- **Documentação**: Interfaces com anotações Swagger (`UserControllerDoc`, `AuthControllerDoc`).
 - **DTOs**: Objetos de transferência de dados para request/response.
 - **Exception Handlers**: Tratamento centralizado de exceções (`UserExceptionHandler`).
 

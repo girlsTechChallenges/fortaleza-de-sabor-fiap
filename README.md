@@ -52,6 +52,7 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
 │   │   │   └── infrastructure/
 │   │   │       ├── config/             # Configurações
 │   │   │       ├── controller/         # Controllers REST
+│   │   │       ├── doc/               # Interfaces de documentação Swagger
 │   │   │       ├── dto/               # DTOs
 │   │   │       ├── mapper/            # Mappers
 │   │   │       └── persistence/       # Entidades JPA

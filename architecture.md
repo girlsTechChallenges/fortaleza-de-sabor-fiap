@@ -2,9 +2,9 @@
 
 ```mermaid
 graph TD
-    %% Camadas da Aplicação
-    subgraph Apresentação[Camada de Apresentação]
+    %% Camadas da Aplicação    subgraph Apresentação[Camada de Apresentação]
         A[Controllers]
+        Docs[Documentação Swagger]
         DTOs[DTOs]
         ExceptionHandlers[Exception Handlers]
     end
@@ -22,9 +22,8 @@ graph TD
 
     subgraph Database[Banco de Dados]
         PostgreSQL[(PostgreSQL)]
-    end
-
-    %% Relacionamentos
+    end    %% Relacionamentos
+    A --> Docs
     A --> DTOs
     DTOs --> Mappers
     A --> UseCases
@@ -42,7 +41,7 @@ graph TD
     classDef infrastructure fill:#dfa,stroke:#333,stroke-width:2px
     classDef database fill:#fad,stroke:#333,stroke-width:2px
 
-    class A,DTOs,ExceptionHandlers presentation
+    class A,Docs,DTOs,ExceptionHandlers presentation
     class UseCases,Entities domain
     class Gateways,Repositories,Mappers infrastructure
     class PostgreSQL database
