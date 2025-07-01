@@ -12,12 +12,10 @@ graph TD
     subgraph Domínio[Camada de Domínio]
         UseCases[Use Cases]
         Entities[Entidades]
-    end
-
-    subgraph Infraestrutura[Camada de Infraestrutura]
+    end    subgraph Infraestrutura[Camada de Infraestrutura]
         Gateways[Gateways]
         Repositories[Repositórios JPA]
-        Mappers[Mappers]
+        Mappers[MapStruct Mappers]
     end
 
     subgraph Database[Banco de Dados]

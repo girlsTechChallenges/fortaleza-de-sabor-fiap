@@ -2,7 +2,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.AuthUseCase;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,19 +27,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AuthController.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
 
     @InjectMocks
     private AuthController authController;
+
     @MockitoBean
-    private AuthUseCase authUseCase;
+    private AuthUseCase authUseCase;    
+    
     @MockitoBean
-    private UserEntityMapper userEntityMapper;
+    private UserMapper userMapper;
 
     @BeforeEach
     public void setUp() {
-        authController = new AuthController(authUseCase,userEntityMapper);
+        authController = new AuthController(authUseCase, userMapper);
     }
 
     @Test
@@ -49,7 +53,7 @@ class AuthControllerTest {
         var request = "{\n\t\"email\":\"email@email.com.br\",\n\t\"password\": \"password\"\n}";
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-        when(userEntityMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
+        when(userMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
 
         // WHEN
         ResultActions result = mockMvc.perform(post("/auth/login")

@@ -10,7 +10,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDt
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.doc.UserControllerDoc;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -33,22 +33,19 @@ public class UserController implements UserControllerDoc {    private static fin
     private final GetUseCase getUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
-    private final UserEntityMapper userEntityMapper;
-
-    public UserController(CreateUseCase createUseCase, GetUseCase getAllUseCase, UpdateUseCase updateUseCase, DeleteUseCase deleteUseCase, UserEntityMapper userEntityMapper) {
+    private final UserMapper userMapper;    public UserController(CreateUseCase createUseCase, GetUseCase getAllUseCase, UpdateUseCase updateUseCase, DeleteUseCase deleteUseCase, UserMapper userMapper) {
         this.createUseCase = createUseCase;
         this.getUseCase = getAllUseCase;
         this.updateUseCase = updateUseCase;
         this.deleteUseCase = deleteUseCase;
-        this.userEntityMapper = userEntityMapper;
+        this.userMapper = userMapper;
     }   
     
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userRequestDto) {
 
-        log.info("POST USER REQUEST: {} ", userRequestDto);
-        var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp));
+        log.info("POST USER REQUEST: {} ", userRequestDto);        var resp = createUseCase.save(userMapper.toUser(userRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponseDto(resp));
     }
 
     @GetMapping("/{idUser}")
@@ -57,14 +54,14 @@ public class UserController implements UserControllerDoc {    private static fin
     ) {
         log.info("GET USER BY ID REQUEST {} ", idUser);
         Optional<User> user = getUseCase.getById(idUser);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.getUserByIdToUserResponseDto(user));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userMapper.toResponseDto(user.orElse(null)));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getUseCase.getAll();
-        return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
+        return resp.stream().map(userMapper::toResponseDto).toList();
     }
 
     @PutMapping(value = "/{idUser}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,7 +70,9 @@ public class UserController implements UserControllerDoc {    private static fin
             @RequestBody @Valid UpdateRequestDto updateRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateUseCase.update(idUser, userEntityMapper.updateToUserDomain(updateRequestDto));
+        User user = getUseCase.getById(idUser).orElseThrow();
+        userMapper.updateUserFromDto(updateRequestDto, user);
+        updateUseCase.update(idUser, user);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }   
     

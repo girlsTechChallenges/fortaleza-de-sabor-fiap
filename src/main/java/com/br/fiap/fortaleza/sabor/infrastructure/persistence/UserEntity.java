@@ -81,9 +81,13 @@ public class UserEntity {
         return dataAlteracao;
     }
 
+    public void setDataAlteracao(LocalDate dataAlteracao) {
+        this.dataAlteracao = dataAlteracao;
+    }
+
     @PrePersist
     @PreUpdate
-    public void setDataAlteracao() {
+    public void setDataAlteracaoAutomatically() {
         this.dataAlteracao = LocalDate.now();
     }
 

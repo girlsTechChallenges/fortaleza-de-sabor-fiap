@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
+    private Long id;
     private String nome;
     private String email;
     private String login;
@@ -24,16 +25,22 @@ public class User {
     private TypeEnum tipo;
     private List<Address> address;
 
-    public User(
-            String nome,
-            String email,
-            String senha,
-            TypeEnum tipo,
-            List<Address> address) {
+    public User(String nome, String email, String senha, TypeEnum tipo, List<Address> address) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.tipo = tipo;
         this.address = address;
+        this.dataAlteracao = LocalDate.now();
+    }
+
+    public User(Long id, String nome, String email, String senha, TypeEnum tipo, List<Address> address) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.tipo = tipo;
+        this.address = address;
+        this.dataAlteracao = LocalDate.now();
     }
 }

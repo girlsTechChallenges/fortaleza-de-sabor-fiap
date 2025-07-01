@@ -13,11 +13,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -58,13 +56,6 @@ class AuthUseCaseTest {
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, user.getSenha())).thenReturn(true);
-
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("BackendFortalezaSabor")
-                .subject(email)
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(300))
-                .build();
 
         Jwt mockJwt = mock(Jwt.class);
         when(mockJwt.getTokenValue()).thenReturn("mocked-jwt-token");

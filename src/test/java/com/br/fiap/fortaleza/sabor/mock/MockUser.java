@@ -37,30 +37,28 @@ public class MockUser {
                 )
         );
     }
-
-
     public static User userMockOne(){
-        return new User(
+        User user = new User(
                 "João Silva",
-                "email@email.com.br",
-                "login",
+                "email@email.com.br", 
                 new BCryptPasswordEncoder().encode("senha1234"),
-                LocalDate.of(2025,5,16),
                 TypeEnum.DONO,
                 List.of(new Address("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
-    }
-
-    public static User userMockTwo(){
-        return new User(
+        user.setLogin("login");
+        user.setDataAlteracao(LocalDate.of(2025,5,16));
+        return user;
+    }    public static User userMockTwo(){
+        User user = new User(
                 "Maria Oliveira",
                 "email",
-                "login",
                 "senha",
-                LocalDate.of(2025,5,16),
                 TypeEnum.CLIENTE,
                 List.of(new Address("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
+        user.setLogin("login");
+        user.setDataAlteracao(LocalDate.of(2025,5,16));
+        return user;
     }
 
     public static UserResponseDto responseDtoMockOne(){

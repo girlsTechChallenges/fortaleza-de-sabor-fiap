@@ -36,10 +36,10 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
 #### Camada de Infraestrutura
 - **Gateways**: Interfaces de acesso a dados.
 - **Repositórios**: Implementações JPA para persistência.
-- **Mappers**: Conversão entre entidades e DTOs.
+- **Mappers**: Conversão automática entre entidades e DTOs usando MapStruct (`UserMapper`, `AddressMapper`).
 
 #### Banco de Dados
-- PostgreSQL para persistência dos dados.
+- PostgreSQL 42.7.7 para persistência dos dados (versão atualizada por segurança).
 
 ### Diagrama da Arquitetura
 O diagrama abaixo ilustra a interação entre as camadas da aplicação:
@@ -256,67 +256,33 @@ Response (204 No Content):
 
 ---
 
-## 4. Configuração do Projeto
-### Configuração do Docker Compose
-O arquivo `docker-compose.yml` orquestra a aplicação e o banco de dados PostgreSQL. Abaixo, cada comando e configuração do arquivo é explicado:
+## 4. Containerização com Docker
+O projeto utiliza Docker e Docker Compose para facilitar o deployment e garantir a consistência entre ambientes.
 
-#### Estrutura do docker-compose.yml
+### Dockerfile
+O Dockerfile utiliza uma abordagem multi-stage para otimizar o tamanho da imagem final:
+1. Stage de Build: Utiliza `maven:3.9.6-eclipse-temurin-21` para compilar o projeto
+2. Stage de Runtime: Utiliza `eclipse-temurin:21-jre` para executar a aplicação
 
-```yaml
-services:
-  app:
-    build:
-      context: .           # Define o diretório de build da aplicação (raiz do projeto)
-    container_name: app    # Nome do container da aplicação
-    depends_on:
-      - db                 # Garante que o banco de dados (db) será iniciado antes da aplicação
-    environment:
-      - POSTGRES_USER=postgres                # Usuário do banco de dados
-      - POSTGRES_PASSWORD=postgres            # Senha do banco de dados
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres  # URL de conexão do Spring para o banco
-      - SPRING_DATASOURCE_USERNAME=postgres   # Usuário do banco para o Spring
-      - SPRING_DATASOURCE_PASSWORD=postgres   # Senha do banco para o Spring
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update  # Configuração do Hibernate para atualizar o schema automaticamente
-    ports:      - "8080:8080"         # Mapeia a porta 8080 do container para a 8080 do host
+### Docker Compose
+O arquivo `docker-compose.yml` define dois serviços:
+1. **app**: Aplicação Spring Boot
+   - Depende do serviço `db`
+   - Expõe a porta 8080
+   - Configurado com variáveis de ambiente para conexão com o banco
 
-  db:
-    image: postgres:latest # Imagem oficial do PostgreSQL
-    container_name: db     # Nome do container do banco de dados
-    environment:
-      - POSTGRES_USER=postgres      # Usuário padrão do banco
-      - POSTGRES_PASSWORD=postgres  # Senha padrão do banco
-      - POSTGRES_DB=postgres        # Nome do banco de dados
-    ports:
-      - "5432:5432"        # Mapeia a porta 5432 do container para a 5432 do host
+2. **db**: PostgreSQL (Driver 42.7.7 - versão segura)
+   - Utiliza a imagem `postgres:latest`
+   - Expõe a porta 5432
+   - Utiliza volume para persistência dos dados
+
+### Execução
+Para executar o projeto com Docker:
+```powershell
+docker-compose up --build
 ```
 
-#### Explicação dos principais comandos e parâmetros:
-- `version`: Define a versão do Docker Compose utilizada.
-- `services`: Define os serviços que serão orquestrados (app e db).
-- `build.context`: Diretório onde está o Dockerfile da aplicação.
-- `container_name`: Nome do container para facilitar identificação.
-- `depends_on`: Garante a ordem de inicialização dos serviços.
-- `environment`: Variáveis de ambiente passadas para os containers (credenciais, URLs, configurações do Spring e do banco).
-- `ports`: Mapeamento de portas entre o host e o container.
-- `image`: Imagem Docker a ser utilizada (no caso do banco, a oficial do PostgreSQL).
-
-### Instruções para execução local
-1. Clonar o repositório:
-   ```powershell
-   git clone https://github.com/seu-usuario/fortaleza-de-sabor-fiap.git
-   cd fortaleza-de-sabor-fiap
-   ```
-2. Construir o projeto:
-   ```powershell
-   ./mvnw clean install
-   ```
-3. Executar com Docker Compose:
-   ```powershell
-   docker-compose up --build
-   ```
-4. Acessar a aplicação:
-   - API: [http://localhost:8080](http://localhost:8080)
-   - Swagger: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+O sistema estará disponível em `http://localhost:8080` após a inicialização dos containers.
 
 ---
 
@@ -343,7 +309,7 @@ O projeto possui uma cobertura completa de testes unitários, incluindo:
 #### Testes de Infraestrutura
 - `UserExceptionHandlerTest`: Tratamento de exceções
 - `UserRepositoryJpaTest`: Operações de persistência
-- `UserEntityMapperTest`: Mapeamento entre DTOs e entidades
+- `UserMapper`: Mapeamento automático via MapStruct entre DTOs, entidades e domain objects
 
 ### Artefatos Gerados
 Após a build, o projeto gera os seguintes artefatos:
@@ -387,3 +353,29 @@ A collection para testes está disponível em:
 ### Notas
 Fiquem à vontade para modificar e ajustar este modelo às necessidades do projeto.
 Não é necessário implementar a autenticação dos usuários mas fiquem à vontade para fazê-lo se assim desejarem.
+
+### MapStruct
+O projeto utiliza o MapStruct para realizar o mapeamento automático entre DTOs e entidades de domínio. As principais interfaces de mapeamento são:
+
+#### UserMapper
+```java
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    User toUser(UserRequestDto dto);
+    UserResponseDto toResponseDto(User user);
+    void updateUserFromDto(UpdateRequestDto dto, @MappingTarget User user);
+}
+```
+
+#### AddressMapper
+```java
+@Mapper(componentModel = "spring")
+public interface AddressMapper {
+    Address toAddress(AddressDto dto);
+    AddressDto toAddressDto(Address address);
+}
+```
+
+O MapStruct gera implementações em tempo de compilação, reduzindo a necessidade de código boilerplate e minimizando erros de mapeamento.
+
+---

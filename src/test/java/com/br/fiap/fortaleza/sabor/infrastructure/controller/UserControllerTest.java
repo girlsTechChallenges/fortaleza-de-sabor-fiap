@@ -10,7 +10,7 @@ import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.test.context.TestPropertySource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -30,33 +31,40 @@ import java.util.Optional;
 
 import static com.br.fiap.fortaleza.sabor.mock.MockUser.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
     @InjectMocks
-    private UserController userController;
-
+    private UserController userController;    
+    
     @MockitoBean
-    private UserEntityMapper userEntityMapper;
+    private UserMapper userMapper;
+    
     @MockitoBean
     private UsersRepository usersRepository;
+    
     @MockitoBean
     private CreateUseCase createUseCase;
+    
     @MockitoBean
     private GetUseCase getUseCase;
+    
     @MockitoBean
     private UpdateUseCase updateUseCase;
+    
     @MockitoBean
     private DeleteUseCase deleteUseCase;
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase,getUseCase,updateUseCase, deleteUseCase,userEntityMapper);
+        userController = new UserController(createUseCase,getUseCase,updateUseCase, deleteUseCase,userMapper);
     }
 
     @Test
@@ -69,11 +77,12 @@ class UserControllerTest {
         //GIVEN
         var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
-        var mapper = userEntityMapper.toUserDomain(requestDto);
+        User user = userMapper.toUser(requestDto);
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(createUseCase.save(mapper)).thenReturn(userMockOne());
+        when(userMapper.toUser(requestDto)).thenReturn(user);
+        when(createUseCase.save(user)).thenReturn(userMockOne());
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +91,7 @@ class UserControllerTest {
                 .andExpect(status().isCreated());
 
         //THEN
-        verify(createUseCase, times(1)).save(mapper);
+        verify(createUseCase, times(1)).save(user);
     }
 
     @Test
@@ -93,9 +102,8 @@ class UserControllerTest {
         var userTwo = userMockTwo();
 
         // WHEN
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
-        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();        when(userMapper.toResponseDto(userOne)).thenReturn(responseDtoMockOne());
+        when(userMapper.toResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
         when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
@@ -123,7 +131,7 @@ class UserControllerTest {
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(getUseCase.getById(1L)).thenReturn(Optional.of(user));
-        when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
+        when(userMapper.toResponseDto(user)).thenReturn(responseDto);
 
         // THEN
         mockMvc.perform(get("/users/{idUsuario}", 1L)
@@ -157,7 +165,8 @@ class UserControllerTest {
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
+        User existingUser = userMockOne();
+        when(getUseCase.getById(anyLong())).thenReturn(Optional.of(existingUser));
 
         // WHEN
         mockMvc.perform(put("/users/1")
