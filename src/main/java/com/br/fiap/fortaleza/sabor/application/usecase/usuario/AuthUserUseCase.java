@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
@@ -15,13 +15,13 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 @Component
-public class AuthUseCase {
+public class AuthUserUseCase {
 
     private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
-    public AuthUseCase(UsersRepository usersRepository, BCryptPasswordEncoder passwordEncoder, JwtEncoder jwtEncoder) {
+    public AuthUserUseCase(UsersRepository usersRepository, BCryptPasswordEncoder passwordEncoder, JwtEncoder jwtEncoder) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtEncoder = jwtEncoder;

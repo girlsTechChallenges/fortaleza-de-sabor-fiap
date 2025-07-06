@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,15 +16,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class GetUseCaseTest {
+class GetUserUseCaseTest {
 
     private UsersRepository usersRepository;
-    private GetUseCase getUseCase;
+    private GetUserUseCase getUserUseCase;
 
     @BeforeEach
     void setUp() {
         usersRepository = mock(UsersRepository.class);
-        getUseCase = new GetUseCase(usersRepository);
+        getUserUseCase = new GetUserUseCase(usersRepository);
     }
 
     @Test
@@ -37,7 +38,7 @@ class GetUseCaseTest {
         when(usersRepository.getAll()).thenReturn(expectedUsers);
 
         // Act
-        List<User> result = getUseCase.getAll();
+        List<User> result = getUserUseCase.getAll();
 
         // Assert
         assertEquals(expectedUsers.size(), result.size());
@@ -54,7 +55,7 @@ class GetUseCaseTest {
         when(usersRepository.getById(userId)).thenReturn(Optional.of(expectedUser));
 
         // Act
-        Optional<User> result = getUseCase.getById(userId);
+        Optional<User> result = getUserUseCase.getById(userId);
 
         // Assert
         assertTrue(result.isPresent());
@@ -70,7 +71,7 @@ class GetUseCaseTest {
         when(usersRepository.getById(userId)).thenReturn(Optional.empty());
 
         // Act
-        Optional<User> result = getUseCase.getById(userId);
+        Optional<User> result = getUserUseCase.getById(userId);
 
         // Assert
         assertTrue(result.isEmpty());

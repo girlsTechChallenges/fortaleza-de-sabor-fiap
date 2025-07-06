@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.AuthUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserCredentialsDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserAuthDto;
@@ -24,11 +24,11 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    private final AuthUseCase authUseCase;
+    private final AuthUserUseCase authUserUseCase;
     private final UserEntityMapper userEntityMapper;
 
-    public AuthController(AuthUseCase authUseCase, UserEntityMapper userEntityMapper) {
-        this.authUseCase = authUseCase;
+    public AuthController(AuthUserUseCase authUserUseCase, UserEntityMapper userEntityMapper) {
+        this.authUserUseCase = authUserUseCase;
         this.userEntityMapper = userEntityMapper;
     }
 
@@ -41,7 +41,7 @@ public class AuthController {
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
-        var response = authUseCase.validateLogin(loginRequest.email(), loginRequest.password());
+        var response = authUserUseCase.validateLogin(loginRequest.email(), loginRequest.password());
         return ResponseEntity.status(HttpStatus.OK).body(userEntityMapper.toTokenResponseDto(response));
     }
 
@@ -55,7 +55,7 @@ public class AuthController {
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse> updatePassword(@RequestBody UserCredentialsDto request) {
         log.info("UPDATE USER PASSWORD {}", request);
-        authUseCase.updatePassword(request.email(), request.password());
+        authUserUseCase.updatePassword(request.email(), request.password());
         return ResponseEntity.noContent().build();
     }
 }

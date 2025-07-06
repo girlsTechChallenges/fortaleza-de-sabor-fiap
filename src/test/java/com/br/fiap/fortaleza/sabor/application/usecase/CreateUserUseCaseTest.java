@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreateUseCaseTest {
+class CreateUserUseCaseTest {
 
     @InjectMocks
-    private CreateUseCase createUseCase;
+    private CreateUserUseCase createUserUseCase;
 
     @Mock
     private UsersRepository usersRepository;
@@ -38,7 +39,7 @@ class CreateUseCaseTest {
         when(passwordEncoder.encode(anyString())).thenReturn(anyString());
 
         //THEN
-        assertNotNull(createUseCase.save(request));
-        assertDoesNotThrow(() -> createUseCase.save(request));
+        assertNotNull(createUserUseCase.save(request));
+        assertDoesNotThrow(() -> createUserUseCase.save(request));
     }
 }
