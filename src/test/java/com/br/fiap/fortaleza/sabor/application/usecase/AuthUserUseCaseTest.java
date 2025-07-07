@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class AuthUseCaseTest {
+class AuthUserUseCaseTest {
 
     @Mock
     private UsersRepository usersRepository;
@@ -38,7 +39,7 @@ class AuthUseCaseTest {
     private JwtEncoderParameters jwtEncoderParameters;
 
     @InjectMocks
-    private AuthUseCase authUseCase;
+    private AuthUserUseCase authUseCase;
 
     @BeforeEach
     void setUp() {

@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,15 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DeleteUseCaseTest {
+class DeleteUserUseCaseTest {
 
     private UsersRepository usersRepository;
-    private DeleteUseCase deleteUseCase;
+    private DeleteUserUseCase deleteUserUseCase;
 
     @BeforeEach
     void setUp() {
         usersRepository = mock(UsersRepository.class);
-        deleteUseCase = new DeleteUseCase(usersRepository);
+        deleteUserUseCase = new DeleteUserUseCase(usersRepository);
     }
 
     @Test
@@ -36,7 +37,7 @@ class DeleteUseCaseTest {
         when(usersRepository.deleteById(userId)).thenReturn(expected);
 
         // Act
-        Optional<User> result = deleteUseCase.delete(userId);
+        Optional<User> result = deleteUserUseCase.delete(userId);
 
         // Assert
         assertTrue(result.isPresent());
@@ -52,7 +53,7 @@ class DeleteUseCaseTest {
         when(usersRepository.deleteById(userId)).thenReturn(Optional.empty());
 
         // Act
-        Optional<User> result = deleteUseCase.delete(userId);
+        Optional<User> result = deleteUserUseCase.delete(userId);
 
         // Assert
         assertTrue(result.isEmpty());
