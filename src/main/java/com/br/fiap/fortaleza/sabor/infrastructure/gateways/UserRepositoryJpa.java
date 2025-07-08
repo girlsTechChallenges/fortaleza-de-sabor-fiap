@@ -5,7 +5,7 @@ import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.slf4j.Logger;

@@ -2,8 +2,8 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserCredentialsDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserAuthDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserCredentialsDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,6 +1,7 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto;
+package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response;
 
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 
 import java.util.List;
 

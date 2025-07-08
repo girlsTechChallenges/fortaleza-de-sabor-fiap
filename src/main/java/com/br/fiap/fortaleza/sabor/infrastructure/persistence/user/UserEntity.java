@@ -1,6 +1,7 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -32,9 +33,14 @@ public class UserEntity {
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
     private List<AddressEntity> enderecos;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurante_id")
+    private RestaurantEntity restaurante;
+
     public UserEntity() {}
 
-    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.login = login;

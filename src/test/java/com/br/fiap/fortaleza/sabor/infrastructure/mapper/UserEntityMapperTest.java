@@ -3,12 +3,12 @@ package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -83,7 +83,7 @@ class UserEntityMapperTest {
     @DisplayName("Should map UserEntity to User.")
     void shouldMapUserEntityToUser() {
         AddressEntity address = new AddressEntity("Rua 1", "Bairro 2", "Comp", 1, "Estado", "Cidade", "03565000");
-        UserEntity entity = new UserEntity("João", "joao@email.com", "joao123", "123", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of(address));
+        UserEntity entity = new UserEntity(1L, "João", "joao@email.com", "joao123", "123", LocalDate.now(), TypeEntityEnum.CLIENTE, List.of(address));
 
         User user = mapper.toUserDomain(entity);
 
