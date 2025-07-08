@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import jakarta.persistence.*;

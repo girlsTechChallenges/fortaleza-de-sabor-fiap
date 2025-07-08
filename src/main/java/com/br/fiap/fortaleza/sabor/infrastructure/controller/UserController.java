@@ -6,10 +6,10 @@ import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,14 +36,14 @@ public class UserController {
     private final GetUseCase getUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
-    private final UserEntityMapper userEntityMapper;
+    private final UserMapper userMapper;
 
-    public UserController(CreateUseCase createUseCase, GetUseCase getAllUseCase, UpdateUseCase updateUseCase, DeleteUseCase deleteUseCase, UserEntityMapper userEntityMapper) {
+    public UserController(CreateUseCase createUseCase, GetUseCase getAllUseCase, UpdateUseCase updateUseCase, DeleteUseCase deleteUseCase, UserMapper userMapper) {
         this.createUseCase = createUseCase;
         this.getUseCase = getAllUseCase;
         this.updateUseCase = updateUseCase;
         this.deleteUseCase = deleteUseCase;
-        this.userEntityMapper = userEntityMapper;
+        this.userMapper = userMapper;
     }
 
     @Operation(summary = "Create a user", description = "Register a user.")
@@ -57,8 +57,8 @@ public class UserController {
     public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST: {} ", userRequestDto);
-        var resp = createUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp));
+        var resp = createUseCase.save(userMapper.toUserDomain(userRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponseDto(resp));
     }
 
     @Operation(summary = "Rescue the user by Id", description = "Allows the retrieval of information from a specific user")
@@ -73,7 +73,7 @@ public class UserController {
     ) {
         log.info("GET USER BY ID REQUEST {} ", idUser);
         Optional<User> user = getUseCase.getById(idUser);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
     }
 
     @Operation(summary = "Search all users", description = "Returns a list of all users registered in the system.")
@@ -85,7 +85,7 @@ public class UserController {
     public List<UserResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getUseCase.getAll();
-        return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
+        return resp.stream().map(userMapper::toUserResponseDto).toList();
     }
 
     @Operation(summary = "Update a user", description = "Allows the user to update their registered data from identification")
@@ -102,7 +102,7 @@ public class UserController {
             @RequestBody @Valid UpdateRequestDto updateRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateUseCase.update(idUser, userEntityMapper.updateToUserDomain(updateRequestDto));
+        updateUseCase.update(idUser, userMapper.updateToUserDomain(updateRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

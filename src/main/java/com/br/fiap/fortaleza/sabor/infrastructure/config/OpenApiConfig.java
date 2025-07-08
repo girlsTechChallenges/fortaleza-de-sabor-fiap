@@ -29,6 +29,7 @@ public class OpenApiConfig {
                         .addResponses("204", new ApiResponse().description("No Content"))
                         .addResponses("400", new ApiResponse().description("Bad Request"))
                         .addResponses("404", new ApiResponse().description("Not Found"))
+                        .addResponses("409", new ApiResponse().description("Conflict"))
                         .addResponses("500", new ApiResponse().description("Internal Server Error"))
                 );
     }

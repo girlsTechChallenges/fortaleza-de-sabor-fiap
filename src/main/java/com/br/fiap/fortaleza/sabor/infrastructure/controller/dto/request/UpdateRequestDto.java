@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto;
+package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request;
 
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import jakarta.validation.constraints.Email;

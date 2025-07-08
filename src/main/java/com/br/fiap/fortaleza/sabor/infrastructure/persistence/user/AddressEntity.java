@@ -1,5 +1,6 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -27,6 +28,11 @@ public class AddressEntity {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UserEntity usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private RestaurantEntity restaurante;
+
 
     public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
         this.rua = rua;
@@ -104,4 +110,8 @@ public class AddressEntity {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    public RestaurantEntity getRestaurante() {return restaurante; }
+
+    public void setRestaurante(RestaurantEntity restaurante) { this.restaurante = restaurante; }
 }
