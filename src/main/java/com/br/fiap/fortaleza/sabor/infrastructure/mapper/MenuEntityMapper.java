@@ -19,10 +19,10 @@ public class MenuEntityMapper {
 //    public MenuItem toMenuDomain(MenuRequestDto menuRequestDto) {
 //        return new MenuItem(
 //                menuRequestDto.nome(),
-//                menuRequestDto.descricao_item(),
-//                menuRequestDto.preco_item(),
-//                menuRequestDto.disponibilidade()
-//                menuRequestDto.imagem_item()
+//                menuRequestDto.itemDescription(),
+//                menuRequestDto.itemPrice(),
+//                menuRequestDto.availability()
+//                menuRequestDto.itemImage()
 //                );
 //    }
 
@@ -35,15 +35,15 @@ public class MenuEntityMapper {
 //                addresses);
 //    }
 
-    public MenuEntity toUserEntity(MenuItem menuItem) {
-        return new MenuEntity(
-                menuItem.getNome(),
-                menuItem.getDescricao_item(),
-                menuItem.getPreco_item(),
-                menuItem.getDisponibilidade(),
-                menuItem.getImagem_item()
-        );
-    }
+//    public MenuEntity toUserEntity(MenuItem menuItem) {
+//        return new MenuEntity(
+//                menuItem.getNome(),
+//                menuItem.getItemDescription(),
+//                menuItem.getItemPrice(),
+//                menuItem.getAvailability(),
+//                menuItem.getItemImage()
+//        );
+//    }
 
     public User toUserDomain(UserEntity userEntity) {
 

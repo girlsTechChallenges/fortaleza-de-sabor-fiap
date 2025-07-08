@@ -11,21 +11,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MenuItem {
     private String nome;
-    private String descricao_item;
-    private String preco_item;
-    private Boolean disponibilidade;
-    private String imagem_item;
+    private String itemDescription;
+    private String itemPrice;
+    private Boolean availability;
+    private String itemImage;
 
 //    public MenuItem(
 //            String nome,
-//            String descricao_item,
-//            String preco_item,
-//            Boolean disponibilidade,
-//            String imagem_item) {
+//            String itemDescription,
+//            String itemPrice,
+//            Boolean availability,
+//            String itemImage) {
 //        this.nome = nome;
-//        this.descricao_item = descricao_item;
-//        this.preco_item = preco_item;
-//        this.disponibilidade = disponibilidade;
-//        this.imagem_item = imagem_item;
+//        this.itemDescription = itemDescription;
+//        this.itemPrice = itemPrice;
+//        this.availability = availability;
+//        this.itemImage = itemImage;
 //    }
 }

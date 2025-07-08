@@ -14,13 +14,13 @@ public class MenuEntity {
     private Long id_cardapio;
 
     @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL)
-    private List<MenuItemsEntity> lista_items_cardapio;
+    private List<MenuItemsEntity> menuItemsList;
 
     public MenuEntity() {}
 
-    public MenuEntity(Long id_cardapio, List<MenuItemsEntity> lista_items_cardapio){
+    public MenuEntity(Long id_cardapio, List<MenuItemsEntity> menuItemsList){
         this.id_cardapio = id_cardapio;
-        this.lista_items_cardapio = lista_items_cardapio;
+        this.menuItemsList = menuItemsList;
     }
 
     public Long getId_cardapio() { return id_cardapio;}
@@ -29,9 +29,9 @@ public class MenuEntity {
         this.id_cardapio = id_cardapio;
     }
 
-    public List<MenuItemsEntity> getLista_items_cardapio(){ return lista_items_cardapio; }
+    public List<MenuItemsEntity> getMenuItemsList(){ return menuItemsList; }
 
-    public void setLista_items_cardapio(List<MenuItemsEntity> lista_items_cardapio) {
-        this.lista_items_cardapio = lista_items_cardapio;
+    public void setMenuItemsList(List<MenuItemsEntity> menuItemsList) {
+        this.menuItemsList = menuItemsList;
     }
 }

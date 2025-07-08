@@ -1,18 +1,18 @@
 package com.br.fiap.fortaleza.sabor.application.usecase.menu;
 
-import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemRepository;
+import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemsRepository;
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CreateMenuItemUseCase {
-    private final MenuItemRepository menuItemRepository;
+    private final MenuItemsRepository menuItemsRepository;
 
-    public CreateMenuItemUseCase(MenuItemRepository menuItemRepository) {
-        this.menuItemRepository = menuItemRepository;
+    public CreateMenuItemUseCase(MenuItemsRepository menuItemsRepository) {
+        this.menuItemsRepository = menuItemsRepository;
     }
 
     public MenuItem save(MenuItem menu) {
-        return menuItemRepository.save(menu);
+        return menuItemsRepository.save(menu);
     }
 }

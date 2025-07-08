@@ -15,7 +15,7 @@ public record MenuItemRequestDto(
         @NotNull
         @NotBlank
         @Size(min = 2, max = 250)
-        String descricao_item,
+        String itemDescription,
 
         @NotNull
         @NotBlank
@@ -23,13 +23,13 @@ public record MenuItemRequestDto(
                 regexp = "^\\d{1,8}(\\.\\d{2})?$",
                 message = "The price must be a valid number with up to 8 digits and optionally 2 decimal places (e.g., 12.34)"
         )
-        String preco_item,
+        String itemPrice,
 
         @NotNull
         @NotBlank
-        Boolean disponibilidade,
+        Boolean availability,
 
         @NotNull
-        String imagem_item
+        String itemImage
 ) {}
 

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class MenuItemsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_item_cardapio;
+    private Long idItemCardapio;
 
     @ManyToOne
     @JoinColumn(name = "id_cardapio")
@@ -15,32 +15,32 @@ public class MenuItemsEntity {
 
     private String nome;
 
-    private String descricao_item;
+    private String itemDescription;
 
-    private String preco_item;
+    private String itemPrice;
 
-    private Boolean disponibilidade;
+    private Boolean availability;
 
-    private String imagem_item;
+    private String itemImage;
 
     public MenuItemsEntity() {}
 
-    public MenuItemsEntity(Long id_item_cardapio, MenuEntity cardapio, String nome, String descricao_item, String preco_item, Boolean disponibilidade, String imagem_item) {
-        this.id_item_cardapio = id_item_cardapio;
+    public MenuItemsEntity(Long idItemCardapio, MenuEntity cardapio, String nome, String itemDescription, String itemPrice, Boolean availability, String itemImage) {
+        this.idItemCardapio = idItemCardapio;
         this.cardapio = cardapio;
         this.nome = nome;
-        this.descricao_item = descricao_item;
-        this.preco_item = preco_item;
-        this.disponibilidade = disponibilidade;
-        this.imagem_item = imagem_item;
+        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.availability = availability;
+        this.itemImage = itemImage;
     }
 
-    public Long getId_item_cardapio() {
-        return id_item_cardapio;
+    public Long getIdTtemCardapio() {
+        return idItemCardapio;
     }
 
-    public void setId_item_cardapio(Long id_item_cardapio) {
-        this.id_item_cardapio = id_item_cardapio;
+    public void setIdItemCardapio(Long idItemCardapio) {
+        this.idItemCardapio = idItemCardapio;
     }
 
     public MenuEntity getCardapio() {
@@ -59,35 +59,35 @@ public class MenuItemsEntity {
         this.nome = nome;
     }
 
-    public String getDescricao_item() {
-        return descricao_item;
+    public String getItemDescription() {
+        return itemDescription;
     }
 
-    public void setDescricao_item(String descricao_item) {
-        this.descricao_item = descricao_item;
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
     }
 
-    public String getPreco_item() {
-        return preco_item;
+    public String getItemPrice() {
+        return itemPrice;
     }
 
-    public void setPreco_item(String preco_item) {
-        this.preco_item = preco_item;
+    public void setItemPrice(String itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
-    public Boolean getDisponibilidade() {
-        return disponibilidade;
+    public Boolean getAvailability() {
+        return availability;
     }
 
-    public void setDisponibilidade(Boolean disponibilidade) {
-        this.disponibilidade = disponibilidade;
+    public void setAvailability(Boolean availability) {
+        this.availability = availability;
     }
 
-    public String getImagem_item() {
-        return imagem_item;
+    public String getItemImage() {
+        return itemImage;
     }
 
-    public void setImagem_item(String imagem_item) {
-        this.imagem_item = imagem_item;
+    public void setItemImage(String itemImage) {
+        this.itemImage = itemImage;
     }
 }

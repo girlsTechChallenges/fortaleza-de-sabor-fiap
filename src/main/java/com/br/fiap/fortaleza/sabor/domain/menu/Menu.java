@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Menu {
-    private List<MenuItem> lista_items_cardapio;
+    private List<MenuItem> menuItemsList;
 }

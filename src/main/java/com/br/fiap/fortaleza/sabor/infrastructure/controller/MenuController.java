@@ -55,7 +55,6 @@ public class MenuController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto) {
-
         log.info("POST MENU REQUEST: {} ", menuItemRequestDto);
         var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuItemRequestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuResponseDto(resp));
