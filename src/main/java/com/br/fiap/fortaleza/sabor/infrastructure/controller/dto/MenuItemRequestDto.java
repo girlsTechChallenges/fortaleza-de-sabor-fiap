@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record MenuRequestDto(
+public record MenuItemRequestDto(
         @NotNull
         @NotBlank
         @Size(min = 2, max = 50)
@@ -27,7 +27,7 @@ public record MenuRequestDto(
 
         @NotNull
         @NotBlank
-        boolean disponibilidade,
+        Boolean disponibilidade,
 
         @NotNull
         String imagem_item

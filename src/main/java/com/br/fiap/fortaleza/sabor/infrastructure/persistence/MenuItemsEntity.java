@@ -19,13 +19,13 @@ public class MenuItemsEntity {
 
     private String preco_item;
 
-    private boolean disponibilidade;
+    private Boolean disponibilidade;
 
     private String imagem_item;
 
     public MenuItemsEntity() {}
 
-    public MenuItemsEntity(Long id_item_cardapio, MenuEntity cardapio, String nome, String descricao_item, String preco_item, boolean disponibilidade, String imagem_item) {
+    public MenuItemsEntity(Long id_item_cardapio, MenuEntity cardapio, String nome, String descricao_item, String preco_item, Boolean disponibilidade, String imagem_item) {
         this.id_item_cardapio = id_item_cardapio;
         this.cardapio = cardapio;
         this.nome = nome;
@@ -75,11 +75,11 @@ public class MenuItemsEntity {
         this.preco_item = preco_item;
     }
 
-    public boolean isDisponibilidade() {
+    public Boolean getDisponibilidade() {
         return disponibilidade;
     }
 
-    public void setDisponibilidade(boolean disponibilidade) {
+    public void setDisponibilidade(Boolean disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
 

@@ -1,14 +1,15 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuItemUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuItemUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.domain.menu.Menu;
+import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,39 +32,38 @@ import java.util.Optional;
 @RequestMapping("/cardapio")
 public class MenuController {
     private static final Logger log = LoggerFactory.getLogger(MenuController.class);
-    private final CreateMenuUseCase createMenuUseCase;
-    private final GetMenuUseCase getMenuUseCase;
-    private final UpdateMenuUseCase updateMenuUseCase;
-    private final DeleteMenuUseCase deleteMenuUseCase;
+    private final CreateMenuItemUseCase createMenuUseCase;
+    private final GetMenuItemUseCase getMenuItemUseCase;
+    private final UpdateMenuItemUseCase updateMenuItemUseCase;
+    private final DeleteMenuItemUseCase deleteMenuItemUseCase;
     private final MenuEntityMapper menuEntityMapper;
 
-    public MenuController(CreateMenuUseCase createMenuUseCase, GetMenuUseCase getMenuUseCase, UpdateMenuUseCase updateMenuUseCase, DeleteMenuUseCase deleteMenuUseCase, MenuEntityMapper menuEntityMapper) {
+    public MenuController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuEntityMapper menuEntityMapper) {
         this.createMenuUseCase = createMenuUseCase;
-        this.getMenuUseCase = getMenuUseCase;
-        this.updateMenuUseCase = updateMenuUseCase;
-        this.deleteMenuUseCase = deleteMenuUseCase;
+        this.getMenuItemUseCase = getMenuItemUseCase;
+        this.updateMenuItemUseCase = updateMenuItemUseCase;
+        this.deleteMenuItemUseCase = deleteMenuItemUseCase;
         this.menuEntityMapper = menuEntityMapper;
     }
 
     @Operation(summary = "Create a menu", description = "Create a new menu.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Register a menu.", content = @Content(schema = @Schema(implementation = MenuResponseDto.class))),
+            @ApiResponse(responseCode = "200", description = "Register a menu.", content = @Content(schema = @Schema(implementation = MenuItemResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid field: mandatory criteria were not met.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "409", description = "Menu already registered.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@Valid @RequestBody MenuRequestDto menuRequestDto) {
+    public ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto) {
 
-        log.info("POST MENU REQUEST: {} ", menuRequestDto);
-        var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuRequestDto));
+        log.info("POST MENU REQUEST: {} ", menuItemRequestDto);
+        var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuItemRequestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuResponseDto(resp));
     }
 
-//
     @Operation(summary = "Rescue the menu by Id", description = "Allows the retrieval of information from a specific menu")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Menu successfully located", content = @Content(schema = @Schema(implementation = MenuResponseDto.class))),
+            @ApiResponse(responseCode = "202", description = "Menu successfully located", content = @Content(schema = @Schema(implementation = MenuItemResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "Menu not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
@@ -72,7 +72,7 @@ public class MenuController {
             @PathVariable @NotNull Long idMenu
     ) {
         log.info("GET USER BY ID REQUEST {} ", idMenu);
-        Optional<Menu> menu = getMenuUseCase.getById(idMenu);
+        Optional<MenuItem> menu = getMenuItemUseCase.getById(idMenu);
         return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(menuEntityMapper.getMenuByIdToMenuResponseDto(menu)), HttpStatus.ACCEPTED);
     }
 
@@ -82,15 +82,15 @@ public class MenuController {
             @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MenuResponseDto> getAll() {
+    public List<MenuItemResponseDto> getAll() {
         log.info("START GET ALL USERS");
-        var resp = getMenuUseCase.getAll();
+        var resp = getMenuItemUseCase.getAll();
         return resp.stream().map(menuEntityMapper::toMenuResponseDto).toList();
     }
 
     @Operation(summary = "Update a menu", description = "Allows the menu to update their registered data from identification")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Menu updated successfully", content = @Content(schema = @Schema(implementation = MenuResponseDto.class))),
+            @ApiResponse(responseCode = "202", description = "Menu updated successfully", content = @Content(schema = @Schema(implementation = MenuItemResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Data structure error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "404", description = "Menu not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
@@ -102,7 +102,7 @@ public class MenuController {
             @RequestBody @Valid UpdateRequestDto updateRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateMenuUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateRequestDto));
+        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -115,7 +115,7 @@ public class MenuController {
     @DeleteMapping("/{idMenu}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long idMenu) {
         log.info("DELETE USER BY ID REQUEST {}", idMenu);
-        deleteMenuUseCase.delete(idMenu);
+        deleteMenuItemUseCase.delete(idMenu);
         return ResponseEntity.noContent().build();
     }
 
