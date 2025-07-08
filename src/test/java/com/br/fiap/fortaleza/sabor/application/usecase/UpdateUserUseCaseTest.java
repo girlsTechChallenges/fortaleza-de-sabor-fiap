@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -16,17 +16,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateUseCaseTest {
+class UpdateUserUseCaseTest {
 
     private UsersRepository usersRepository;
-    private UpdateUseCase updateUseCase;
+    private UpdateUserUseCase updateUserUseCase;
     private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         usersRepository = mock(UsersRepository.class);
         passwordEncoder = mock(BCryptPasswordEncoder.class);
-        updateUseCase = new UpdateUseCase(usersRepository, passwordEncoder);
+        updateUserUseCase = new UpdateUserUseCase(usersRepository, passwordEncoder);
     }
 
     @Test
@@ -41,7 +41,7 @@ class UpdateUseCaseTest {
         when(usersRepository.update(userId, userToUpdate)).thenReturn(expected);
 
         // Act
-        Optional<User> result = updateUseCase.update(userId, userToUpdate);
+        Optional<User> result = updateUserUseCase.update(userId, userToUpdate);
 
         // Assert
         assertTrue(result.isPresent());
@@ -58,7 +58,7 @@ class UpdateUseCaseTest {
         when(usersRepository.update(userId, userToUpdate)).thenReturn(Optional.empty());
 
         // Act
-        Optional<User> result = updateUseCase.update(userId, userToUpdate);
+        Optional<User> result = updateUserUseCase.update(userId, userToUpdate);
 
         // Assert
         assertTrue(result.isEmpty());
