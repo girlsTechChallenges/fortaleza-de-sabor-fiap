@@ -2,6 +2,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserCredentialsDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +40,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
+    public ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
         var response = authUserUseCase.validateLogin(loginRequest.email(), loginRequest.password());
         return ResponseEntity.status(HttpStatus.OK).body(userEntityMapper.toTokenResponseDto(response));
     }
