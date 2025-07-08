@@ -51,7 +51,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
             throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
         }
 
-        if(!verifyRestaurant(restaurant.getName(), restaurant.getEmail())) {
+        if(!verifyRestaurant(restaurant.getName())) {
             throw new RestaurantAlreadyExistsException("Restaurant with name " + restaurant.getName() + " already exists");
         }
 
@@ -89,7 +89,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         return mapper.toRestaurantDomain(restaurantRepository.save(restaurantEntity));
     }
 
-    private boolean verifyRestaurant(String nome, String email) {
+    private boolean verifyRestaurant(String nome) {
 
         var findName = restaurantRepository.findByName(nome);
         if(findName.isPresent()) {
