@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UserMapper {
+public class UserEntityMapper {
 
     public User toUserDomain(UserRequestDto userRequestDto) {
 

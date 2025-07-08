@@ -1,15 +1,15 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,18 +32,18 @@ import java.util.Optional;
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private final CreateUseCase createUseCase;
-    private final GetUseCase getUseCase;
-    private final UpdateUseCase updateUseCase;
-    private final DeleteUseCase deleteUseCase;
-    private final UserMapper userMapper;
+    private final CreateUserUseCase createUserUseCase;
+    private final GetUserUseCase getUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
+    private final UserEntityMapper userEntityMapper;
 
-    public UserController(CreateUseCase createUseCase, GetUseCase getAllUseCase, UpdateUseCase updateUseCase, DeleteUseCase deleteUseCase, UserMapper userMapper) {
-        this.createUseCase = createUseCase;
-        this.getUseCase = getAllUseCase;
-        this.updateUseCase = updateUseCase;
-        this.deleteUseCase = deleteUseCase;
-        this.userMapper = userMapper;
+    public UserController(CreateUserUseCase createUserUseCase, GetUserUseCase getAllUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, UserEntityMapper userEntityMapper) {
+        this.createUserUseCase = createUserUseCase;
+        this.getUserUseCase = getAllUseCase;
+        this.updateUserUseCase = updateUserUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @Operation(summary = "Create a user", description = "Register a user.")
@@ -57,8 +57,8 @@ public class UserController {
     public ResponseEntity create(@Valid @RequestBody UserRequestDto userRequestDto) {
 
         log.info("POST USER REQUEST: {} ", userRequestDto);
-        var resp = createUseCase.save(userMapper.toUserDomain(userRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponseDto(resp));
+        var resp = createUserUseCase.save(userEntityMapper.toUserDomain(userRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userEntityMapper.toUserResponseDto(resp));
     }
 
     @Operation(summary = "Rescue the user by Id", description = "Allows the retrieval of information from a specific user")
@@ -72,8 +72,8 @@ public class UserController {
             @PathVariable @NotNull Long idUser
     ) {
         log.info("GET USER BY ID REQUEST {} ", idUser);
-        Optional<User> user = getUseCase.getById(idUser);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
+        Optional<User> user = getUserUseCase.getById(idUser);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(userEntityMapper.getUserByIdToUserResponseDto(user)), HttpStatus.ACCEPTED);
     }
 
     @Operation(summary = "Search all users", description = "Returns a list of all users registered in the system.")
@@ -84,8 +84,8 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserResponseDto> getAll() {
         log.info("START GET ALL USERS");
-        var resp = getUseCase.getAll();
-        return resp.stream().map(userMapper::toUserResponseDto).toList();
+        var resp = getUserUseCase.getAll();
+        return resp.stream().map(userEntityMapper::toUserResponseDto).toList();
     }
 
     @Operation(summary = "Update a user", description = "Allows the user to update their registered data from identification")
@@ -102,7 +102,7 @@ public class UserController {
             @RequestBody @Valid UpdateRequestDto updateRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateUseCase.update(idUser, userMapper.updateToUserDomain(updateRequestDto));
+        updateUserUseCase.update(idUser, userEntityMapper.updateToUserDomain(updateRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -115,7 +115,7 @@ public class UserController {
     @DeleteMapping("/{idUser}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long idUser) {
         log.info("DELETE USER BY ID REQUEST {}", idUser);
-        deleteUseCase.delete(idUser);
+        deleteUserUseCase.delete(idUser);
         return ResponseEntity.noContent().build();
     }
 }

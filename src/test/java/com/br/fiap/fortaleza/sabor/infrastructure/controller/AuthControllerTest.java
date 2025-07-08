@@ -1,8 +1,8 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.AuthUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,13 +32,13 @@ class AuthControllerTest {
     @InjectMocks
     private AuthController authController;
     @MockitoBean
-    private AuthUseCase authUseCase;
+    private AuthUserUseCase authUserUseCase;
     @MockitoBean
-    private UserMapper userMapper;
+    private UserEntityMapper userEntityMapper;
 
     @BeforeEach
     public void setUp() {
-        authController = new AuthController(authUseCase, userMapper);
+        authController = new AuthController(authUserUseCase,userEntityMapper);
     }
 
     @Test
@@ -49,7 +49,7 @@ class AuthControllerTest {
         var request = "{\n\t\"email\":\"email@email.com.br\",\n\t\"password\": \"password\"\n}";
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-        when(userMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
+        when(userEntityMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
 
         // WHEN
         ResultActions result = mockMvc.perform(post("/auth/login")

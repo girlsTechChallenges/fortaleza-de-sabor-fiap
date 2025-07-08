@@ -4,7 +4,7 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
@@ -24,9 +24,9 @@ public class UserRepositoryJpa implements UsersRepository {
     private static final Logger log = LoggerFactory.getLogger(UserRepositoryJpa.class);
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserMapper mapper;
+    private final UserEntityMapper mapper;
 
-    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserMapper mapper) {
+    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserEntityMapper mapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.mapper = mapper;

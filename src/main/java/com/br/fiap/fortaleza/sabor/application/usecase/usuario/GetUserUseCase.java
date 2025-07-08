@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class GetUseCase {
+public class GetUserUseCase {
 
     private final UsersRepository usersRepository;
 
-    public GetUseCase(UsersRepository usersRepository) {
+    public GetUserUseCase(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 

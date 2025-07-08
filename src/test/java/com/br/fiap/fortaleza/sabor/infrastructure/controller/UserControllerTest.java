@@ -1,16 +1,16 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,21 +42,21 @@ class UserControllerTest {
     private UserController userController;
 
     @MockitoBean
-    private UserMapper userMapper;
+    private UserEntityMapper userEntityMapper;
     @MockitoBean
     private UsersRepository usersRepository;
     @MockitoBean
-    private CreateUseCase createUseCase;
+    private CreateUserUseCase createUseCase;
     @MockitoBean
-    private GetUseCase getUseCase;
+    private GetUserUseCase getUserUseCase;
     @MockitoBean
-    private UpdateUseCase updateUseCase;
+    private UpdateUserUseCase updateUseCase;
     @MockitoBean
-    private DeleteUseCase deleteUseCase;
+    private DeleteUserUseCase deleteUseCase;
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase,getUseCase,updateUseCase, deleteUseCase, userMapper);
+        userController = new UserController(createUseCase, getUserUseCase,updateUseCase, deleteUseCase,userEntityMapper);
     }
 
     @Test
@@ -69,7 +69,7 @@ class UserControllerTest {
         //GIVEN
         var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
-        var mapper = userMapper.toUserDomain(requestDto);
+        var mapper = userEntityMapper.toUserDomain(requestDto);
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
@@ -94,10 +94,10 @@ class UserControllerTest {
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
-        when(userMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
+        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
+        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
-        when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
+        when(getUserUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
         mockMvc.perform(get("/users")
                         .accept(MediaType.APPLICATION_JSON))
@@ -110,7 +110,7 @@ class UserControllerTest {
             """));
 
         // THEN
-        verify(getUseCase, times(1)).getAll();
+        verify(getUserUseCase, times(1)).getAll();
     }
 
     @Test
@@ -122,15 +122,15 @@ class UserControllerTest {
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(getUseCase.getById(1L)).thenReturn(Optional.of(user));
-        when(userMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
+        when(getUserUseCase.getById(1L)).thenReturn(Optional.of(user));
+        when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
 
         // THEN
         mockMvc.perform(get("/users/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
                 .andExpect(status().isAccepted());
 
-        verify(getUseCase, times(1)).getById(1L);
+        verify(getUserUseCase, times(1)).getById(1L);
     }
 
 
@@ -157,7 +157,7 @@ class UserControllerTest {
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
+        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
 
         // WHEN
         mockMvc.perform(put("/users/1")

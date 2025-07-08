@@ -23,13 +23,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserMapperTest {
+class UserEntityMapperTest {
 
-    private UserMapper mapper;
+    private UserEntityMapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = new UserMapper();
+        mapper = new UserEntityMapper();
     }
 
     @Test

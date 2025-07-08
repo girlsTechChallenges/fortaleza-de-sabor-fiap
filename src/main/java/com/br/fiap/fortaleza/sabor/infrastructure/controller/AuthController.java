@@ -1,10 +1,9 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.AuthUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserCredentialsDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,12 +23,12 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    private final AuthUseCase authUseCase;
-    private final UserMapper userMapper;
+    private final AuthUserUseCase authUserUseCase;
+    private final UserEntityMapper userEntityMapper;
 
-    public AuthController(AuthUseCase authUseCase, UserMapper userMapper) {
-        this.authUseCase = authUseCase;
-        this.userMapper = userMapper;
+    public AuthController(AuthUserUseCase authUserUseCase, UserEntityMapper userEntityMapper) {
+        this.authUserUseCase = authUserUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @Operation(summary = "Login", description = "Allows a user to authenticate by logging in with email and password")
@@ -40,9 +39,9 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
-        var response = authUseCase.validateLogin(loginRequest.email(), loginRequest.password());
-        return ResponseEntity.status(HttpStatus.OK).body(userMapper.toTokenResponseDto(response));
+    public ResponseEntity<com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
+        var response = authUserUseCase.validateLogin(loginRequest.email(), loginRequest.password());
+        return ResponseEntity.status(HttpStatus.OK).body(userEntityMapper.toTokenResponseDto(response));
     }
 
     @Operation(summary = "Change password", description = "Allows a user to change an already registered password")
@@ -55,7 +54,7 @@ public class AuthController {
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse> updatePassword(@RequestBody UserCredentialsDto request) {
         log.info("UPDATE USER PASSWORD {}", request);
-        authUseCase.updatePassword(request.email(), request.password());
+        authUserUseCase.updatePassword(request.email(), request.password());
         return ResponseEntity.noContent().build();
     }
 }

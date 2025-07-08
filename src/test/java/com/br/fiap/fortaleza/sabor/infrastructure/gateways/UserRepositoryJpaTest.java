@@ -3,7 +3,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
@@ -35,7 +35,7 @@ class UserRepositoryJpaTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserMapper mapper;
+    private UserEntityMapper mapper;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
