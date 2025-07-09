@@ -11,6 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TypeUser {
 
+    private Long idType;
     private String nameType;
 
+    public TypeUser(String nameType) {
+        this.nameType = nameType;
+    }
 }

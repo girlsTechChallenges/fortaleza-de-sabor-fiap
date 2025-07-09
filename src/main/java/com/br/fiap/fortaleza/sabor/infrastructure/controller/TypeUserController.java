@@ -4,6 +4,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.typeUser.*;
 import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.TypeUserEntityMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,7 +54,7 @@ public class TypeUserController {
 
         log.info("POST USER REQUEST: {} ", typeUserDto);
         TypeUser resp = createUseCase.save(typeUserEntityMapper.toTypeUserDomain(typeUserDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(typeUserEntityMapper.toTypeUserRequestDto(resp));
+        return ResponseEntity.status(HttpStatus.CREATED).body(typeUserEntityMapper.toTypeUserResponseDto(resp));
     }
 
     @Operation(summary = "Rescue the typeUser by Id", description = "Allows the retrieval of information from a specific typeUser")
@@ -77,10 +78,10 @@ public class TypeUserController {
             @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TypeUserRequestDto> getAll() {
+    public List<TypeUserResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getUseCase.getAll();
-        return resp.stream().map(typeUserEntityMapper::toTypeUserRequestDto).toList();
+        return resp.stream().map(typeUserEntityMapper::toTypeUserResponseDto).toList();
     }
 
     @Operation(summary = "Update a typeUser", description = "Allows the typeUser to update their registered data from identification")

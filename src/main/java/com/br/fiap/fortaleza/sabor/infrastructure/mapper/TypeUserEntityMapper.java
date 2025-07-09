@@ -2,6 +2,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserEntity;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class TypeUserEntityMapper {
 
     public TypeUser toTypeUserDomain(TypeUserEntity typeUserEntity) {
-        return new TypeUser(typeUserEntity.getType());
+        return new TypeUser(typeUserEntity.getId(),typeUserEntity.getType());
     }
 
     public TypeUser toTypeUserDomain(TypeUserRequestDto typeUserRequestDto) {
@@ -22,6 +23,14 @@ public class TypeUserEntityMapper {
 
     public TypeUserRequestDto toTypeUserRequestDto(TypeUser typeUser) {
         return new TypeUserRequestDto(typeUser.getNameType());
+    }
+
+    public TypeUserResponseDto toTypeUserResponseDto(TypeUser typeUser) {
+        return new TypeUserResponseDto(typeUser.getIdType(),typeUser.getNameType());
+    }
+
+    public TypeUserResponseDto toTypeUserResponseDto(TypeUserEntity typeUserEntity) {
+        return new TypeUserResponseDto(typeUserEntity.getId(),typeUserEntity.getType());
     }
 
 }
