@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TypeUser {
 
-    private String nome_tipo;
+    private String nameType;
 
 }

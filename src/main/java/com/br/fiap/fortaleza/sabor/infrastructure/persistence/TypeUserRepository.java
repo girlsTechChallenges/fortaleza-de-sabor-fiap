@@ -8,6 +8,6 @@ import java.util.Optional;
 @Repository
 public interface TypeUserRepository extends JpaRepository<TypeUserEntity, Long> {
 
-    Optional<TypeUserEntity> getByNomeTipo(String nome_tipo);
+    Optional<TypeUserEntity> getByNameType(String nameType);
 
 }

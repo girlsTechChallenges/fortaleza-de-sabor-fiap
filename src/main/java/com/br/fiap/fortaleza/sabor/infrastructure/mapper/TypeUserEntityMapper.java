@@ -1,29 +1,27 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.TypeUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class TypeUserEntityMapper {
 
     public TypeUser toTypeUserDomain(TypeUserEntity typeUserEntity) {
-        return new TypeUser(typeUserEntity.getTipo());
+        return new TypeUser(typeUserEntity.getType());
     }
 
-    public TypeUser toTypeUserDomain(TypeUserDto typeUserDto) {
-        return new TypeUser(typeUserDto.nome_tipo());
+    public TypeUser toTypeUserDomain(TypeUserRequestDto typeUserRequestDto) {
+        return new TypeUser(typeUserRequestDto.nameType());
     }
 
     public TypeUserEntity toTypeUserEntity(TypeUser typeUser) {
-        return new TypeUserEntity(typeUser.getNome_tipo());
+        return new TypeUserEntity(typeUser.getNameType());
     }
 
-    public TypeUserDto toTypeUserDto(TypeUser typeUser) {
-        return new TypeUserDto(typeUser.getNome_tipo());
+    public TypeUserRequestDto toTypeUserRequestDto(TypeUser typeUser) {
+        return new TypeUserRequestDto(typeUser.getNameType());
     }
 
 }

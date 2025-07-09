@@ -6,7 +6,6 @@ import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.typeUser.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.TypeUserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserRepository;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,10 +28,10 @@ public class TypeUserRepositoryJpa implements TypeUsersRepository {
 
     @Override
     public TypeUser save(TypeUser typeUser) {
-        typeUserRepository.getByNomeTipo(typeUser.getNome_tipo())
+        typeUserRepository.getByNameType(typeUser.getNameType())
                 .ifPresent(existingTypeUser -> {
                     throw new TypeUserAlreadyRegisteredException(
-                            "This typeUser" + typeUser.getNome_tipo() + " already exists."
+                            "This typeUser " + typeUser.getNameType() + " already exists."
                     );
                 });
         TypeUserEntity typeUserEntity = mapper.toTypeUserEntity(typeUser);
@@ -45,7 +44,7 @@ public class TypeUserRepositoryJpa implements TypeUsersRepository {
                 .orElseThrow(() -> new TypeUserNotFoundException(idTypeUser));
 
         if (typeUser != null) {
-            findTypeUser.setTipo(typeUser.getNome_tipo());
+            findTypeUser.setType(typeUser.getNameType());
         }
 
         TypeUserEntity actualization = typeUserRepository.save(findTypeUser);
@@ -71,8 +70,8 @@ public class TypeUserRepositoryJpa implements TypeUsersRepository {
     }
 
     @Override
-    public Optional<TypeUser> getByNomeTipo(String nomeTypeUser) {
-        Optional<TypeUserEntity> findTypeUser = typeUserRepository.getByNomeTipo(nomeTypeUser);
+    public Optional<TypeUser> getByNameType(String nameTypeUser) {
+        Optional<TypeUserEntity> findTypeUser = typeUserRepository.getByNameType(nameTypeUser);
 
         return findTypeUser.map(mapper::toTypeUserDomain);
     }

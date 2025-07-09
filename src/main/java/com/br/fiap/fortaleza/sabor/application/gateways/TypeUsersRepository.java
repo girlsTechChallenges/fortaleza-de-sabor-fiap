@@ -15,7 +15,7 @@ public interface TypeUsersRepository {
 
     Optional<TypeUser> getById(Long idTypeUser);
 
-    Optional<TypeUser> getByNomeTipo(String nomeTypeUser);
+    Optional<TypeUser> getByNameType(String nameTypeUser);
 
     List<TypeUser> getAll();
 

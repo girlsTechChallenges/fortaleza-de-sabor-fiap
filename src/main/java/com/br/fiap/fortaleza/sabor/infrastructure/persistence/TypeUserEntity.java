@@ -9,31 +9,30 @@ public class TypeUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTipos;
+    private Long idType;
 
     @Column(nullable = false)
-    private String nomeTipo;
+    private String nameType;
 
-    public TypeUserEntity(String nomeTipo) {
-        this.nomeTipo = nomeTipo;
+    public TypeUserEntity(String nameType) {
+        this.nameType = nameType;
     }
 
     public TypeUserEntity() {}
 
-    // Getters and Setters
     public Long getId() {
-        return idTipos;
+        return idType;
     }
 
-    public void setId(Long idTipos) {
-        this.idTipos = idTipos;
+    public void setId(Long idType) {
+        this.idType = idType;
     }
 
-    public String getTipo() {
-        return nomeTipo;
+    public String getType() {
+        return nameType;
     }
 
-    public void setTipo(String nomeTipo) {
-        this.nomeTipo = nomeTipo;
+    public void setType(String nameType) {
+        this.nameType = nameType;
     }
 }
