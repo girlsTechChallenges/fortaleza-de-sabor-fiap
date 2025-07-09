@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
