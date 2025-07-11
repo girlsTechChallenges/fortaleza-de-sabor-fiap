@@ -12,6 +12,7 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
 
 1. **Camada de Apresentação**:
    - Controllers: Exposição dos endpoints REST da API
+   - Controller Docs: Interfaces de documentação Swagger (separadas dos controllers)
    - DTOs: Objetos de transferência de dados
    - Exception Handlers: Tratamento de exceções
 
@@ -52,6 +53,7 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
 │   │   │   └── infrastructure/
 │   │   │       ├── config/             # Configurações
 │   │   │       ├── controller/         # Controllers REST
+│   │   │       │   └── docs/          # Interfaces de documentação Swagger
 │   │   │       ├── dto/               # DTOs
 │   │   │       ├── mapper/            # Mappers
 │   │   │       └── persistence/       # Entidades JPA
@@ -89,19 +91,54 @@ O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Arch
    cd fortaleza-de-sabor-fiap
    ```
 
-2. **Construa o projeto**:
-   ```powershell
-   ./mvnw clean install
-   ```
-
-3. **Execute com Docker**:
+2. **Execute com Docker (Recomendado - Build Automático)**:
    ```powershell
    docker-compose up --build
+   ```
+   
+   > **Nota**: O Docker agora utiliza **multi-stage build**, automatizando a compilação do projeto sem necessidade de build local.
+
+3. **Alternativa - Build Manual + Docker**:
+   ```powershell
+   ./mvnw clean install
+   docker-compose up
    ```
 
 4. **Acesse a aplicação**:
    - API: [http://localhost:8080](http://localhost:8080)
    - Swagger: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+---
+
+## Melhorias Implementadas
+
+### 🐳 **Docker Multi-stage Build**
+- **Problema**: Dependência de build local da máquina
+- **Solução**: Build automatizado dentro do container Docker
+- **Benefício**: Deploy reproduzível e independente do ambiente
+
+### 🔧 **Configuração PostgreSQL Otimizada**
+- **Problema**: Erro na configuração de conexão do banco
+- **Solução**: Variáveis de ambiente corrigidas no docker-compose.yml
+- **Benefício**: Conexão estável e configurável
+
+### 🚀 **Driver PostgreSQL Explícito**
+- **Problema**: Driver class implícito causando inconsistências
+- **Solução**: `spring.datasource.driver-class-name=org.postgresql.Driver`
+- **Benefício**: Conexão mais confiável e explícita
+
+### 📚 **Swagger Organizado**
+- **Problema**: Anotações Swagger "poluindo" os Controllers
+- **Solução**: Interfaces de documentação separadas (`docs/`)
+- **Benefício**: Código mais limpo e documentação centralizada
+
+### 📁 **Nova Estrutura de Documentação**
+```
+src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/docs/
+├── AuthControllerDocs.java          # Documentação de autenticação
+├── UserControllerDocs.java          # Documentação de usuários
+└── RestaurantControllerDocs.java    # Documentação de restaurantes
+```
 
 ---
 

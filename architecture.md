@@ -5,6 +5,7 @@ graph TD
     %% Camadas da Aplicação
     subgraph Apresentação[Camada de Apresentação]
         A[Controllers]
+        ControllerDocs[Controller Docs<br/>Interfaces Swagger]
         DTOs[DTOs]
         ExceptionHandlers[Exception Handlers]
     end
@@ -26,6 +27,7 @@ graph TD
 
     %% Relacionamentos
     A --> DTOs
+    A -.implements.-> ControllerDocs
     DTOs --> Mappers
     A --> UseCases
     ExceptionHandlers --> A
@@ -41,8 +43,10 @@ graph TD
     classDef domain fill:#fda,stroke:#333,stroke-width:2px
     classDef infrastructure fill:#dfa,stroke:#333,stroke-width:2px
     classDef database fill:#fad,stroke:#333,stroke-width:2px
+    classDef documentation fill:#e6f3ff,stroke:#0066cc,stroke-width:2px
 
     class A,DTOs,ExceptionHandlers presentation
+    class ControllerDocs documentation
     class UseCases,Entities domain
     class Gateways,Repositories,Mappers infrastructure
     class PostgreSQL database
