@@ -128,7 +128,7 @@ class UserControllerTest {
         // THEN
         mockMvc.perform(get("/users/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
 
         verify(getUserUseCase, times(1)).getById(1L);
     }
@@ -163,7 +163,7 @@ class UserControllerTest {
         mockMvc.perform(put("/users/1")
                         .content(new ObjectMapper().writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
 
         // THEN
         verify(updateUseCase, times(1)).update(eq(1L), any(User.class));
