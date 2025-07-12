@@ -19,7 +19,8 @@ Desenvolver um backend completo e robusto utilizando Spring Boot, com foco no ge
 O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Architecture e DDD (Domain-Driven Design), organizada da seguinte forma:
 
 #### Camada de Apresentação
-- **Controllers**: Exposição dos endpoints REST da API (`UserController`, `AuthController`).
+- **Controllers**: Exposição dos endpoints REST da API (`UserController`, `AuthController`, `RestaurantController`).
+- **Controller Docs**: Interfaces de documentação Swagger separadas (`AuthControllerDocs`, `UserControllerDocs`, `RestaurantControllerDocs`).
 - **DTOs**: Objetos de transferência de dados para request/response.
 - **Exception Handlers**: Tratamento centralizado de exceções (`UserExceptionHandler`).
 
@@ -363,7 +364,63 @@ Após a build, o projeto gera os seguintes artefatos:
 
 ---
 
-## 6. Collections para Teste
+## 6. Melhorias Técnicas Implementadas
+
+### 6.1. Otimização do Build com Docker Multi-stage
+**Problema Identificado**: A estratégia de apenas copiar o arquivo JAR para construção da imagem não é uma boa prática, pois depende que o processo de build seja realizado na máquina local.
+
+**Solução Implementada**: 
+- Implementação de Docker multi-stage build
+- Estágio 1: Build automático usando `maven:3.9.5-eclipse-temurin-21`
+- Estágio 2: Execução otimizada com `eclipse-temurin:21-jre-alpine`
+
+**Benefícios**:
+- Build reproduzível e independente do ambiente
+- Imagem final mais leve (apenas JRE)
+- Processo automatizado via Docker
+
+### 6.2. Correção da Configuração PostgreSQL
+**Problema Identificado**: Erro na configuração da conexão do banco de dados (docker-compose.yml).
+
+**Solução Implementada**:
+- Correção das variáveis de ambiente no docker-compose.yml
+- Adição da variável `SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver`
+- Padronização do nome do serviço de banco (`db`)
+
+### 6.3. Driver PostgreSQL Explícito
+**Problema Identificado**: Faltou informar `spring.datasource.driver-class-name=org.postgresql.Driver`.
+
+**Solução Implementada**:
+- Configuração explícita do driver em `application.properties`
+- Redundância configuracional via variável de ambiente
+- Maior confiabilidade na conexão com o banco
+
+### 6.4. Organização da Documentação Swagger
+**Problema Identificado**: A utilização das anotações Swagger no Controller "polui" o código, desviando a atenção do que realmente importa.
+
+**Solução Implementada**:
+- Criação de interfaces de documentação separadas:
+  - `AuthControllerDocs.java`
+  - `UserControllerDocs.java` 
+  - `RestaurantControllerDocs.java`
+- Controllers implementam essas interfaces
+- Separação clara entre lógica de negócio e documentação
+
+**Estrutura Resultante**:
+```
+src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/
+├── docs/
+│   ├── AuthControllerDocs.java
+│   ├── UserControllerDocs.java
+│   └── RestaurantControllerDocs.java
+├── AuthController.java (limpo, sem anotações Swagger)
+├── UserController.java (limpo, sem anotações Swagger)
+└── RestaurantController.java (limpo, sem anotações Swagger)
+```
+
+---
+
+## 7. Collections para Teste
 ### Link para a Collection do Postman
 A collection para testes está disponível em:
 - Local: `/collections/collection-phase-one`
@@ -377,7 +434,7 @@ A collection para testes está disponível em:
 
 ---
 
-## 7. Repositório do Código
+## 8. Repositório do Código
 ### URL do Repositório
 [https://github.com/girlsTechChallenges/fortaleza-de-sabor-fiap.git](https://github.com/girlsTechChallenges/fortaleza-de-sabor-fiap.git)
 
