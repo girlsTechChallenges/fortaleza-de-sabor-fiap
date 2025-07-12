@@ -1,5 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,10 +15,12 @@ public record BusinessHoursDto (
         DayOfWeek dayOfWeek,
 
         @NotNull(message = "Opening time is required")
+        @JsonFormat(pattern = "HH:mm:ss")
         @Schema(type = "string", pattern = "HH:mm:ss", example = "08:00:00")
         LocalTime openingTime,
 
         @NotNull(message = "Closing time is required")
+        @JsonFormat(pattern = "HH:mm:ss")
         @Schema(type = "string", pattern = "HH:mm:ss", example = "08:00:00")
         LocalTime closingTime,
 

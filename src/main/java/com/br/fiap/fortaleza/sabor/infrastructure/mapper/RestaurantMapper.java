@@ -4,20 +4,23 @@ import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantUpdateDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.BusinessHoursEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class RestaurantMapper {
 
-    public Restaurant toRestaurantDomain(RestaurantRequestDto restaurantRequestDto) {
-
-        List<Address> addressList = restaurantRequestDto.address().stream()
+    public Restaurant toRestaurantDomain(RestaurantRequestDto dto) {
+        List<Address> addresses = dto.address().stream()
                 .map(addressDto -> new Address(
                         addressDto.rua(),
                         addressDto.bairro(),
@@ -25,88 +28,143 @@ public class RestaurantMapper {
                         addressDto.numero(),
                         addressDto.estado(),
                         addressDto.cidade(),
-                        addressDto.cep()
-                )).toList();
+                        addressDto.cep()))
+                .toList();
 
-        List<BusinessHours> businessHoursList = restaurantRequestDto.businessHours().stream()
-                .map(dto -> new BusinessHours(
-                        dto.dayOfWeek(),
-                        dto.openingTime(),
-                        dto.closingTime(),
-                        dto.observations()
-                )).toList();
+        List<BusinessHours> businessHours = dto.businessHours().stream()
+                .map(bh -> new BusinessHours(
+                        bh.dayOfWeek(),
+                        bh.openingTime(),
+                        bh.closingTime(),
+                        bh.observations()))
+                .toList();
 
         return new Restaurant(
                 null,
-                restaurantRequestDto.name(),
-                restaurantRequestDto.kitchenType(),
-                restaurantRequestDto.email(),
+                dto.name(),
+                dto.kitchenType(),
+                dto.email(),
                 null,
-                addressList,
-                businessHoursList
-        );
+                addresses,
+                businessHours);
     }
 
-    public Restaurant toRestaurantDomain(RestaurantEntity restaurantEntity) {
+    public Restaurant toRestaurantDomain(RestaurantUpdateDto dto) {
+        List<Address> addresses = dto.address().stream()
+                .map(addressDto -> new Address(
+                        addressDto.rua(),
+                        addressDto.bairro(),
+                        addressDto.complemento(),
+                        addressDto.numero(),
+                        addressDto.estado(),
+                        addressDto.cidade(),
+                        addressDto.cep()))
+                .toList();
 
-        List<Address> addresses = restaurantEntity.getAddress().stream()
-                .map(addressEntity -> new Address(
-                        addressEntity.getRua(),
-                        addressEntity.getBairro(),
-                        addressEntity.getComplemento(),
-                        addressEntity.getNumero(),
-                        addressEntity.getEstado(),
-                        addressEntity.getCidade(),
-                        addressEntity.getCep()
-                )).toList();
-
-        List<BusinessHours> businessHours = restaurantEntity.getBusinessHours().stream()
-                .map(businessHoursEntity -> new BusinessHours(
-                        businessHoursEntity.getDay(),
-                        businessHoursEntity.getOpeningTime(),
-                        businessHoursEntity.getClosingTime(),
-                        businessHoursEntity.getObservations()
-                )).toList();
+        List<BusinessHours> businessHours = dto.businessHours().stream()
+                .map(bh -> new BusinessHours(
+                        bh.dayOfWeek(),
+                        bh.openingTime(),
+                        bh.closingTime(),
+                        bh.observations()))
+                .toList();
 
         return new Restaurant(
-                restaurantEntity.getId(),
-                restaurantEntity.getname(),
-                restaurantEntity.getKitchenType(),
-                restaurantEntity.getUser() != null ? restaurantEntity.getUser().getEmail() : null,
-                restaurantEntity.getUser() != null ? restaurantEntity.getUser().getNome() : null,
+                null,
+                dto.name(),
+                dto.kitchenType(),
+                null,
+                null,
                 addresses,
-                businessHours
-        );
+                businessHours);
     }
 
     public RestaurantEntity toRestaurantEntity(Restaurant restaurant) {
-
-        List<AddressEntity> addressEntities = restaurant.getAddress()
-                .stream().map(address -> new AddressEntity(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getEstado(),
-                        address.getCidade(), address.getCep())).toList();
-
-        List<BusinessHoursEntity> businessHoursEntities = restaurant.getBusinessHours()
-                .stream().map(businessHours -> new BusinessHoursEntity(
-                        businessHours.getDayOfWeek(),
-                        businessHours.getOpeningTime(),
-                        businessHours.getClosingTime(),
-                        businessHours.getObservations(), null )).toList();
-
-        return new RestaurantEntity(
+        RestaurantEntity entity = new RestaurantEntity(
                 restaurant.getName(),
                 restaurant.getKitchenType(),
-                addressEntities,
-                businessHoursEntities,
-               null
+                new UserEntity(),
+                new ArrayList<>(),
+                new ArrayList<>()
         );
+
+        List<AddressEntity> addressEntities = restaurant.getAddress().stream()
+                .map(address -> {
+                    AddressEntity ae = new AddressEntity(
+                            address.getRua(),
+                            address.getBairro(),
+                            address.getComplemento(),
+                            address.getNumero(),
+                            address.getEstado(),
+                            address.getCidade(),
+                            address.getCep()
+                    );
+                    ae.setRestaurante(entity);
+                    return ae;
+                })
+                .toList();
+
+        List<BusinessHoursEntity> businessHoursEntities = restaurant.getBusinessHours().stream()
+                .filter(bh -> bh.getDayOfWeek() != null && bh.getOpeningTime() != null && bh.getClosingTime() != null)
+                .map(bh -> new BusinessHoursEntity(
+                        bh.getDayOfWeek(),
+                        bh.getOpeningTime(),
+                        bh.getClosingTime(),
+                        bh.getObservations(),
+                        entity))
+                .toList();
+
+        entity.setAddress(addressEntities);
+        entity.setBusinessHours(businessHoursEntities);
+        return entity;
+    }
+
+    public List<BusinessHoursEntity> toBusinessHoursEntities(Restaurant restaurant, RestaurantEntity entity) {
+        return restaurant.getBusinessHours().stream()
+                .filter(bh -> bh.getDayOfWeek() != null && bh.getOpeningTime() != null && bh.getClosingTime() != null)
+                .map(bh -> new BusinessHoursEntity(
+                        bh.getDayOfWeek(),
+                        bh.getOpeningTime(),
+                        bh.getClosingTime(),
+                        bh.getObservations(),
+                        entity))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Restaurant toRestaurantDomain(RestaurantEntity entity) {
+        List<Address> addresses = entity.getAddress().stream()
+                .map(ae -> new Address(
+                        ae.getRua(),
+                        ae.getBairro(),
+                        ae.getComplemento(),
+                        ae.getNumero(),
+                        ae.getEstado(),
+                        ae.getCidade(),
+                        ae.getCep()))
+                .toList();
+
+        List<BusinessHours> businessHours = entity.getBusinessHours().stream()
+                .map(bh -> new BusinessHours(
+                        bh.getDay(),
+                        bh.getOpeningTime(),
+                        bh.getClosingTime(),
+                        bh.getObservations()))
+                .toList();
+
+        return new Restaurant(
+                entity.getId(),
+                entity.getName(),
+                entity.getTypeKitchen(),
+                entity.getOwner().getEmail(),
+                entity.getOwner().getNome(),
+                addresses,
+                businessHours);
     }
 
     public RestaurantResponseDto toRestaurantResponseDto(Restaurant restaurant) {
-        return new RestaurantResponseDto(restaurant.getId(), restaurant.getKitchenType(), restaurant.getOwner());
+        return new RestaurantResponseDto(
+                restaurant.getId(),
+                restaurant.getName(),
+                restaurant.getOwner());
     }
 }

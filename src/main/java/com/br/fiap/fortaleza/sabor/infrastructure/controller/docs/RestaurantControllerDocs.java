@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -25,5 +28,19 @@ public interface RestaurantControllerDocs {
             @ApiResponse(responseCode = "500", description = "Internal server error", 
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity<RestaurantResponseDto> createRestaurant(@RequestBody RestaurantRequestDto request);
+    ResponseEntity<RestaurantResponseDto> createRestaurant(@Valid @RequestBody RestaurantRequestDto request);
+
+    @Operation(summary = "Update a restaurant", description = "Update a restaurant.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Register a restaurant.",
+                    content = @Content(schema = @Schema(implementation = RestaurantResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Restaurant not found.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Restaurant already registered.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+    })
+    ResponseEntity<RestaurantResponseDto> updateRestaurant(@PathVariable @NotNull Long idRestaurant,
+                                                           @Valid @RequestBody RestaurantRequestDto restaurant);
 }

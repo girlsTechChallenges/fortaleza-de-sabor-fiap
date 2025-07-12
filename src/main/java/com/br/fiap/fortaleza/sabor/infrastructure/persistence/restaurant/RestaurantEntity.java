@@ -14,31 +14,29 @@ public class RestaurantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome", nullable = false)
     private String name;
 
-    @Column(name = "tipo_cozinha", nullable = false)
-    private String kitchenType;
-
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AddressEntity> address;
-
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<BusinessHoursEntity> businessHours;
+    @Column(name = "tipo_cozinha")
+    private String typeKitchen;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private UserEntity user;
+    @JoinColumn(name = "usuario_id")
+    private UserEntity owner;
 
-    public RestaurantEntity(String name, String kitchenType, List<AddressEntity> address, List<BusinessHoursEntity> businessHours, UserEntity user) {
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<AddressEntity> address;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<BusinessHoursEntity> businessHours;
+
+    public RestaurantEntity() {}
+
+    public RestaurantEntity(String name, String typeKitchen, UserEntity owner, List<AddressEntity> address, List<BusinessHoursEntity> businessHours) {
         this.name = name;
-        this.kitchenType = kitchenType;
+        this.typeKitchen = typeKitchen;
+        this.owner = owner;
         this.address = address;
         this.businessHours = businessHours;
-        this.user = user;
-    }
-
-    public RestaurantEntity() {
     }
 
     public Long getId() {
@@ -49,20 +47,28 @@ public class RestaurantEntity {
         this.id = id;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getKitchenType() {
-        return kitchenType;
+    public String getTypeKitchen() {
+        return typeKitchen;
     }
 
-    public void setKitchenType(String kitchenType) {
-        this.kitchenType = kitchenType;
+    public void setTypeKitchen(String typeKitchen) {
+        this.typeKitchen = typeKitchen;
+    }
+
+    public UserEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserEntity owner) {
+        this.owner = owner;
     }
 
     public List<AddressEntity> getAddress() {
@@ -79,13 +85,5 @@ public class RestaurantEntity {
 
     public void setBusinessHours(List<BusinessHoursEntity> businessHours) {
         this.businessHours = businessHours;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 }
