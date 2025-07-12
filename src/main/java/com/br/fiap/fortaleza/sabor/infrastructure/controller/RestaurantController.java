@@ -46,7 +46,6 @@ public class RestaurantController implements RestaurantControllerDocs {
         return ResponseEntity.created(location).body(responseDto);
     }
 
-
     @PutMapping(value = "/{idRestaurant}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestaurantResponseDto> updateRestaurant(@PathVariable @NotNull Long idRestaurant,
                                                                   @Valid @RequestBody RestaurantRequestDto restaurant) {
