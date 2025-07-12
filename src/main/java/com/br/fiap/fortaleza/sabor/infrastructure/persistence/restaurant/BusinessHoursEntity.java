@@ -14,7 +14,7 @@ public class BusinessHoursEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "dia_semana", nullable = false)
     private DayOfWeek day;
 
     @Column(name = "hora_abertura", nullable = false)

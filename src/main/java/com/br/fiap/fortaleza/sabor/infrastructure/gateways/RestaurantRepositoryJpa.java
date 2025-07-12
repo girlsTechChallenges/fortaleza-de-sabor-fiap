@@ -1,23 +1,25 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.RestaurantsRepository;
+import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantAlreadyExistsException;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.RestaurantMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.RestaurantRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.BusinessHoursEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantRepositoryJpa implements RestaurantsRepository {
@@ -36,29 +38,74 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
     @Override
     public Restaurant create(Restaurant restaurant) {
         String email = restaurant.getEmail();
-        if (email == null) return null;
-
-        log.info("Creating restaurant with email: {}", email);
-        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
-
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User not found with email: " + email);
+        if (email == null) {
+            log.error("Email do restaurante é nulo.");
+            return null;
         }
 
-        UserEntity userEntity = optionalUser.get();
+        log.info("Creating restaurant with email: {}", email);
+
+        var userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
         if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
             throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
         }
 
-        if(!verifyRestaurant(restaurant.getName())) {
+        if (restaurantRepository.findByName(restaurant.getName()).isPresent()) {
             throw new RestaurantAlreadyExistsException("Restaurant with name " + restaurant.getName() + " already exists");
         }
 
         RestaurantEntity restaurantEntity = mapper.toRestaurantEntity(restaurant);
-        restaurantEntity.setUser(userEntity);
+        restaurantEntity.setOwner(userEntity);
+        restaurantEntity.setAddress(addressEntityList(restaurant.getAddress()));
+        restaurantEntity.setBusinessHours(mapper.toBusinessHoursEntities(restaurant, restaurantEntity));
 
-        List<AddressEntity> addresses = userEntity.getEnderecos().stream()
+        restaurantEntity.getBusinessHours().forEach(bh -> {
+            if (bh == null) {
+                log.warn("⚠️ Horário nulo detectado.");
+            } else {
+                log.info("🕑 Horário válido: {} - {} às {}", bh.getDay(), bh.getOpeningTime(), bh.getClosingTime());
+            }
+        });
+
+        var savedEntity = restaurantRepository.save(restaurantEntity);
+        return mapper.toRestaurantDomain(savedEntity);
+    }
+
+    @Override
+    public Optional<Restaurant> update(Long idRestaurant, Restaurant restaurant) {
+        log.info("Updating restaurant with id: {}", idRestaurant);
+
+        var userEntity = userRepository.findByEmail(restaurant.getEmail())
+                .orElseThrow(() -> new RestaurantNotFoundException("User not found with email: " + restaurant.getEmail()));
+
+        if(!userEntity.getEmail().equals(restaurant.getEmail())) {
+            throw new RestaurantAlreadyExistsException("Email does not match the registered user. " + restaurant.getEmail());
+        }
+
+        if (restaurantRepository.findByName(restaurant.getName()).isPresent()) {
+            throw new RestaurantAlreadyExistsException("Restaurant with name " + restaurant.getName() + " already exists");
+        }
+
+        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+            throw new UserNotFoundException("User with email " + restaurant.getEmail() + " is not a restaurant owner");
+        }
+
+        var restaurantEntity = restaurantRepository.findById(idRestaurant)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant));
+
+        restaurantEntity.setName(restaurant.getName());
+        restaurantEntity.setTypeKitchen(restaurant.getKitchenType());
+        restaurantEntity.setAddress(addressEntityList(restaurant.getAddress()));
+        restaurantEntity.setBusinessHours(mapper.toBusinessHoursEntities(restaurant, restaurantEntity));
+
+        var updatedEntity = restaurantRepository.save(restaurantEntity);
+        return Optional.of(mapper.toRestaurantDomain(updatedEntity));
+    }
+
+    private List<AddressEntity> addressEntityList(List<Address> addresses) {
+        return addresses.stream()
                 .map(address -> {
                     AddressEntity newAddress = new AddressEntity();
                     newAddress.setRua(address.getRua());
@@ -68,34 +115,8 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
                     newAddress.setEstado(address.getEstado());
                     newAddress.setCidade(address.getCidade());
                     newAddress.setCep(address.getCep());
-                    newAddress.setRestaurante(restaurantEntity);
                     return newAddress;
                 })
-                .toList();
-
-        restaurantEntity.setAddress(addresses);
-
-        List<BusinessHoursEntity> business = restaurant.getBusinessHours().stream()
-                .map(bh -> new BusinessHoursEntity(
-                        bh.getDayOfWeek(),
-                        bh.getOpeningTime(),
-                        bh.getClosingTime(),
-                        bh.getObservations(),
-                        restaurantEntity))
-                .toList();
-
-        restaurantEntity.setBusinessHours(business);
-
-        return mapper.toRestaurantDomain(restaurantRepository.save(restaurantEntity));
-    }
-
-    private boolean verifyRestaurant(String nome) {
-
-        var findName = restaurantRepository.findByName(nome);
-        if(findName.isPresent()) {
-            log.error("Restaurant with name {} already exists", nome);
-            throw new RestaurantAlreadyExistsException("Restaurant with name " + nome + " already exists");
-        }
-        return true;
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

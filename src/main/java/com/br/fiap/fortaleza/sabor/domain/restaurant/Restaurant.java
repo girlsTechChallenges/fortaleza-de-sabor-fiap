@@ -3,7 +3,6 @@ package com.br.fiap.fortaleza.sabor.domain.restaurant;
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Restaurant {
 
     private Long id;
