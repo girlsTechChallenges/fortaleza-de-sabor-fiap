@@ -3,10 +3,11 @@ package com.br.fiap.fortaleza.sabor.application.usecase;
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -17,17 +18,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DeleteUserUseCaseTest {
 
-    private UsersRepository usersRepository;
+    @InjectMocks
     private DeleteUserUseCase deleteUserUseCase;
 
-    @BeforeEach
-    void setUp() {
-        usersRepository = mock(UsersRepository.class);
-        deleteUserUseCase = new DeleteUserUseCase(usersRepository);
-    }
+    @Mock
+    private UsersRepository usersRepository;
 
     @Test
-    @DisplayName("Should delete user by ID successfully.")
+    @DisplayName("Should delete user by ID successfully")
     void shouldDeleteUserByIdSuccessfully() {
         // Arrange
         Long userId = 1L;
@@ -46,7 +44,7 @@ class DeleteUserUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should return empty when user is not found.")
+    @DisplayName("Should return empty when user is not found")
     void shouldReturnEmptyWhenUserNotFound() {
         // Arrange
         Long userId = 2L;

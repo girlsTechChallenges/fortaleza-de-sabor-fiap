@@ -29,16 +29,15 @@ class CreateUserUseCaseTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    @DisplayName("Create Use Case - Must create and save a database user.")
-    void save() {
-        //GIVEN
+    @DisplayName("Should create and save user successfully")
+    void shouldCreateAndSaveUserSuccessfully() {
+        // Arrange
         var request = MockUser.userMockOne();
 
-        //WHEN
         when(usersRepository.save(request)).thenReturn(MockUser.userMockOne());
         when(passwordEncoder.encode(anyString())).thenReturn(anyString());
 
-        //THEN
+        // Act & Assert
         assertNotNull(createUserUseCase.save(request));
         assertDoesNotThrow(() -> createUserUseCase.save(request));
     }
