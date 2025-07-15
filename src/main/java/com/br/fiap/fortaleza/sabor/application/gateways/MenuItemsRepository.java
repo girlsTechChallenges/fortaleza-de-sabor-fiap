@@ -5,8 +5,6 @@ import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import java.util.List;
 import java.util.Optional;
 
-// usar camel case idItemCardapio
-// mudar para ingles
 public interface MenuItemsRepository {
     List<MenuItem> getAll();
 

@@ -25,9 +25,7 @@ public class MenuItemsEntity {
 
     public MenuItemsEntity() {}
 
-    public MenuItemsEntity(Long idItemCardapio, MenuEntity cardapio, String nome, String itemDescription, String itemPrice, Boolean availability, String itemImage) {
-        this.idItemCardapio = idItemCardapio;
-        this.cardapio = cardapio;
+    public MenuItemsEntity(String nome, String itemDescription, String itemPrice, Boolean availability, String itemImage) {
         this.nome = nome;
         this.itemDescription = itemDescription;
         this.itemPrice = itemPrice;

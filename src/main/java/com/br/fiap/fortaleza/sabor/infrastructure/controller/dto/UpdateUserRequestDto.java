@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record UpdateRequestDto(
+public record UpdateUserRequestDto(
         @NotNull(message = "This field cannot be empty") @NotBlank @Size(min = 2, max = 50) String nome,
         @NotNull @NotBlank @Email String email,
         @NotNull @NotBlank @Size(min = 8, max = 100) String senha,

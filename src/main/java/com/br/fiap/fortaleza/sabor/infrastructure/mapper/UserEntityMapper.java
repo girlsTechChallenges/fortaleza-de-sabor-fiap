@@ -39,9 +39,9 @@ public class UserEntityMapper {
                 addresses);
     }
 
-    public User updateToUserDomain(UpdateRequestDto updateRequestDto) {
+    public User updateToUserDomain(UpdateUserRequestDto updateUserRequestDto) {
 
-        List<Address> addresses = updateRequestDto.address().stream()
+        List<Address> addresses = updateUserRequestDto.address().stream()
                 .map(addressEntity -> new Address(
                         addressEntity.rua(),
                         addressEntity.bairro(),
@@ -53,10 +53,10 @@ public class UserEntityMapper {
                 )).toList();
 
         return new User(
-                updateRequestDto.nome(),
-                updateRequestDto.email(),
-                updateRequestDto.senha(),
-                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                updateUserRequestDto.nome(),
+                updateUserRequestDto.email(),
+                updateUserRequestDto.senha(),
+                TypeEnum.valueOf(updateUserRequestDto.tipo().name()),
                 addresses);
     }
 

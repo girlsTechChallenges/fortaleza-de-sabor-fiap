@@ -4,10 +4,9 @@ import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuItemUseCas
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.domain.menu.Menu;
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
@@ -98,10 +97,10 @@ public class MenuController {
     @PutMapping(value = "/{idMenu}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(
             @PathVariable @NotNull Long idMenu,
-            @RequestBody @Valid UpdateRequestDto updateRequestDto
+            @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto
     ) {
-        log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateRequestDto));
+        log.info("UPDATE USER REQUEST {} ", updateUserRequestDto);
+        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateUserRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

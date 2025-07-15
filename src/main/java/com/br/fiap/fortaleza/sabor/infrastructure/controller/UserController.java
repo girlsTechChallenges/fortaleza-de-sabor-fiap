@@ -6,7 +6,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
@@ -99,10 +99,10 @@ public class UserController {
     @PutMapping(value = "/{idUser}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(
             @PathVariable @NotNull Long idUser,
-            @RequestBody @Valid UpdateRequestDto updateRequestDto
+            @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto
     ) {
-        log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        updateUserUseCase.update(idUser, userEntityMapper.updateToUserDomain(updateRequestDto));
+        log.info("UPDATE USER REQUEST {} ", updateUserRequestDto);
+        updateUserUseCase.update(idUser, userEntityMapper.updateToUserDomain(updateUserRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

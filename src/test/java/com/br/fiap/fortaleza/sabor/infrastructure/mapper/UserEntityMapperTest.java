@@ -4,7 +4,7 @@ import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
@@ -52,7 +52,7 @@ class UserEntityMapperTest {
     @Test
     @DisplayName("Should map UpdateRequestDto to User.")
     void shouldMapUpdateRequestDtoToUser() {
-        UpdateRequestDto dto = new UpdateRequestDto(
+        UpdateUserRequestDto dto = new UpdateUserRequestDto(
                 "Nome Update", "update@email.com", "novaSenha", TypeEnum.CLIENTE,
                 List.of(new AddressDto("Rua Z", "Bairro X", "Ap 101", 50, "Cidade Y", "Estado Z", "03565000"))
         );

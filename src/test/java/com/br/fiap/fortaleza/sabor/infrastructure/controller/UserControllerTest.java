@@ -8,7 +8,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -151,7 +151,7 @@ class UserControllerTest {
     void shouldUpdateUserSuccessfully() throws Exception {
 
         // GIVEN
-        UpdateRequestDto dto = new UpdateRequestDto(
+        UpdateUserRequestDto dto = new UpdateUserRequestDto(
                 "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
