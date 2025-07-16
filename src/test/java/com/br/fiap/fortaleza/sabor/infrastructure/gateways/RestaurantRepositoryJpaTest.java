@@ -120,7 +120,6 @@ class RestaurantRepositoryJpaTest {
         );
 
         when(userRepository.findByEmail(restaurant.getEmail())).thenReturn(Optional.of(userEntity));
-        when(restaurantRepository.findByName(restaurant.getName())).thenReturn(Optional.empty());
         when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurantEntity));
         when(restaurantRepository.save(any(RestaurantEntity.class))).thenReturn(restaurantEntity);
         when(mapper.toRestaurantDomain(any(RestaurantEntity.class))).thenReturn(updatedRestaurant);

@@ -7,9 +7,9 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.Address
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.BusinessHoursDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.AddressRestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.BusinessHoursEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,6 @@ class RestaurantMapperTest {
     private RestaurantRequestDto restaurantRequestDto;
     private Restaurant restaurant;
     private RestaurantEntity restaurantEntity;
-    private UserEntity userEntity;
 
     @BeforeEach
     void setUp() {
@@ -95,13 +94,13 @@ class RestaurantMapperTest {
         );
 
         // Setup User Entity
-        userEntity = new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setId(1L);
         userEntity.setEmail("teste@teste.com");
         userEntity.setNome("Dono Teste");
 
         // Setup Address Entity
-        AddressEntity addressEntity = new AddressEntity();
+        AddressRestaurantEntity addressEntity = new AddressRestaurantEntity();
         addressEntity.setRua("Rua Teste");
         addressEntity.setBairro("Bairro Teste");
         addressEntity.setComplemento("Apto 1");
@@ -141,11 +140,11 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().get(0).getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().get(0).getDayOfWeek());
+        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDayOfWeek());
     }
 
     @Test
@@ -161,11 +160,11 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().get(0).getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().get(0).getDay());
+        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDay());
     }
 
     @Test
@@ -184,11 +183,11 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().get(0).getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().get(0).getDayOfWeek());
+        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDayOfWeek());
     }
 
     @Test
@@ -214,7 +213,7 @@ class RestaurantMapperTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         
-        BusinessHoursEntity businessHoursEntity = result.get(0);
+        BusinessHoursEntity businessHoursEntity = result.getFirst();
         assertEquals(DayOfWeek.MONDAY, businessHoursEntity.getDay());
         assertEquals(LocalTime.of(8, 0), businessHoursEntity.getOpeningTime());
         assertEquals(LocalTime.of(18, 0), businessHoursEntity.getClosingTime());
@@ -269,6 +268,6 @@ class RestaurantMapperTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size()); // Only the valid one should remain
-        assertEquals(DayOfWeek.MONDAY, result.get(0).getDay());
+        assertEquals(DayOfWeek.MONDAY, result.getFirst().getDay());
     }
 }

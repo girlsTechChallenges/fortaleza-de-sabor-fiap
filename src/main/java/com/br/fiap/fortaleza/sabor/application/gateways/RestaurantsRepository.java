@@ -2,6 +2,7 @@ package com.br.fiap.fortaleza.sabor.application.gateways;
 
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RestaurantsRepository {
@@ -10,4 +11,9 @@ public interface RestaurantsRepository {
 
     Optional<Restaurant> update(Long idRestaurant, Restaurant restaurant);
 
+    Optional<Restaurant> getById(Long idRestaurant);
+
+    Optional<Restaurant> deleteById(Long idRestaurant);
+
+    List<Restaurant> getAll();
 }
