@@ -5,7 +5,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
@@ -149,10 +149,11 @@ class UserControllerTest {
     @Test
     @DisplayName("Should update user successfully - return HTTP 202 response")
     void shouldUpdateUserSuccessfully() throws Exception {
+        TypeUser typeUser = new TypeUser("DONO");
 
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(
-                "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
+                "Nome Teste", "email@test.com", "loginTeste", typeUser,
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
 

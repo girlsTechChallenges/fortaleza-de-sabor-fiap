@@ -1,8 +1,8 @@
 package com.br.fiap.fortaleza.sabor.application.usecase;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
+import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,9 +52,10 @@ class AuthUseCaseTest {
         String password = "senha1234";
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
         User user = new User();
+        TypeUser typeUser = new TypeUser("CLINETE");
         user.setEmail(email);
         user.setSenha(hashedPassword);
-        user.setTipo(TypeEnum.CLIENTE);
+        user.setTipo(typeUser);
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, user.getSenha())).thenReturn(true);
