@@ -46,7 +46,7 @@ class UserRepositoryJpaTest {
 
     @Test
     @DisplayName("Service JPA - GetAll Users")
-    void getAll() {
+    void shouldGetAllUsers() {
         // GIVEN
         List<UserEntity> userEntities = List.of(MockUser.getUserEntityMock(), MockUser.getUserEntityMock());
         List<User> expectedUsers = List.of(MockUser.userMockOne(), MockUser.userMockOne());
@@ -69,7 +69,7 @@ class UserRepositoryJpaTest {
 
     @Test
     @DisplayName("Service JPA - Save a user in the database")
-    void save() {
+    void shouldSaveUser() {
         // GIVEN
         User user = MockUser.userMockOne();
         UserEntity userEntity = MockUser.getUserEntityMock();

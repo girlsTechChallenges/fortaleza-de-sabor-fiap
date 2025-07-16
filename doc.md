@@ -421,16 +421,28 @@ src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/
 ---
 
 ## 7. Collections para Teste
-### Link para a Collection do Postman
+### Collection Postman Unificada
 A collection para testes está disponível em:
-- Local: `/collections/collection-phase-one`
+- Local: `/collections/Fortaleza_de_Sabor_API_Completa.postman_collection.json`
 
-### Descrição dos Testes Manuais
-1. Importar a collection disponível no diretório `collections`
-2. Executar os endpoints seguindo a ordem:
+### Descrição dos Testes
+1. **Importar a collection** disponível no diretório `collections`
+2. **Configurar ambiente**: A collection inclui variáveis para baseUrl e token
+3. **Cenários disponíveis**:
+   - **Testes de Validação**: Campos obrigatórios, formatos e limites
+   - **Testes de Lógica de Negócio**: Fluxos completos e regras específicas
+   - **Testes de Segurança**: Autenticação e autorização
+   - **Casos Extremos**: Dados no limite e situações excepcionais
+   - **Cenários de Falha**: Validação de erros e tratamento de exceções
+   - **Requisições Malformadas**: Estruturas inválidas e tipos incorretos
+
+### Execução dos Testes
+1. Executar endpoints seguindo a ordem sugerida:
    - Criar usuário (POST `/users`)
-   - Login (POST `/auth/login`)
+   - Login (POST `/auth/login`) 
    - Demais operações CRUD
+2. A collection possui **35+ cenários de teste** cobrindo casos de sucesso e falha
+3. Documentação completa em: `DOCUMENTACAO_COMPLETA_TESTES.md`
 
 ---
 

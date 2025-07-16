@@ -45,13 +45,13 @@ class AuthControllerTest {
     @SneakyThrows
     @DisplayName("Should return login user")
     void shouldReturnLoginUser() {
-        // GIVEN
+        // Arrange
         var request = "{\n\t\"email\":\"email@email.com.br\",\n\t\"password\": \"password\"\n}";
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         when(userEntityMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
 
-        // WHEN
+        // Act & Assert
         ResultActions result = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

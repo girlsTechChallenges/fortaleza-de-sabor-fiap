@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request;
 
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,5 +14,5 @@ public record UpdateRequestDto(
         @NotNull @NotBlank @Email String email,
         @NotNull @NotBlank @Size(min = 8, max = 100) String senha,
         @NotNull TypeEnum tipo,
-        @NotNull @Size(min = 1) List<AddressDto> address
+        @NotNull @Size(min = 1) @Valid List<AddressDto> address
 ) {}

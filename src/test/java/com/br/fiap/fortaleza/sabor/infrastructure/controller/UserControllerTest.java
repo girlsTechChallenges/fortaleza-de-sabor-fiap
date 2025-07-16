@@ -61,17 +61,17 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Should engrave object USER in database - return response HTTP 201 CREATE")
-    void create() throws Exception {
+    void shouldCreateUser() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        //GIVEN
+        // Arrange
         var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
         var mapper = userEntityMapper.toUserDomain(requestDto);
 
-        //WHEN
+        // Act & Assert
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(createUseCase.save(mapper)).thenReturn(userMockOne());
 
@@ -81,13 +81,13 @@ class UserControllerTest {
                         .content(request))
                 .andExpect(status().isCreated());
 
-        //THEN
+
         verify(createUseCase, times(1)).save(mapper);
     }
 
     @Test
     @DisplayName("Should return a list of users - return response HTTP 200 OK")
-    void getAll() throws Exception {
+    void shouldGetAllUsers() throws Exception {
         // GIVEN
         var userOne = userMockOne();
         var userTwo = userMockTwo();
@@ -115,7 +115,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
-    void getById() throws Exception {
+    void shouldGetUserById() throws Exception {
         // GIVEN
         var user = userMockOne();
         var responseDto = responseDtoMockOne();
@@ -136,7 +136,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Should delete user by ID - return response HTTP 204 NO CONTENT")
-    void deleteById() throws Exception {
+    void shouldDeleteUserById() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         mockMvc.perform(delete("/users/{idUsuario}", 1L)
