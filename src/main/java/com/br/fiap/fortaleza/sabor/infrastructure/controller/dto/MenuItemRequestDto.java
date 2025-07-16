@@ -26,7 +26,6 @@ public record MenuItemRequestDto(
         String itemPrice,
 
         @NotNull
-        @NotBlank
         Boolean availability,
 
         @NotNull

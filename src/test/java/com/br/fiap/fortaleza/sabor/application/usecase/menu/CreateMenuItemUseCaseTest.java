@@ -1,7 +1,9 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.menu;
 
+import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemsRepository;
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
+import com.br.fiap.fortaleza.sabor.mock.MockMenu;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,29 +19,25 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreateUserUseCaseTest {
-
+class CreateMenuItemUseCaseTest {
     @InjectMocks
-    private CreateUserUseCase createUserUseCase;
+    private CreateMenuItemUseCase createMenuItemUseCase;
 
     @Mock
-    private UsersRepository usersRepository;
+    private MenuItemsRepository menuItemsRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @Test
-    @DisplayName("Create Use Case - Must create and save a database user.")
+    @DisplayName("Create Use Case - Must create and save a database menu.")
     void save() {
         //GIVEN
-        var request = MockUser.userMockOne();
+        var request = MockMenu.menuItemMockOne();
 
         //WHEN
-        when(usersRepository.save(request)).thenReturn(MockUser.userMockOne());
-        when(passwordEncoder.encode(anyString())).thenReturn(anyString());
+        when(menuItemsRepository.save(request)).thenReturn(MockMenu.menuItemMockOne());
 
         //THEN
-        assertNotNull(createUserUseCase.save(request));
-        assertDoesNotThrow(() -> createUserUseCase.save(request));
+        assertNotNull(createMenuItemUseCase.save(request));
+        assertDoesNotThrow(() -> createMenuItemUseCase.save(request));
     }
 }

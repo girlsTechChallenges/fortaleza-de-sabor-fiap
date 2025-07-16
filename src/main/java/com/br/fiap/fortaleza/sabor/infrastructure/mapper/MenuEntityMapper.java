@@ -5,7 +5,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.MenuItemsEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
 public class MenuEntityMapper {
@@ -59,6 +59,22 @@ public class MenuEntityMapper {
     }
 
     public MenuItemResponseDto toMenuItemResponseDto(MenuItem menuItem) {
+        return new MenuItemResponseDto(
+                menuItem.getNome(),
+                menuItem.getItemDescription(),
+                menuItem.getItemPrice(),
+                menuItem.getAvailability(),
+                menuItem.getItemImage()
+        );
+    }
+
+    public MenuItemResponseDto getMenuByIdToMenuResponseDto(Optional<MenuItem> optionalMenuItem) {
+        if (optionalMenuItem.isEmpty()) {
+            throw new IllegalArgumentException("Menu not found");
+        }
+
+        MenuItem menuItem = optionalMenuItem.get();
+
         return new MenuItemResponseDto(
                 menuItem.getNome(),
                 menuItem.getItemDescription(),

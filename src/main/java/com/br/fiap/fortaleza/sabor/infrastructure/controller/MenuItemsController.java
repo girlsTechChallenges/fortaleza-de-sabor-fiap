@@ -6,7 +6,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateUserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateMenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.MenuItemResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
@@ -29,15 +29,15 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/cardapio")
-public class MenuController {
-    private static final Logger log = LoggerFactory.getLogger(MenuController.class);
+public class MenuItemsController {
+    private static final Logger log = LoggerFactory.getLogger(MenuItemsController.class);
     private final CreateMenuItemUseCase createMenuUseCase;
     private final GetMenuItemUseCase getMenuItemUseCase;
     private final UpdateMenuItemUseCase updateMenuItemUseCase;
     private final DeleteMenuItemUseCase deleteMenuItemUseCase;
     private final MenuEntityMapper menuEntityMapper;
 
-    public MenuController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuEntityMapper menuEntityMapper) {
+    public MenuItemsController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuEntityMapper menuEntityMapper) {
         this.createMenuUseCase = createMenuUseCase;
         this.getMenuItemUseCase = getMenuItemUseCase;
         this.updateMenuItemUseCase = updateMenuItemUseCase;
@@ -56,7 +56,7 @@ public class MenuController {
     public ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto) {
         log.info("POST MENU REQUEST: {} ", menuItemRequestDto);
         var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuItemRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuResponseDto(resp));
+        return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuItemResponseDto(resp));
     }
 
     @Operation(summary = "Rescue the menu by Id", description = "Allows the retrieval of information from a specific menu")
@@ -83,7 +83,7 @@ public class MenuController {
     public List<MenuItemResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getMenuItemUseCase.getAll();
-        return resp.stream().map(menuEntityMapper::toMenuResponseDto).toList();
+        return resp.stream().map(menuEntityMapper::toMenuItemResponseDto).toList();
     }
 
     @Operation(summary = "Update a menu", description = "Allows the menu to update their registered data from identification")
@@ -97,10 +97,10 @@ public class MenuController {
     @PutMapping(value = "/{idMenu}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(
             @PathVariable @NotNull Long idMenu,
-            @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto
+            @RequestBody @Valid UpdateMenuItemRequestDto updateMenuItemRequestDto
     ) {
-        log.info("UPDATE USER REQUEST {} ", updateUserRequestDto);
-        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateUserRequestDto));
+        log.info("UPDATE USER REQUEST {} ", updateMenuItemRequestDto);
+        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateMenuItemRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

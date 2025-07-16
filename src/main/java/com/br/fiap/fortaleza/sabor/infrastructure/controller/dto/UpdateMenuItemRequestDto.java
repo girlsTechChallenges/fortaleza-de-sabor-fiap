@@ -26,7 +26,6 @@ public record UpdateMenuItemRequestDto(
         String itemPrice,
 
         @NotNull
-        @NotBlank
         Boolean availability,
 
         @NotNull

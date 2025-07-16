@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +27,12 @@ public class MenuItemRepositoryJpa implements MenuItemsRepository{
 
     @Override
     public List<MenuItem> getAll() {
-        return menuItemRepository.findAll().stream().map(mapper::toMenuDomain).toList();
+        return menuItemRepository.findAll().stream().map(mapper::toMenuItemDomain).toList();
     }
 
     @Override
     public MenuItem save(MenuItem menuItem) {
-        menuItemRepository.findByName(menuItem.getNome())
+        menuItemRepository.findByNome(menuItem.getNome())
                 .ifPresent(existingMenuItem -> {
                     throw new MenuAlreadyRegisteredException(
                             "This item already exists."
@@ -47,7 +46,7 @@ public class MenuItemRepositoryJpa implements MenuItemsRepository{
     @Override
     public Optional<MenuItem> update(Long idItemCardapio, MenuItem menu) {
         MenuItemsEntity findMenu = menuItemRepository.findById(idItemCardapio)
-                .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio.toString() + "was not found"));
+                .orElseThrow(() -> new MenuNotFoundException("Menu " + idItemCardapio + " was not found"));
 
         if (menu != null) {
             findMenu.setNome(menu.getNome());
@@ -58,7 +57,7 @@ public class MenuItemRepositoryJpa implements MenuItemsRepository{
         }
 
         MenuItemsEntity actualization = menuItemRepository.save(findMenu);
-        return Optional.ofNullable(mapper.toMenuDomain(actualization));
+        return Optional.ofNullable(mapper.toMenuItemDomain(actualization));
     }
 
     @Override
@@ -66,7 +65,7 @@ public class MenuItemRepositoryJpa implements MenuItemsRepository{
         var findMenu = menuItemRepository.findById(idItemCardapio)
                 .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio.toString() + "was not found"));
 
-        return Optional.ofNullable(mapper.toMenuDomain(findMenu));
+        return Optional.ofNullable(mapper.toMenuItemDomain(findMenu));
     }
 
     @Override
@@ -76,6 +75,6 @@ public class MenuItemRepositoryJpa implements MenuItemsRepository{
 
         Optional<MenuItemsEntity> menu = menuItemRepository.findById(idItemCardapio);
         menuItemRepository.deleteById(idItemCardapio);
-        return menu.map(mapper::toMenuDomain);
+        return menu.map(mapper::toMenuItemDomain);
     }
 }
