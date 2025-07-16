@@ -1,13 +1,12 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
+import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +14,8 @@ import java.util.Optional;
 
 @Component
 public class UserEntityMapper {
+
+    private TypeUserEntityMapper typeMapper;
 
     public User toUserDomain(UserRequestDto userRequestDto) {
 
@@ -35,7 +36,7 @@ public class UserEntityMapper {
                 userRequestDto.login(),
                 userRequestDto.senha(),
                 userRequestDto.dataAlteracao(),
-                TypeEnum.valueOf(userRequestDto.tipo().name()),
+                userRequestDto.tipo(),
                 addresses);
     }
 
@@ -56,7 +57,7 @@ public class UserEntityMapper {
                 updateRequestDto.nome(),
                 updateRequestDto.email(),
                 updateRequestDto.senha(),
-                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                updateRequestDto.tipo(),
                 addresses);
     }
 
@@ -77,7 +78,7 @@ public class UserEntityMapper {
                 user.getLogin(),
                 user.getSenha(),
                 user.getDataAlteracao(),
-                TypeEntityEnum.valueOf(user.getTipo().name()),
+                typeMapper.toTypeUserEntity(user.getTipo()),
                 addressEntities
                 );
     }
@@ -101,7 +102,7 @@ public class UserEntityMapper {
                 userEntity.getLogin(),
                 userEntity.getSenha(),
                 userEntity.getDataAlteracao(),
-                TypeEnum.valueOf(userEntity.getTipo().name()),
+                typeMapper.toTypeUserDomain(userEntity.getTipo()),
                 addresses
                 );
     }

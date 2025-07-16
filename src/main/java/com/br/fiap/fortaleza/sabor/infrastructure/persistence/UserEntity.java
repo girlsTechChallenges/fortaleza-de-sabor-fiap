@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ public class UserEntity {
     private LocalDate dataAlteracao;
 
     @Enumerated(EnumType.STRING)
-    private TypeEntityEnum tipo;
+    private TypeUserEntity tipo;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
@@ -34,7 +34,7 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeUserEntity tipo, List<AddressEntity> enderecos) {
         this.nome = nome;
         this.email = email;
         this.login = login;
@@ -87,11 +87,11 @@ public class UserEntity {
         this.dataAlteracao = LocalDate.now();
     }
 
-    public TypeEntityEnum getTipo() {
+    public TypeUserEntity getTipo() {
         return tipo;
     }
 
-    public void setTipo(TypeEntityEnum tipo) {
+    public void setTipo(TypeUserEntity tipo) {
         this.tipo = tipo;
     }
 
