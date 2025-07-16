@@ -182,16 +182,6 @@ public class RestaurantMapper {
     }
 
     public RestaurantFullDto toRestaurantFullDto(Restaurant restaurant) {
-        return convertToRestaurantFullDto(restaurant);
-    }
-
-    public List<RestaurantFullDto> toRestaurantFullDto(List<Restaurant> restaurants) {
-        return restaurants.stream()
-                .map(this::convertToRestaurantFullDto)
-                .toList();
-    }
-
-    private RestaurantFullDto convertToRestaurantFullDto(Restaurant restaurant) {
         return new RestaurantFullDto(
                 restaurant.getId(),
                 restaurant.getName(),
