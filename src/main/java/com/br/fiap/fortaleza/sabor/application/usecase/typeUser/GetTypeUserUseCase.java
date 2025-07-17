@@ -23,4 +23,8 @@ public class GetTypeUserUseCase {
     public Optional<TypeUser> getById(Long idTypeUser) {
         return typeUsersRepository.getById(idTypeUser);
     }
+
+    public Optional<TypeUser> getByNameType(String nameTypeUser) {
+        return typeUsersRepository.getByNameType(nameTypeUser);
+    }
 }

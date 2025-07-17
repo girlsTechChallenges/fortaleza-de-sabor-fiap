@@ -25,7 +25,8 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @Enumerated(EnumType.STRING)
+    @OneToOne
+    @JoinColumn(name = "typeUser" , referencedColumnName = "idType" )
     private TypeUserEntity tipo;
 
     @OneToMany(cascade = CascadeType.ALL)

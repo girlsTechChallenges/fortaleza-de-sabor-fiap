@@ -40,6 +40,13 @@ public class TypeUserRepositoryJpa implements TypeUsersRepository {
 
     @Override
     public Optional<TypeUser> update(Long idTypeUser, TypeUser typeUser) {
+        typeUserRepository.getByNameType(typeUser.getNameType())
+                .ifPresent(existingTypeUser -> {
+                    throw new TypeUserAlreadyRegisteredException(
+                            "This typeUser " + typeUser.getNameType() + " already exists."
+                    );
+                });
+
         TypeUserEntity findTypeUser = typeUserRepository.findById(idTypeUser)
                 .orElseThrow(() -> new TypeUserNotFoundException(idTypeUser));
 
