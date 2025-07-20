@@ -6,6 +6,7 @@ import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantAlreadyExistsException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeMismatchException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.RestaurantMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.RestaurantRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
@@ -132,6 +133,29 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         return entities.stream()
                 .map(mapper::toRestaurantDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<Restaurant> updateOwner(Long idRestaurant, String ownerName, String email){
+        log.info("Updating the restaurant owner with id: {}", idRestaurant);
+
+        var restaurantEntity = restaurantRepository.findById(idRestaurant)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant));
+
+        var userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+
+        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+            throw new UserTypeMismatchException("User with email " + email + " is not a restaurant owner");
+        }
+
+        if (userEntity.getEmail().equals(email) && userEntity.getNome().equals(ownerName)) {
+            restaurantEntity.setOwner(userEntity);
+            var updatedEntity = restaurantRepository.save(restaurantEntity);
+            return Optional.of(mapper.toRestaurantDomain(restaurantEntity));
+        }
+
+        return Optional.empty();
     }
 
     @Override

@@ -16,4 +16,6 @@ public interface RestaurantsRepository {
     Optional<Restaurant> deleteById(Long idRestaurant);
 
     List<Restaurant> getAll();
+
+    Optional<Restaurant> updateOwner(Long idRestaurant, String ownerName, String email);
 }

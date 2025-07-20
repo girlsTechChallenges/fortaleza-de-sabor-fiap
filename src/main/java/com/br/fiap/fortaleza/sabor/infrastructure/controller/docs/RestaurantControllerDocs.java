@@ -1,6 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.docs;
 
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.OwnerRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantFullDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantResponseDto;
@@ -35,7 +36,7 @@ public interface RestaurantControllerDocs {
 
     @Operation(summary = "Update a restaurant", description = "Update a restaurant.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Register a restaurant.",
+            @ApiResponse(responseCode = "200", description = "Update a restaurant.",
                     content = @Content(schema = @Schema(implementation = RestaurantResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "Restaurant not found.",
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
@@ -78,4 +79,18 @@ public interface RestaurantControllerDocs {
     })
     ResponseEntity<Void> delete(@PathVariable @NotNull Long id);
 
+
+    @Operation(summary = "Update a Owner", description = "Update a Owner.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Update a Owner.",
+                    content = @Content(schema = @Schema(implementation = RestaurantResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Owner not found.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "422", description = "Mismatch Exception",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
+    })
+    ResponseEntity<RestaurantResponseDto> updateOwnerRestaurant(@PathVariable @NotNull Long id,
+                                                                @Valid @RequestBody OwnerRequestDto ownerRequestDto);
 }
