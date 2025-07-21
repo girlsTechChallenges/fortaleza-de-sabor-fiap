@@ -19,4 +19,9 @@ public class UpdateRestaurantUseCase {
                 .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant));
     }
 
+    public Restaurant updateOwner(Long idRestaurant, String ownerName, String email){
+        return restaurantRepository.updateOwner(idRestaurant, ownerName, email)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant));
+    }
+
 }

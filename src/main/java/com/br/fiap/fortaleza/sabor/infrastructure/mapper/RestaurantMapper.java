@@ -3,12 +3,15 @@ package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.BusinessHoursDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantUpdateDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantFullDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.AddressRestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.BusinessHoursEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -88,9 +91,9 @@ public class RestaurantMapper {
                 new ArrayList<>()
         );
 
-        List<AddressEntity> addressEntities = restaurant.getAddress().stream()
+        List<AddressRestaurantEntity> addressEntities = restaurant.getAddress().stream()
                 .map(address -> {
-                    AddressEntity ae = new AddressEntity(
+                    AddressRestaurantEntity ae = new AddressRestaurantEntity(
                             address.getRua(),
                             address.getBairro(),
                             address.getComplemento(),
@@ -166,5 +169,50 @@ public class RestaurantMapper {
                 restaurant.getId(),
                 restaurant.getName(),
                 restaurant.getOwner());
+    }
+
+    public RestaurantFullDto toRestaurantFullByIdDto(Restaurant restaurant) {
+        return new RestaurantFullDto(restaurant.getId(),
+                restaurant.getName(),
+                restaurant.getKitchenType(),
+                restaurant.getEmail(),
+                restaurant.getOwner(),
+                convertAddresses(restaurant.getAddress()),
+                convertBusinessHours(restaurant.getBusinessHours()));
+    }
+
+    public RestaurantFullDto toRestaurantFullDto(Restaurant restaurant) {
+        return new RestaurantFullDto(
+                restaurant.getId(),
+                restaurant.getName(),
+                restaurant.getKitchenType(),
+                restaurant.getEmail(),
+                restaurant.getOwner(),
+                convertAddresses(restaurant.getAddress()),
+                convertBusinessHours(restaurant.getBusinessHours())
+        );
+    }
+
+    private List<AddressDto> convertAddresses(List<Address> addresses) {
+        return addresses.stream()
+                .map(address -> new AddressDto(
+                        address.getRua(),
+                        address.getBairro(),
+                        address.getComplemento(),
+                        address.getNumero(),
+                        address.getEstado(),
+                        address.getCidade(),
+                        address.getCep()))
+                .toList();
+    }
+
+    private List<BusinessHoursDto> convertBusinessHours(List<BusinessHours> businessHours) {
+        return businessHours.stream()
+                .map(bh -> new BusinessHoursDto(
+                        bh.getDayOfWeek(),
+                        bh.getOpeningTime(),
+                        bh.getClosingTime(),
+                        bh.getObservations()))
+                .toList();
     }
 }

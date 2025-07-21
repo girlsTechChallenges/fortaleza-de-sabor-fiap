@@ -1,11 +1,10 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "enderecos_usuarios")
-public class AddressEntity {
+@Table(name = "enderecos_restaurantes")
+public class AddressRestaurantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +24,12 @@ public class AddressEntity {
 
     private String cep;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UserEntity usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurante_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "restaurante_id", nullable = false)
     private RestaurantEntity restaurante;
 
 
-    public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
+    public AddressRestaurantEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
         this.rua = rua;
         this.bairro = bairro;
         this.complemento = complemento;
@@ -44,7 +39,7 @@ public class AddressEntity {
         this.cep = cep;
     }
 
-    public AddressEntity() {
+    public AddressRestaurantEntity() {
     }
 
     public Long getId() {

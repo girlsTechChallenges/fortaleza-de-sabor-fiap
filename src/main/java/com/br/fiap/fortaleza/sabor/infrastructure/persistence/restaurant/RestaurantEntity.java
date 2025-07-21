@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import jakarta.persistence.*;
 
@@ -23,15 +22,15 @@ public class RestaurantEntity {
     @JoinColumn(name = "usuario_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<AddressEntity> address;
-
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BusinessHoursEntity> businessHours;
+
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AddressRestaurantEntity> address;
 
     public RestaurantEntity() {}
 
-    public RestaurantEntity(String name, String typeKitchen, UserEntity owner, List<AddressEntity> address, List<BusinessHoursEntity> businessHours) {
+    public RestaurantEntity(String name, String typeKitchen, UserEntity owner, List<AddressRestaurantEntity> address, List<BusinessHoursEntity> businessHours) {
         this.name = name;
         this.typeKitchen = typeKitchen;
         this.owner = owner;
@@ -71,11 +70,11 @@ public class RestaurantEntity {
         this.owner = owner;
     }
 
-    public List<AddressEntity> getAddress() {
+    public List<AddressRestaurantEntity> getAddress() {
         return address;
     }
 
-    public void setAddress(List<AddressEntity> address) {
+    public void setAddress(List<AddressRestaurantEntity> address) {
         this.address = address;
     }
 
