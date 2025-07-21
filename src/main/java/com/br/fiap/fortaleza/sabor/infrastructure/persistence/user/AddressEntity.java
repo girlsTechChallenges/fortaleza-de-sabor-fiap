@@ -4,7 +4,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.Restaur
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "enderecos")
+@Table(name = "enderecos_usuarios")
 public class AddressEntity {
 
     @Id
