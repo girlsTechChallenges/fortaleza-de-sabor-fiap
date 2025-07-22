@@ -1,7 +1,6 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.domain.user.User;

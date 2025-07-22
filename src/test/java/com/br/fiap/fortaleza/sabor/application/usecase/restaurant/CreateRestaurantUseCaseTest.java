@@ -1,7 +1,6 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.restaurant;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.RestaurantsRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.CreateRestaurantUseCase;
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
