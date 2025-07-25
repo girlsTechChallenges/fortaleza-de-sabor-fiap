@@ -30,7 +30,7 @@ class TypeUserRepositoryJpaTest {
     @Test
     void shouldSaveTypeUserSuccessfully() {
         TypeUser typeUser = new TypeUser("ADMIN");
-        TypeUserEntity entity = new TypeUserEntity("ADMIN");
+        TypeUserEntity entity = new TypeUserEntity(1L,"ADMIN");
 
         when(typeUserRepository.getByNameType("ADMIN")).thenReturn(Optional.empty());
         when(mapper.toTypeUserEntity(typeUser)).thenReturn(entity);
@@ -48,7 +48,7 @@ class TypeUserRepositoryJpaTest {
     @Test
     void shouldThrowExceptionWhenSavingExistingTypeUser() {
         TypeUser typeUser = new TypeUser("ADMIN");
-        TypeUserEntity existing = new TypeUserEntity("ADMIN");
+        TypeUserEntity existing = new TypeUserEntity(1L,"ADMIN");
 
         when(typeUserRepository.getByNameType("ADMIN")).thenReturn(Optional.of(existing));
 
@@ -60,7 +60,7 @@ class TypeUserRepositoryJpaTest {
     void shouldUpdateTypeUser() {
         Long id = 1L;
         TypeUser typeUser = new TypeUser("CLIENTE");
-        TypeUserEntity entity = new TypeUserEntity("ADMIN");
+        TypeUserEntity entity = new TypeUserEntity(1L, "ADMIN");
         entity.setId(id);
 
         when(typeUserRepository.findById(id)).thenReturn(Optional.of(entity));
@@ -84,7 +84,7 @@ class TypeUserRepositoryJpaTest {
     @Test
     void shouldDeleteTypeUserById() {
         Long id = 1L;
-        TypeUserEntity entity = new TypeUserEntity("ADMIN");
+        TypeUserEntity entity = new TypeUserEntity(1L,"ADMIN");
 
         when(typeUserRepository.findById(id)).thenReturn(Optional.of(entity));
         when(mapper.toTypeUserDomain(entity)).thenReturn(new TypeUser("ADMIN"));
@@ -105,7 +105,7 @@ class TypeUserRepositoryJpaTest {
     @Test
     void shouldGetById() {
         Long id = 1L;
-        TypeUserEntity entity = new TypeUserEntity("CLIENTE");
+        TypeUserEntity entity = new TypeUserEntity(1L,"CLIENTE");
         when(typeUserRepository.findById(id)).thenReturn(Optional.of(entity));
         when(mapper.toTypeUserDomain(entity)).thenReturn(new TypeUser("CLIENTE"));
 
@@ -124,7 +124,7 @@ class TypeUserRepositoryJpaTest {
 
     @Test
     void shouldGetByNameType() {
-        TypeUserEntity entity = new TypeUserEntity("ADMIN");
+        TypeUserEntity entity = new TypeUserEntity(1L,"ADMIN");
 
         when(typeUserRepository.getByNameType("ADMIN")).thenReturn(Optional.of(entity));
         when(mapper.toTypeUserDomain(entity)).thenReturn(new TypeUser("ADMIN"));
@@ -138,8 +138,8 @@ class TypeUserRepositoryJpaTest {
     @Test
     void shouldGetAllTypeUsers() {
         List<TypeUserEntity> entities = List.of(
-            new TypeUserEntity("ADMIN"),
-            new TypeUserEntity("CLIENTE")
+            new TypeUserEntity(1L,"ADMIN"),
+            new TypeUserEntity(1L,"CLIENTE")
         );
 
         when(typeUserRepository.findAll()).thenReturn(entities);

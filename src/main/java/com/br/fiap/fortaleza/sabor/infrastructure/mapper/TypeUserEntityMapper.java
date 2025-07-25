@@ -18,7 +18,7 @@ public class TypeUserEntityMapper {
     }
 
     public TypeUserEntity toTypeUserEntity(TypeUser typeUser) {
-        return new TypeUserEntity(typeUser.getNameType());
+        return new TypeUserEntity(typeUser.getIdType(), typeUser.getNameType());
     }
 
     public TypeUserRequestDto toTypeUserRequestDto(TypeUser typeUser) {

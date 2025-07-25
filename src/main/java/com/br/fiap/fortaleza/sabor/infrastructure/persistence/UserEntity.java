@@ -25,8 +25,8 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @OneToOne
-    @JoinColumn(name = "typeUser" , referencedColumnName = "idType" )
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_type", referencedColumnName = "idType")
     private TypeUserEntity tipo;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -111,4 +111,6 @@ public class UserEntity {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+
 }

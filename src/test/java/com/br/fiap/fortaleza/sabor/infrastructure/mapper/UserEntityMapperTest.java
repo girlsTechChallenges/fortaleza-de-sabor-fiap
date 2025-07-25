@@ -27,9 +27,11 @@ class UserEntityMapperTest {
 
     private UserEntityMapper mapper;
 
+    private TypeUserEntityMapper typeMapper;
+
     @BeforeEach
     void setUp() {
-        mapper = new UserEntityMapper();
+        mapper = new UserEntityMapper(typeMapper);
     }
 
     @Test

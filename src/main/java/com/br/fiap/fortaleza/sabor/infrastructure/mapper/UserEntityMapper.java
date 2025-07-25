@@ -2,7 +2,6 @@ package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
@@ -15,7 +14,11 @@ import java.util.Optional;
 @Component
 public class UserEntityMapper {
 
-    private TypeUserEntityMapper typeMapper;
+    private final TypeUserEntityMapper typeMapper;
+
+    public UserEntityMapper(TypeUserEntityMapper typeMapper) {
+        this.typeMapper = typeMapper;
+    }
 
     public User toUserDomain(UserRequestDto userRequestDto) {
 

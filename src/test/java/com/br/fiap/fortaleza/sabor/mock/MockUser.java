@@ -23,7 +23,7 @@ public class MockUser {
                 "login",
                 "123",
                 LocalDate.of(2025, 5, 16),
-                new TypeUserEntity("CLIENTE"),
+                new TypeUserEntity(1L,"CLIENTE"),
                 List.of(
                         new AddressEntity(
                                 "rua",

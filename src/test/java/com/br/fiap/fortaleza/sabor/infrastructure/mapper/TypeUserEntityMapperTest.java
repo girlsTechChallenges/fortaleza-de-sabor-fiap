@@ -20,7 +20,7 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapEntityToDomain() {
-        TypeUserEntity entity = new TypeUserEntity("CLIENTE");
+        TypeUserEntity entity = new TypeUserEntity(1L,"CLIENTE");
         entity.setId(10L);
 
         TypeUser domain = mapper.toTypeUserDomain(entity);
@@ -73,7 +73,7 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapEntityToResponseDto() {
-        TypeUserEntity entity = new TypeUserEntity("ANALISTA");
+        TypeUserEntity entity = new TypeUserEntity(1L,"ANALISTA");
         entity.setId(7L);
 
         TypeUserResponseDto response = mapper.toTypeUserResponseDto(entity);

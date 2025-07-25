@@ -1,5 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser;
 
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,7 +14,8 @@ public class TypeUserEntity {
     @Column(nullable = false)
     private String nameType;
 
-    public TypeUserEntity(String nameType) {
+    public TypeUserEntity(Long idType, String nameType) {
+        this.idType = idType;
         this.nameType = nameType;
     }
 
@@ -34,4 +36,5 @@ public class TypeUserEntity {
     public void setType(String nameType) {
         this.nameType = nameType;
     }
+
 }
