@@ -1,7 +1,6 @@
-package com.br.fiap.fortaleza.sabor.application.usecase;
+package com.br.fiap.fortaleza.sabor.application.usecase.restaurant;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.RestaurantsRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.UpdateRestaurantUseCase;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
