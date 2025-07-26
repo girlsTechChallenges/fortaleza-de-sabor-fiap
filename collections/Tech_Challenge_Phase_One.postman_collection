@@ -83,12 +83,12 @@
                         "method": "DELETE",
                         "header": [],
                         "url": {
-                            "raw": "http://localhost:8081/usuarios/8",
+                            "raw": "http://localhost:8080/usuarios/8",
                             "protocol": "http",
                             "host": [
                                 "localhost"
                             ],
-                            "port": "8081",
+                            "port": "8080",
                             "path": [
                                 "usuarios",
                                 "8"
@@ -112,12 +112,12 @@
                             }
                         },
                         "url": {
-                            "raw": "http://localhost:8081/usuarios/3",
+                            "raw": "http://localhost:8080/usuarios/3",
                             "protocol": "http",
                             "host": [
                                 "localhost"
                             ],
-                            "port": "8081",
+                            "port": "8080",
                             "path": [
                                 "usuarios",
                                 "3"

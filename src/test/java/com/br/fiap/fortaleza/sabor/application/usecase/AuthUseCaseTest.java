@@ -52,7 +52,7 @@ class AuthUseCaseTest {
         String password = "senha1234";
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
         User user = new User();
-        TypeUser typeUser = new TypeUser("CLINETE");
+        TypeUser typeUser = new TypeUser("CLIENTE");
         user.setEmail(email);
         user.setSenha(hashedPassword);
         user.setTipo(typeUser);
