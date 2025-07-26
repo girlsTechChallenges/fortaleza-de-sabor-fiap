@@ -1,9 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity

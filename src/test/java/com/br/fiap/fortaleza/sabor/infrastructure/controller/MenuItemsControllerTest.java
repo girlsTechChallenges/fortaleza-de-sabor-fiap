@@ -1,12 +1,10 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-
 import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemsRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
 import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
@@ -33,7 +31,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -162,7 +159,6 @@ class MenuItemsControllerTest {
                 true,
                 "https://exemplo.com/images/pizza-quatro-queijos.png"
         );
-
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
         when(menuEntityMapper.updateToMenuDomain(dto)).thenReturn(menuItemMockOne());
