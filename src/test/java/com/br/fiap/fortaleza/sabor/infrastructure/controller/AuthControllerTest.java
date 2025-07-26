@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.AuthUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import lombok.SneakyThrows;
@@ -32,26 +32,26 @@ class AuthControllerTest {
     @InjectMocks
     private AuthController authController;
     @MockitoBean
-    private AuthUseCase authUseCase;
+    private AuthUserUseCase authUserUseCase;
     @MockitoBean
     private UserEntityMapper userEntityMapper;
 
     @BeforeEach
     public void setUp() {
-        authController = new AuthController(authUseCase,userEntityMapper);
+        authController = new AuthController(authUserUseCase,userEntityMapper);
     }
 
     @Test
     @SneakyThrows
     @DisplayName("Should return login user")
     void shouldReturnLoginUser() {
-        // GIVEN
+        // Arrange
         var request = "{\n\t\"email\":\"email@email.com.br\",\n\t\"password\": \"password\"\n}";
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         when(userEntityMapper.toTokenResponseDto(any(Token.class))).thenReturn(userAuthDto());
 
-        // WHEN
+        // Act & Assert
         ResultActions result = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

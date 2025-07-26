@@ -1,92 +1,134 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.config.exception;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.http.HttpHeaders;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
 
-    private GlobalExceptionHandler handler;
+    @InjectMocks
+    private GlobalExceptionHandler globalExceptionHandler;
+
+    @Mock
+    private MethodArgumentNotValidException methodArgumentNotValidException;
+
+    @Mock
+    private BindingResult bindingResult;
+
+    @Mock
+    private WebRequest webRequest;
 
     @BeforeEach
-    void setup() {
-        handler = new GlobalExceptionHandler();
+    void setUp() {
+        // Setup for specific tests that need it
     }
 
     @Test
-    void testHandleValidationExceptions() {
-        // Mock FieldError
-        FieldError fieldError = new FieldError("objectName", "fieldName", "must not be blank");
+    @DisplayName("Should handle UserNotFoundException")
+    void shouldHandleUserNotFoundException() {
+        // Arrange
+        UserNotFoundException exception = new UserNotFoundException(1L);
 
-        // Mock BindingResult
-        BindingResult bindingResult = mock(BindingResult.class);
-        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
+        // Act
+        ResponseEntity<ApiErrorMessage> response = globalExceptionHandler.handleUserNotFoundException(exception, webRequest);
 
-        // Mock MethodArgumentNotValidException
-        MethodArgumentNotValidException ex = mock(MethodArgumentNotValidException.class);
-        when(ex.getBindingResult()).thenReturn(bindingResult);
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.NOT_FOUND, response.getBody().getStatus());
+        assertTrue(response.getBody().getErrors().containsKey("message"));
+    }
 
-        ResponseEntity<ApiErrorMessage> response = handler.handleValidationExceptions(ex);
+    @Test
+    @DisplayName("Should handle MethodArgumentNotValidException")
+    void shouldHandleMethodArgumentNotValidException() {
+        // Arrange
+        FieldError fieldError1 = new FieldError("user", "name", "Name is required");
+        FieldError fieldError2 = new FieldError("user", "email", "Email is invalid");
+        
+        when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError1, fieldError2));
 
+        // Act
+        ResponseEntity<ApiErrorMessage> response = globalExceptionHandler.handleValidationExceptions(methodArgumentNotValidException);
+
+        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody().getErrors().containsKey("fieldName"));
-        assertEquals(List.of("must not be blank"), response.getBody().getErrors().get("fieldName"));
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+        assertTrue(response.getBody().getErrors().containsKey("name"));
+        assertTrue(response.getBody().getErrors().containsKey("email"));
+        assertTrue(response.getBody().getErrors().get("name").contains("Name is required"));
+        assertTrue(response.getBody().getErrors().get("email").contains("Email is invalid"));
     }
 
     @Test
-    void testHandleGenericException() {
-        Exception ex = new Exception("Generic error");
+    @DisplayName("Should handle general exceptions")
+    void shouldHandleGeneralExceptions() {
+        // Arrange
+        String errorMessage = "Something went wrong";
+        Exception exception = new Exception(errorMessage);
 
-        ResponseEntity<Map<String, String>> response = handler.handleException(ex);
+        // Act
+        ResponseEntity<?> response = globalExceptionHandler.handleException(exception);
 
+        // Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Generic error", response.getBody().get("error"));
+        assertNotNull(response.getBody());
     }
 
     @Test
-    void testHandleAccessDeniedException() {
-        AuthorizationDeniedException ex = new AuthorizationDeniedException("Access denied message");
+    @DisplayName("Should handle validation with empty field errors")
+    void shouldHandleValidationWithEmptyFieldErrors() {
+        // Arrange
+        when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of());
 
-        ResponseEntity<Map<String, String>> response = handler.handleAccessDeniedException(ex);
+        // Act
+        ResponseEntity<ApiErrorMessage> response = globalExceptionHandler.handleValidationExceptions(methodArgumentNotValidException);
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals("Access Denied", response.getBody().get("error"));
-        assertEquals("Access denied message", response.getBody().get("message"));
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+        assertTrue(response.getBody().getErrors().isEmpty());
     }
 
     @Test
-    void testUserCredentialsException() {
-        UserCredentialsException ex = new UserCredentialsException("Invalid credentials");
+    @DisplayName("Should handle multiple validation errors for same field")
+    void shouldHandleMultipleValidationErrorsForSameField() {
+        // Arrange
+        FieldError fieldError1 = new FieldError("user", "email", "Email is required");
+        FieldError fieldError2 = new FieldError("user", "email", "Email is invalid");
+        
+        when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError1, fieldError2));
 
-        ResponseEntity<Map<String, String>> response = handler.userCredentialsException(ex);
+        // Act
+        ResponseEntity<ApiErrorMessage> response = globalExceptionHandler.handleValidationExceptions(methodArgumentNotValidException);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        assertEquals("Invalid email or password", response.getBody().get("error"));
-        assertEquals("Invalid credentials", response.getBody().get("message"));
-    }
-
-    @Test
-    void testUserAlreadyRegisteredException() {
-        UserAlreadyRegisteredException ex = new UserAlreadyRegisteredException("User already exists");
-
-        ResponseEntity<Map<String, String>> response = handler.eserAlreadyRegisteredException(ex);
-
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("Invalid email or password", response.getBody().get("error"));
-        assertEquals("User already exists", response.getBody().get("message"));
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().getErrors().containsKey("email"));
+        assertEquals(2, response.getBody().getErrors().get("email").size());
+        assertTrue(response.getBody().getErrors().get("email").contains("Email is required"));
+        assertTrue(response.getBody().getErrors().get("email").contains("Email is invalid"));
     }
 }

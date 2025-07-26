@@ -8,6 +8,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.typeUser.Type
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -87,7 +88,6 @@ public class UserRepositoryJpa implements UsersRepository {
                 findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));
             }
         }
-
 
         UserEntity actualization = userRepository.save(findUser);
         return Optional.ofNullable(mapper.toUserDomain(actualization));
