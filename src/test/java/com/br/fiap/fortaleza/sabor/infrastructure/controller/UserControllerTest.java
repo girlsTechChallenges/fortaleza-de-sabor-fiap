@@ -2,6 +2,10 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.user.*;
+import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -139,29 +143,29 @@ class UserControllerTest {
         verify(deleteUseCase, times(1)).delete(1L);
     }
 
-//    @Test
-//    @DisplayName("Should update user successfully - return HTTP 202 response")
-//    void shouldUpdateUserSuccessfully() throws Exception {
-//        TypeUser typeUser = new TypeUser("DONO");
-//
-//        // GIVEN
-//        UpdateRequestDto dto = new UpdateRequestDto(
-//                "Nome Teste", "email@test.com", "loginTeste", typeUser,
-//                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
-//        );
-//
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
-//
-//        // WHEN
-//        mockMvc.perform(put("/users/1")
-//                        .content(new ObjectMapper().writeValueAsString(dto))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isAccepted());
-//
-//        // THEN
-//        verify(updateUseCase, times(1)).update(eq(1L), any(User.class));
-//    }
+    @Test
+    @DisplayName("Should update user successfully - return HTTP 202 response")
+    void shouldUpdateUserSuccessfully() throws Exception {
+        TypeUser typeUser = new TypeUser("DONO");
+
+        // GIVEN
+        UpdateRequestDto dto = new UpdateRequestDto(
+                "Nome Teste", "email@test.com", "loginTeste", typeUser,
+                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        when(userEntityMapper.updateToUserDomain(any(UpdateRequestDto.class))).thenReturn(userMockOne());
+
+        // WHEN
+        mockMvc.perform(put("/users/1")
+                        .content(new ObjectMapper().writeValueAsString(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // THEN
+        verify(updateUseCase, times(1)).update(eq(1L), any(User.class));
+    }
 
 }
 

@@ -7,7 +7,9 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.Address
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserEntityMapperTest {
@@ -68,34 +72,32 @@ class UserEntityMapperTest {
         assertEquals(typeUser, user.getTipo());
     }
 
-//    @Test
-//    @DisplayName("Should map User to UserEntity")
-//    void shouldMapUserToUserEntity() {
-//        TypeUser typeUser = new TypeUser("DONO");
-//        TypeUserEntity typeUserEntity = new TypeUserEntity("DONO");
-//        Address address = new Address("Rua B", "Bairro C", "Comp", 99, "Estado F", "Cidade D", "03565000");
-//        User user = new User("Nome", "email", "login", "senha", LocalDate.now(), typeUser, List.of(address));
-//
-//        UserEntity entity = mapper.toUserEntity(user);
-//
-//        assertEquals(user.getNome(), entity.getNome());
-//        assertEquals(typeUserEntity, entity.getTipo());
-//        assertEquals("Rua B", entity.getEnderecos().getFirst().getRua());
-//    }
-//
-//    @Test
-//    @DisplayName("Should map UserEntity to User.")
-//    void shouldMapUserEntityToUser() {
-//        TypeUserEntity typeUserEntity = new TypeUserEntity("CLIENTE");
-//        AddressEntity address = new AddressEntity("Rua 1", "Bairro 2", "Comp", 1, "Estado", "Cidade", "03565000");
-//        UserEntity entity = new UserEntity("João", "joao@email.com", "joao123", "123", LocalDate.now(), typeUserEntity, List.of(address));
-//
-//        User user = mapper.toUserDomain(entity);
-//
-//        assertEquals("João", user.getNome());
-//        assertEquals(typeUserEntity, user.getTipo());
-//        assertEquals("Rua 1", user.getAddress().getFirst().getRua());
-//    }
+    @Test
+    @DisplayName("Should map User to UserEntity.")
+    void shouldMapUserToUserEntity() {
+        // Arrange
+        TypeUserEntityMapper typeMapper = mock(TypeUserEntityMapper.class);
+        UserEntityMapper mapper = new UserEntityMapper(typeMapper); // injetando dependência
+
+        TypeUser typeUser = new TypeUser("DONO");
+        TypeUserEntity typeUserEntity = new TypeUserEntity("DONO");
+
+        when(typeMapper.toTypeUserEntity(typeUser)).thenReturn(typeUserEntity); // comportamento simulado
+
+        Address address = new Address("Rua Teste", "Bairro", "Comp", 42, "Estado", "Cidade", "00000000");
+        User user = new User("Maria", "maria@test.com", "maria123", "senha", LocalDate.of(2020, 1, 1), typeUser, List.of(address));
+
+        // Act
+        UserEntity entity = mapper.toUserEntity(user);
+
+        // Assert
+        assertEquals("Maria", entity.getNome());
+        assertEquals("maria@test.com", entity.getEmail());
+        assertEquals("maria123", entity.getLogin());
+        assertEquals("senha", entity.getSenha());
+        assertEquals(typeUserEntity.getType(), entity.getTipo().getType());
+        assertEquals("Rua Teste", entity.getEnderecos().get(0).getRua());
+    }
 
     @Test
     @DisplayName("Should map User to UserResponseDto")

@@ -20,6 +20,9 @@ public class TypeUserEntity {
 
     public TypeUserEntity() {}
 
+    public TypeUserEntity(String dono) {
+    }
+
     public Long getId() {
         return idType;
     }
