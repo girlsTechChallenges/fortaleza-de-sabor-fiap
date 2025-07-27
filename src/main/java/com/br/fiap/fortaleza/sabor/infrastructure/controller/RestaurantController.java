@@ -91,7 +91,7 @@ public class RestaurantController implements RestaurantControllerDocs {
         return ResponseEntity.ok(restaurantMapper.toRestaurantFullByIdDto(restaurantOptional.orElse(null)));
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(Long id) {
         log.info("Received request to delete restaurant with ID: {}", id);
 

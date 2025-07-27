@@ -5,10 +5,10 @@ import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.TypeUserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,7 +77,7 @@ class UserRepositoryJpaTest {
     @DisplayName("Service JPA - Save a user in the database")
     void save() {
         // GIVEN
-        TypeUser typeUser = new TypeUser("CLIENTE");
+        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
         TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
         User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, typeUser, List.of());
         UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
@@ -99,7 +99,7 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should update user successfully.")
     void shouldUpdateUserSuccessfully() {
-        TypeUser typeUser = new TypeUser("CLIENTE");
+        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
         TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
         User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, typeUser, List.of());
         UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
@@ -130,7 +130,7 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should find user by ID.")
     void shouldFindUserById() {
-        TypeUser typeUser = new TypeUser("DONO");
+        TypeUser typeUser = new TypeUser(1L,"DONO");
         TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"DONO");
         UserEntity userEntity = new UserEntity("Joana", "joana@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
         User user = new User("Joana", "joana@email.com", "login", "senha", LocalDate.now(), typeUser, List.of());
@@ -147,7 +147,7 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should delete user by ID")
     void shouldDeleteUserById() {
-        TypeUser typeUser = new TypeUser("CLIENTE");
+        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
         TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
         UserEntity userEntity = new UserEntity("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
         User user = new User("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), typeUser, List.of());

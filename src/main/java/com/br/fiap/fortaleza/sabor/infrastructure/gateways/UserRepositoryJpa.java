@@ -60,7 +60,8 @@ public class UserRepositoryJpa implements UsersRepository {
                         }
                 );
         UserEntity userEntity = mapper.toUserEntity(user);
-        return mapper.toUserDomain(userRepository.save(userEntity));
+        var result = userRepository.save(userEntity);
+        return mapper.toUserDomain(result);
     }
 
     @Override

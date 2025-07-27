@@ -34,14 +34,13 @@ public class UserEntity {
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
     private List<AddressEntity> enderecos;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurante_id")
-    private RestaurantEntity restaurante;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "restaurante_id")
+//    private RestaurantEntity restaurante;
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeUserEntity tipo, List<AddressEntity> enderecos) {
-        this.id = id;
+    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeUserEntity tipo, List<AddressEntity> enderecos) {
         this.nome = nome;
         this.email = email;
         this.login = login;

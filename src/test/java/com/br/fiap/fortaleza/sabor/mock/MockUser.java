@@ -3,12 +3,12 @@ package com.br.fiap.fortaleza.sabor.mock;
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserAuthDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.AddressEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;

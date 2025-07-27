@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
+package com.br.fiap.fortaleza.sabor.application.usecase.user;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;

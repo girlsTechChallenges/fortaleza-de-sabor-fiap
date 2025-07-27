@@ -1,15 +1,8 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.CreateUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.DeleteUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.GetUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.UpdateUseCase;
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.*;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -46,13 +39,13 @@ class UserControllerTest {
     @MockitoBean
     private UsersRepository usersRepository;
     @MockitoBean
-    private CreateUseCase createUseCase;
+    private CreateUserUseCase createUseCase;
     @MockitoBean
-    private GetUseCase getUseCase;
+    private GetUserUseCase getUseCase;
     @MockitoBean
-    private UpdateUseCase updateUseCase;
+    private UpdateUserUseCase updateUseCase;
     @MockitoBean
-    private DeleteUseCase deleteUseCase;
+    private DeleteUserUseCase deleteUseCase;
 
     @BeforeEach
     public void setUp() {
@@ -114,7 +107,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
+    @DisplayName("Should return user by ID - return response HTTP 200 OK")
     void getById() throws Exception {
         // GIVEN
         var user = userMockOne();
@@ -128,7 +121,7 @@ class UserControllerTest {
         // THEN
         mockMvc.perform(get("/users/{idUsuario}", 1L)
                         .param("idUsuario", "1"))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
 
         verify(getUseCase, times(1)).getById(1L);
     }

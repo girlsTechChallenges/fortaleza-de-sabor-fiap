@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.AuthUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.AuthUserUseCase;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.AuthControllerDocs;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserCredentialsDto;

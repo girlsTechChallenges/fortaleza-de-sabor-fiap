@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
