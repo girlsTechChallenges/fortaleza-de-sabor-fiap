@@ -8,6 +8,155 @@
 	},
 	"item": [
 		{
+			"name": "👤TypeUser",
+			"item": [
+				{
+					"name": "1.TypeUser - Create (Cliente)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameType\": \"CLIENTE\"        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/typeUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.TypeUser - Create (Dono)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameType\": \"DONO\"        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/typeUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.TypeUser - Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/typeUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.TypeUser - Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/typeUser/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.TypeUser - Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameType\": \"VISITANTE\"        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/typeUser/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6.TypeUser - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/typeUser/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"typeUser",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "👤 User Management",
 			"item": [
 				{
