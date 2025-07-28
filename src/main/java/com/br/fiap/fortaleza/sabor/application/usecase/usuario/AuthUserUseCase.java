@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.application.usecase.user;
+package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
@@ -36,7 +36,7 @@ public class AuthUserUseCase {
 
         var now = Instant.now();
         var expiresIn = 300L;
-        var scope = user.stream().map(u -> u.getTipo().getNameType()).collect(Collectors.joining(" "));
+        var scope = user.stream().map(u -> u.getTipo().name()).collect(Collectors.joining(" "));
 
         var claims = JwtClaimsSet.builder()
                 .issuer("BackendFortalezaSabor")

@@ -1,7 +1,6 @@
 package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.GetUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

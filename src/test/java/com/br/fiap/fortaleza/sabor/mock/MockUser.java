@@ -1,14 +1,14 @@
 package com.br.fiap.fortaleza.sabor.mock;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
@@ -18,12 +18,13 @@ public class MockUser {
 
     public static UserEntity getUserEntityMock() {
         return new UserEntity(
+                1L,
                 "João Silva",
                 "email",
                 "login",
                 "123",
                 LocalDate.of(2025, 5, 16),
-                new TypeUserEntity(1L,"CLIENTE"),
+                TypeEntityEnum.CLIENTE,
                 List.of(
                         new AddressEntity(
                                 "rua",
@@ -46,7 +47,7 @@ public class MockUser {
                 "login",
                 new BCryptPasswordEncoder().encode("senha1234"),
                 LocalDate.of(2025,5,16),
-                new TypeUser("CLIENTE"),
+                TypeEnum.DONO,
                 List.of(new Address("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
@@ -58,7 +59,7 @@ public class MockUser {
                 "login",
                 "senha",
                 LocalDate.of(2025,5,16),
-                new TypeUser("CLIENTE"),
+                TypeEnum.CLIENTE,
                 List.of(new Address("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
@@ -68,7 +69,7 @@ public class MockUser {
                 "João Silva",
                 "login",
                 "email",
-                new TypeUser("DONO"),
+                TypeEnum.DONO,
                 List.of(new AddressDto("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
@@ -78,7 +79,7 @@ public class MockUser {
                 "Maria Oliveira",
                 "login",
                 "email",
-                new TypeUser("CLIENTE"),
+                TypeEnum.CLIENTE,
                 List.of(new AddressDto("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
