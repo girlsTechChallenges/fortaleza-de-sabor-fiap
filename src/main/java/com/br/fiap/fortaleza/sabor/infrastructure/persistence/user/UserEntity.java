@@ -1,7 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -26,21 +26,21 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_type", referencedColumnName = "idType")
-    private TypeUserEntity tipo;
+    @Enumerated(EnumType.STRING)
+    private TypeEntityEnum tipo;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
     private List<AddressEntity> enderecos;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "restaurante_id")
-//    private RestaurantEntity restaurante;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurante_id")
+    private RestaurantEntity restaurante;
 
     public UserEntity() {}
 
-    public UserEntity(String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeUserEntity tipo, List<AddressEntity> enderecos) {
+    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.login = login;
@@ -93,11 +93,11 @@ public class UserEntity {
         this.dataAlteracao = LocalDate.now();
     }
 
-    public TypeUserEntity getTipo() {
+    public TypeEntityEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(TypeUserEntity tipo) {
+    public void setTipo(TypeEntityEnum tipo) {
         this.tipo = tipo;
     }
 

@@ -1,13 +1,14 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.user.CreateUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.DeleteUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.GetUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.UpdateUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.UserControllerDocs;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.*;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
