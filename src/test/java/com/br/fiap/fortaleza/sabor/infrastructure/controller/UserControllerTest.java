@@ -1,11 +1,8 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.*;
+import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
@@ -48,7 +45,7 @@ class UserControllerTest {
     @MockitoBean
     private CreateUserUseCase createUseCase;
     @MockitoBean
-    private GetUserUseCase getUserUseCase;
+    private GetUserUseCase getUseCase;
     @MockitoBean
     private UpdateUserUseCase updateUseCase;
     @MockitoBean
@@ -56,22 +53,22 @@ class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase, getUserUseCase,updateUseCase, deleteUseCase,userEntityMapper);
+        userController = new UserController(createUseCase,getUseCase,updateUseCase, deleteUseCase,userEntityMapper);
     }
 
     @Test
     @DisplayName("Should engrave object USER in database - return response HTTP 201 CREATE")
-    void shouldCreateUser() throws Exception {
+    void create() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        // Arrange
+        //GIVEN
         var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
         var mapper = userEntityMapper.toUserDomain(requestDto);
 
-        // Act & Assert
+        //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(createUseCase.save(mapper)).thenReturn(userMockOne());
 
@@ -81,13 +78,13 @@ class UserControllerTest {
                         .content(request))
                 .andExpect(status().isCreated());
 
-
+        //THEN
         verify(createUseCase, times(1)).save(mapper);
     }
 
     @Test
     @DisplayName("Should return a list of users - return response HTTP 200 OK")
-    void shouldGetAllUsers() throws Exception {
+    void getAll() throws Exception {
         // GIVEN
         var userOne = userMockOne();
         var userTwo = userMockTwo();
@@ -97,7 +94,7 @@ class UserControllerTest {
         when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
         when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
-        when(getUserUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
+        when(getUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
         mockMvc.perform(get("/users")
                         .accept(MediaType.APPLICATION_JSON))
@@ -110,19 +107,19 @@ class UserControllerTest {
             """));
 
         // THEN
-        verify(getUserUseCase, times(1)).getAll();
+        verify(getUseCase, times(1)).getAll();
     }
 
     @Test
-    @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
-    void shouldGetUserById() throws Exception {
+    @DisplayName("Should return user by ID - return response HTTP 200 OK")
+    void getById() throws Exception {
         // GIVEN
         var user = userMockOne();
         var responseDto = responseDtoMockOne();
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(getUserUseCase.getById(1L)).thenReturn(Optional.of(user));
+        when(getUseCase.getById(1L)).thenReturn(Optional.of(user));
         when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
 
         // THEN
@@ -130,13 +127,13 @@ class UserControllerTest {
                         .param("idUsuario", "1"))
                 .andExpect(status().isOk());
 
-        verify(getUserUseCase, times(1)).getById(1L);
+        verify(getUseCase, times(1)).getById(1L);
     }
 
 
     @Test
     @DisplayName("Should delete user by ID - return response HTTP 204 NO CONTENT")
-    void shouldDeleteUserById() throws Exception {
+    void deleteById() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         mockMvc.perform(delete("/users/{idUsuario}", 1L)
@@ -149,15 +146,16 @@ class UserControllerTest {
     @Test
     @DisplayName("Should update user successfully - return HTTP 202 response")
     void shouldUpdateUserSuccessfully() throws Exception {
+        TypeUser typeUser = new TypeUser("DONO");
 
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(
-                "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
+                "Nome Teste", "email@test.com", "loginTeste", typeUser,
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
+        when(userEntityMapper.updateToUserDomain(any(UpdateRequestDto.class))).thenReturn(userMockOne());
 
         // WHEN
         mockMvc.perform(put("/users/1")

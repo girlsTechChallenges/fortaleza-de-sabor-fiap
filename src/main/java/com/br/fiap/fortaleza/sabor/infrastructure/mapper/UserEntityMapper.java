@@ -1,17 +1,11 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.*;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +13,12 @@ import java.util.Optional;
 
 @Component
 public class UserEntityMapper {
+
+    private final TypeUserEntityMapper typeMapper;
+
+    public UserEntityMapper(TypeUserEntityMapper typeMapper) {
+        this.typeMapper = typeMapper;
+    }
 
     public User toUserDomain(UserRequestDto userRequestDto) {
 
@@ -39,7 +39,7 @@ public class UserEntityMapper {
                 userRequestDto.login(),
                 userRequestDto.senha(),
                 userRequestDto.dataAlteracao(),
-                TypeEnum.valueOf(userRequestDto.tipo().name()),
+                userRequestDto.tipo(),
                 addresses);
     }
 
@@ -60,7 +60,7 @@ public class UserEntityMapper {
                 updateRequestDto.nome(),
                 updateRequestDto.email(),
                 updateRequestDto.senha(),
-                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                updateRequestDto.tipo(),
                 addresses);
     }
 
@@ -76,13 +76,12 @@ public class UserEntityMapper {
                         address.getCidade(), address.getCep())).toList();
 
         return new UserEntity(
-                null, // Assuming ID is auto-generated
                 user.getNome(),
                 user.getEmail(),
                 user.getLogin(),
                 user.getSenha(),
                 user.getDataAlteracao(),
-                TypeEntityEnum.valueOf(user.getTipo().name()),
+                typeMapper.toTypeUserEntity(user.getTipo()),
                 addressEntities
                 );
     }
@@ -106,7 +105,7 @@ public class UserEntityMapper {
                 userEntity.getLogin(),
                 userEntity.getSenha(),
                 userEntity.getDataAlteracao(),
-                TypeEnum.valueOf(userEntity.getTipo().name()),
+                typeMapper.toTypeUserDomain(userEntity.getTipo()),
                 addresses
                 );
     }
