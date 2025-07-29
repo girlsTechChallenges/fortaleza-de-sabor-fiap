@@ -1,5 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser;
 
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,10 @@ public class TypeUserEntity {
         this.idType = idType;
         this.nameType = nameType;
     }
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private UserEntity usuario;
 
     public TypeUserEntity() {}
 

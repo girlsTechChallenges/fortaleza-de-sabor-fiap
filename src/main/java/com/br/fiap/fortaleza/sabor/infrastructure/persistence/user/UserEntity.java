@@ -26,7 +26,7 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @ManyToOne(optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type", referencedColumnName = "idType")
     private TypeUserEntity tipo;
 
@@ -34,9 +34,9 @@ public class UserEntity {
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
     private List<AddressEntity> enderecos;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "restaurante_id")
-//    private RestaurantEntity restaurante;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurante_id")
+    private RestaurantEntity restaurante;
 
     public UserEntity() {}
 

@@ -25,13 +25,13 @@ public class AddressEntity {
 
     private String cep;
 
-//    @ManyToOne
-//    @JoinColumn(name = "usuario_id")
-//    private UserEntity usuario;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "restaurante_id")
-//    private RestaurantEntity restaurante;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UserEntity usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private RestaurantEntity restaurante;
 
 
     public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
