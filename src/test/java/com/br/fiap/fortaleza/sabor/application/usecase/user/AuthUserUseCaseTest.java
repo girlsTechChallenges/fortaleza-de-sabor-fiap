@@ -1,8 +1,8 @@
-package com.br.fiap.fortaleza.sabor.application.usecase.usuario;
+package com.br.fiap.fortaleza.sabor.application.usecase.user;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
+import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserCredentialsException;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -49,7 +50,7 @@ class AuthUserUseCaseTest {
         User user = new User();
         user.setEmail(email);
         user.setSenha(hashedPassword);
-        user.setTipo(TypeEnum.CLIENTE);
+        user.setTipo(new TypeUser(1L, "CLIENTE"));
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, user.getSenha())).thenReturn(true);

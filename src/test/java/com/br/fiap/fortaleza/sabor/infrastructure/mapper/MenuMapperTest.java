@@ -18,12 +18,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class MenuEntityMapperTest {
-    private MenuEntityMapper menuEntityMapper;
+public class MenuMapperTest {
+    private MenuMapper menuMapper;
 
     @BeforeEach
     void setUp() {
-        menuEntityMapper = new MenuEntityMapper();
+        menuMapper = new MenuMapper();
     }
 
     @Test
@@ -37,7 +37,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItem menuItem = menuEntityMapper.toMenuDomain(dto);
+        MenuItem menuItem = menuMapper.toMenuDomain(dto);
 
         assertNotNull(menuItem);
         assertEquals("Pizza Margherita", menuItem.getNome());
@@ -58,7 +58,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItem menuItem = menuEntityMapper.updateToMenuDomain(dto);
+        MenuItem menuItem = menuMapper.updateToMenuDomain(dto);
 
         assertNotNull(menuItem);
         assertEquals("Pizza Margherita", menuItem.getNome());
@@ -79,7 +79,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItemsEntity entity = menuEntityMapper.toMenuItemsEntity(menuItem);
+        MenuItemsEntity entity = menuMapper.toMenuItemsEntity(menuItem);
 
         assertEquals(menuItem.getNome(), entity.getNome());
     }
@@ -95,7 +95,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItem user = menuEntityMapper.toMenuItemDomain(entity);
+        MenuItem user = menuMapper.toMenuItemDomain(entity);
 
         assertEquals("Pizza Margherita", user.getNome());
     }
@@ -111,7 +111,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItemResponseDto dto = menuEntityMapper.toMenuItemResponseDto(entity);
+        MenuItemResponseDto dto = menuMapper.toMenuItemResponseDto(entity);
 
         assertEquals("Pizza Margherita", dto.nome());
     }
@@ -127,7 +127,7 @@ public class MenuEntityMapperTest {
                 "https://exemplo.com/images/pizza-margherita.png"
         );
 
-        MenuItemResponseDto dto = menuEntityMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem));
+        MenuItemResponseDto dto = menuMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem));
 
         assertEquals("Pizza Margherita", dto.nome());
     }
@@ -135,6 +135,6 @@ public class MenuEntityMapperTest {
     @Test
     @DisplayName("Should throw when optional MenuItem is empty.")
     void shouldThrowWhenOptionalMenuItemIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> menuEntityMapper.getMenuByIdToMenuResponseDto(Optional.empty()));
+        assertThrows(IllegalArgumentException.class, () -> menuMapper.getMenuByIdToMenuResponseDto(Optional.empty()));
     }
 }

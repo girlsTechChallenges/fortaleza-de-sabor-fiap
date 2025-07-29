@@ -4,10 +4,10 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,9 +24,9 @@ public class UserRepositoryJpa implements UsersRepository {
     private static final Logger log = LoggerFactory.getLogger(UserRepositoryJpa.class);
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserEntityMapper mapper;
+    private final UserMapper mapper;
 
-    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserEntityMapper mapper) {
+    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserMapper mapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.mapper = mapper;
@@ -59,7 +59,7 @@ public class UserRepositoryJpa implements UsersRepository {
             findUser.setNome(user.getNome());
             findUser.setEmail(user.getEmail());
             findUser.setSenha(user.getSenha());
-            findUser.setTipo(TypeEntityEnum.valueOf(user.getTipo().name()));
+            findUser.setTipo(new TypeEntity(user.getTipo().getId(), user.getTipo().getType()));
 
             if (user.getAddress() != null && !user.getAddress().isEmpty()) {
                 findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));

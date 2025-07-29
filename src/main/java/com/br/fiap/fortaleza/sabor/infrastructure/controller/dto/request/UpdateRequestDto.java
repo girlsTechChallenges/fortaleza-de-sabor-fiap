@@ -13,6 +13,6 @@ public record UpdateRequestDto(
         @NotNull(message = "This field cannot be empty") @NotBlank @Size(min = 2, max = 50) String nome,
         @NotNull @NotBlank @Email String email,
         @NotNull @NotBlank @Size(min = 8, max = 100) String senha,
-        @NotNull TypeEnum tipo,
+        @NotNull TypeUserRequestDto tipo,
         @NotNull @Size(min = 1) @Valid List<AddressDto> address
 ) {}

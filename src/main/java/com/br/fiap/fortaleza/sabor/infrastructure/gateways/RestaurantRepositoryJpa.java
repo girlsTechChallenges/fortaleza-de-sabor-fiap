@@ -10,7 +10,6 @@ import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeMisma
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.RestaurantMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.RestaurantRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.AddressRestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import org.slf4j.Logger;
@@ -50,7 +49,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         var userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if("DONO".equals(userEntity.getEmail())) {
             throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
         }
 
@@ -86,7 +85,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
             throw new RestaurantAlreadyExistsException("Email does not match the registered user. " + restaurant.getEmail());
         }
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if("DONO".equals(userEntity.getEmail())) {
             throw new UserNotFoundException("User with email " + restaurant.getEmail() + " is not a restaurant owner");
         }
 
@@ -145,7 +144,9 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         var userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if("DONO".equals(userEntity.getEmail()))
+
+        {
             throw new UserTypeMismatchException("User with email " + email + " is not a restaurant owner");
         }
 

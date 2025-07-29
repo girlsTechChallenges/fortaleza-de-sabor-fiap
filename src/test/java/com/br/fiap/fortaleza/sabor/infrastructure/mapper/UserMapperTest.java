@@ -1,0 +1,139 @@
+//package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
+//
+//import com.br.fiap.fortaleza.sabor.domain.address.Address;
+//import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
+//import com.br.fiap.fortaleza.sabor.domain.user.User;
+//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.TypeUserRequestDto;
+//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
+//import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+//import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
+//import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.Mockito;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//
+//import java.time.LocalDate;
+//import java.util.List;
+//import java.util.Optional;
+//
+//import static org.junit.jupiter.api.Assertions.*;
+//
+//@ExtendWith(MockitoExtension.class)
+//class UserMapperTest {
+//
+//    private UserMapper mapper;
+//
+//    @BeforeEach
+//    void setUp() {
+//        TypeUserMapper typeUserMapper = Mockito.mock(TypeUserMapper.class);
+//        mapper = new UserMapper(typeUserMapper);
+//    }
+//
+//    @Test
+//    @DisplayName("Should map UserRequestDto to User.")
+//    void shouldMapUserRequestDtoToUser() {
+//        UserRequestDto dto = new UserRequestDto(
+//                "Nome Teste", "email@test.com", "loginTeste", "senha",
+//                LocalDate.of(2025, 5, 21),
+//                new TypeUserRequestDto("DONO"),
+//                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
+//        );
+//
+//        User user = mapper.toUserDomain(dto);
+//
+//        assertNotNull(user);
+//        assertEquals("Nome Teste", user.getNome());
+//        assertEquals("DONO", user.getTipo());
+//        assertEquals("Rua A", user.getAddress().getFirst().getRua());
+//    }
+//
+//    @Test
+//    @DisplayName("Should map UpdateRequestDto to User.")
+//    void shouldMapUpdateRequestDtoToUser() {
+//        UpdateRequestDto dto = new UpdateRequestDto(
+//                "Nome Update", "update@email.com", "novaSenha", new TypeUserRequestDto("CLIENTE"),
+//                List.of(new AddressDto("Rua Z", "Bairro X", "Ap 101", 50, "Cidade Y", "Estado Z", "03565000"))
+//        );
+//
+//        User user = mapper.updateToUserDomain(dto);
+//
+//        assertNotNull(user);
+//        assertEquals("Nome Update", user.getNome());
+//        assertEquals("update@email.com", user.getEmail());
+//        assertEquals("novaSenha", user.getSenha());
+//        assertEquals("CLIENTE", user.getTipo());
+//    }
+//
+//    @Test
+//    @DisplayName("Should map User to UserEntity")
+//    void shouldMapUserToUserEntity() {
+//        Address address = new Address("Rua B", "Bairro C", "Comp", 99, "Estado F", "Cidade D", "03565000");
+//        User user = new User("Nome", "email", "login", "senha", LocalDate.now(), new TypeUser(1L, "DONO"), List.of(address));
+//
+//        UserEntity entity = mapper.toUserEntity(user);
+//
+//        assertEquals(user.getNome(), entity.getNome());
+//        assertEquals("DONO", entity.getTipo());
+//        assertEquals("Rua B", entity.getEnderecos().getFirst().getRua());
+//    }
+//
+//    @Test
+//    @DisplayName("Should map UserEntity to User.")
+//    void shouldMapUserEntityToUser() {
+//        AddressEntity address = new AddressEntity("Rua 1", "Bairro 2", "Comp", 1, "Estado", "Cidade", "03565000");
+//        UserEntity entity = new UserEntity(1L, "João", "joao@email.com", "joao123", "123", LocalDate.now(), new TypeEntity(1L, "CLIENTE"), List.of(address));
+//
+//        User user = mapper.toUserDomain(entity);
+//
+//        assertEquals("João", user.getNome());
+//        assertEquals("CLIENTE", user.getTipo());
+//        assertEquals("Rua 1", user.getAddress().getFirst().getRua());
+//    }
+//
+//    @Test
+//    @DisplayName("Should map User to UserResponseDto")
+//    void shouldMapUserToUserResponseDto() {
+//        Address address = new Address("Rua R", "Bairro B", "Comp", 10, "Estado", "Cidade", "03565000");
+//        User user = new User("Maria", "maria@email.com", "maria123", "123", LocalDate.now(), new TypeUser(1L, "CLIENTE"), List.of(address));
+//
+//        UserResponseDto dto = mapper.toUserResponseDto(user);
+//
+//        assertEquals("Maria", dto.nome());
+//        assertEquals("CLIENTE", dto.tipo());
+//        assertEquals("Rua R", dto.address().getFirst().rua());
+//    }
+//
+//    @Test
+//    @DisplayName("Should map optional User to UserResponseDto.")
+//    void shouldMapOptionalUserToUserResponseDto() {
+//        Address address = new Address("Rua Q", "Bairro C", "Comp", 1, "Estado", "Cidade", "03565000");
+//        User user = new User("Carlos", "carlos@email.com", "carlos123", "123", LocalDate.now(), new TypeUser(1L, "DONO"), List.of(address));
+//
+//        UserResponseDto dto = mapper.getUserByIdToUserResponseDto(Optional.of(user));
+//
+//        assertEquals("Carlos", dto.nome());
+//        assertEquals("Rua Q", dto.address().getFirst().rua());
+//    }
+//
+//    @Test
+//    @DisplayName("Should throw when optional User is empty.")
+//    void shouldThrowWhenOptionalUserIsEmpty() {
+//        assertThrows(IllegalArgumentException.class, () -> mapper.getUserByIdToUserResponseDto(Optional.empty()));
+//    }
+//
+//    @Test
+//    @DisplayName("Should map list of Address to list of AddressEntity.")
+//    void shouldMapListAddressToListAddressEntity() {
+//        Address address = new Address("Rua S", "Bairro S", "Comp", 7, "Estado", "Cidade", "03565000");
+//        List<AddressEntity> entities = mapper.toAddressEntityList(List.of(address));
+//
+//        assertEquals(1, entities.size());
+//        assertEquals("Rua S", entities.getFirst().getRua());
+//    }
+//}

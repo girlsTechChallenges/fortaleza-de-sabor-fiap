@@ -1,5 +1,6 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence;
 
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

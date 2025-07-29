@@ -2,8 +2,8 @@ package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.MenuNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.MenuItemRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;
 import com.br.fiap.fortaleza.sabor.mock.MockMenu;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ public class MenuItemRepositoryJpaTest {
     @Mock
     private MenuItemRepository menuItemRepository;
     @Mock
-    private MenuEntityMapper mapper;
+    private MenuMapper mapper;
 
     @BeforeEach
     public void setUp() {

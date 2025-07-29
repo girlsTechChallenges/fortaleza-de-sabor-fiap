@@ -1,24 +1,27 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
+import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.TypeUserResponse;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UserEntityMapper {
+public class UserMapper {
+
+    private final TypeUserMapper typeUserMapper;
+
+    public UserMapper(TypeUserMapper typeUserMapper) {
+        this.typeUserMapper = typeUserMapper;
+    }
 
     public User toUserDomain(UserRequestDto userRequestDto) {
 
@@ -39,7 +42,7 @@ public class UserEntityMapper {
                 userRequestDto.login(),
                 userRequestDto.senha(),
                 userRequestDto.dataAlteracao(),
-                TypeEnum.valueOf(userRequestDto.tipo().name()),
+                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(userRequestDto.tipo().type())),
                 addresses);
     }
 
@@ -60,7 +63,7 @@ public class UserEntityMapper {
                 updateRequestDto.nome(),
                 updateRequestDto.email(),
                 updateRequestDto.senha(),
-                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(updateRequestDto.tipo().type())),
                 addresses);
     }
 
@@ -76,13 +79,13 @@ public class UserEntityMapper {
                         address.getCidade(), address.getCep())).toList();
 
         return new UserEntity(
-                null, // Assuming ID is auto-generated
+                null,
                 user.getNome(),
                 user.getEmail(),
                 user.getLogin(),
                 user.getSenha(),
                 user.getDataAlteracao(),
-                TypeEntityEnum.valueOf(user.getTipo().name()),
+                typeUserMapper.toTypeEntity(new TypeUser(user.getTipo().getId(), user.getTipo().getType())),
                 addressEntities
                 );
     }
@@ -106,7 +109,7 @@ public class UserEntityMapper {
                 userEntity.getLogin(),
                 userEntity.getSenha(),
                 userEntity.getDataAlteracao(),
-                TypeEnum.valueOf(userEntity.getTipo().name()),
+                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(userEntity.getTipo().getNameType())),
                 addresses
                 );
     }
@@ -123,14 +126,14 @@ public class UserEntityMapper {
                         address.getEstado(),
                         address.getCep()))  .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(),
+                new TypeUserResponse(
+                        null,
+                        user.getTipo().getType()),
+                addressDtos);
     }
 
     public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
-        if (optionalUser.isEmpty()) {
-            // Aqui você pode lançar uma exceção, retornar null, ou um DTO vazio, conforme sua regra de negócio
-            throw new IllegalArgumentException("Usuário não encontrado");
-        }
 
         User user = optionalUser.get();
 
@@ -145,7 +148,11 @@ public class UserEntityMapper {
                         address.getCep()))
                 .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(),
+                new TypeUserResponse(
+                        user.getTipo().getId(),
+                        user.getTipo().getType()),
+                addressDtos);
     }
 
     public List<AddressEntity> toAddressEntityList(List<Address> addresses) {

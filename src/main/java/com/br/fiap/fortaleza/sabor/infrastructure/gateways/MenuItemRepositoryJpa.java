@@ -4,8 +4,8 @@ import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemsRepository;
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.MenuAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.MenuNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.MenuItemRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,9 @@ import java.util.Optional;
 public class MenuItemRepositoryJpa implements MenuItemsRepository{
     private static final Logger log = LoggerFactory.getLogger(MenuItemRepositoryJpa.class);
     private final MenuItemRepository menuItemRepository;
-    private final MenuEntityMapper mapper;
+    private final MenuMapper mapper;
 
-    public MenuItemRepositoryJpa(MenuItemRepository menuItemRepository, MenuEntityMapper mapper) {
+    public MenuItemRepositoryJpa(MenuItemRepository menuItemRepository, MenuMapper mapper) {
         this.menuItemRepository = menuItemRepository;
         this.mapper = mapper;
     }

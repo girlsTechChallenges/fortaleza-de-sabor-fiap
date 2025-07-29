@@ -10,7 +10,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.MenuItemContro
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -31,21 +31,21 @@ public class MenuItemsController implements MenuItemControllerDocs {
     private final GetMenuItemUseCase getMenuItemUseCase;
     private final UpdateMenuItemUseCase updateMenuItemUseCase;
     private final DeleteMenuItemUseCase deleteMenuItemUseCase;
-    private final MenuEntityMapper menuEntityMapper;
+    private final MenuMapper menuMapper;
 
-    public MenuItemsController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuEntityMapper menuEntityMapper) {
+    public MenuItemsController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuMapper menuMapper) {
         this.createMenuUseCase = createMenuUseCase;
         this.getMenuItemUseCase = getMenuItemUseCase;
         this.updateMenuItemUseCase = updateMenuItemUseCase;
         this.deleteMenuItemUseCase = deleteMenuItemUseCase;
-        this.menuEntityMapper = menuEntityMapper;
+        this.menuMapper = menuMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto) {
         log.info("POST MENU REQUEST: {} ", menuItemRequestDto);
-        var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuItemRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuItemResponseDto(resp));
+        var resp = createMenuUseCase.save(menuMapper.toMenuDomain(menuItemRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(menuMapper.toMenuItemResponseDto(resp));
     }
 
     @GetMapping("/{idMenu}")
@@ -54,14 +54,14 @@ public class MenuItemsController implements MenuItemControllerDocs {
     ) {
         log.info("GET USER BY ID REQUEST {} ", idMenu);
         Optional<MenuItem> menu = getMenuItemUseCase.getById(idMenu);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(menuEntityMapper.getMenuByIdToMenuResponseDto(menu)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(menuMapper.getMenuByIdToMenuResponseDto(menu)), HttpStatus.ACCEPTED);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MenuItemResponseDto> getAll() {
         log.info("START GET ALL USERS");
         var resp = getMenuItemUseCase.getAll();
-        return resp.stream().map(menuEntityMapper::toMenuItemResponseDto).toList();
+        return resp.stream().map(menuMapper::toMenuItemResponseDto).toList();
     }
 
     @PutMapping(value = "/{idMenu}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,7 +70,7 @@ public class MenuItemsController implements MenuItemControllerDocs {
             @RequestBody @Valid UpdateMenuItemRequestDto updateMenuItemRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateMenuItemRequestDto);
-        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateMenuItemRequestDto));
+        updateMenuItemUseCase.update(idMenu, menuMapper.updateToMenuDomain(updateMenuItemRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

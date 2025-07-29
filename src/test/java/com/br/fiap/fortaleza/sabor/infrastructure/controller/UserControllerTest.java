@@ -1,16 +1,16 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.CreateUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.DeleteUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.GetUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.usuario.UpdateUserUseCase;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.CreateUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.DeleteUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.GetUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.usecase.user.UpdateUserUseCase;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.TypeUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ class UserControllerTest {
     private UserController userController;
 
     @MockitoBean
-    private UserEntityMapper userEntityMapper;
+    private UserMapper userMapper;
     @MockitoBean
     private UsersRepository usersRepository;
     @MockitoBean
@@ -56,7 +56,7 @@ class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(createUseCase, getUserUseCase,updateUseCase, deleteUseCase,userEntityMapper);
+        userController = new UserController(createUseCase, getUserUseCase,updateUseCase, deleteUseCase, userMapper);
     }
 
     @Test
@@ -67,9 +67,9 @@ class UserControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         // Arrange
-        var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
+        var request = "{\n  \"nome\": \"Lonnie Stanton II\",\n  \"email\": \"Malvina98@gmail.com\",\n  \"login\": \"Hardy_Rempel27\",\n  \"senha\": \"RlhllJJPM_sbW02\",\n  \"dataAlteracao\": \"2025-05-17\",\n  \"tipo\": {\n    \"type\": \"DONO\"\n  },\n  \"address\": [\n    {\n      \"rua\": \"Rua Alves Paulista\",\n      \"bairro\": \"Paulista Nova\",\n      \"complemento\": \"casa\",\n      \"numero\": 130,\n      \"estado\": \"São Paulo\",\n      \"cidade\": \"São Paulo\",\n      \"cep\": 85965000\n    }\n  ]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
-        var mapper = userEntityMapper.toUserDomain(requestDto);
+        var mapper = userMapper.toUserDomain(requestDto);
 
         // Act & Assert
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
@@ -94,8 +94,8 @@ class UserControllerTest {
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
-        when(userEntityMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
+        when(userMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
+        when(userMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
         when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
         when(getUserUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
 
@@ -123,7 +123,7 @@ class UserControllerTest {
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         when(getUserUseCase.getById(1L)).thenReturn(Optional.of(user));
-        when(userEntityMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
+        when(userMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
 
         // THEN
         mockMvc.perform(get("/users/{idUsuario}", 1L)
@@ -152,12 +152,12 @@ class UserControllerTest {
 
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(
-                "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
+                "Nome Teste", "email@test.com", "loginTeste", new TypeUserRequestDto("CLIENTE"),
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        when(userEntityMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
+        when(userMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
 
         // WHEN
         mockMvc.perform(put("/users/1")

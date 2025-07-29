@@ -7,6 +7,7 @@ import com.br.fiap.fortaleza.sabor.infrastructure.mapper.RestaurantMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.RestaurantRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,7 +49,7 @@ class RestaurantRepositoryJpaTest {
         userEntity.setId(1L);
         userEntity.setEmail("teste@teste.com");
         userEntity.setNome("Dono Teste");
-        userEntity.setTipo(com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum.DONO);
+        userEntity.setTipo(new TypeEntity(1L, "DONO"));
 
         restaurant = new Restaurant(
                 null,

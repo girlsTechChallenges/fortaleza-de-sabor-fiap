@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request;
 
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -30,7 +29,7 @@ public record UserRequestDto(
         LocalDate dataAlteracao,
 
         @NotNull
-        TypeEnum tipo,
+        TypeUserRequestDto tipo,
 
         @NotNull
         @Size(min = 1) 

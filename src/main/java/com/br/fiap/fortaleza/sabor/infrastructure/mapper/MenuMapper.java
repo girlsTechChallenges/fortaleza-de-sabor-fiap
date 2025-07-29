@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class MenuEntityMapper {
+public class MenuMapper {
     public MenuItem toMenuDomain(MenuItemRequestDto menuRequestDto) {
         return new MenuItem(
                 menuRequestDto.nome(),

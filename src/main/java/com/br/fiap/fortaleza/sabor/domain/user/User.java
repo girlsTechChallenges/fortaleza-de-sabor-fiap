@@ -1,7 +1,6 @@
 package com.br.fiap.fortaleza.sabor.domain.user;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.enums.TypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,14 +20,14 @@ public class User {
     private String login;
     private String senha;
     private LocalDate dataAlteracao;
-    private TypeEnum tipo;
+    private TypeUser tipo;
     private List<Address> address;
 
     public User(
             String nome,
             String email,
             String senha,
-            TypeEnum tipo,
+            TypeUser tipo,
             List<Address> address) {
         this.nome = nome;
         this.email = email;

@@ -8,7 +8,7 @@ import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCas
 import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ class MenuItemsControllerTest {
     private MenuItemsController menuItemsController;
 
     @MockitoBean
-    private MenuEntityMapper menuEntityMapper;
+    private MenuMapper menuMapper;
     @MockitoBean
     private MenuItemsRepository menuItemsRepository;
     @MockitoBean
@@ -56,7 +56,7 @@ class MenuItemsControllerTest {
 
     @BeforeEach
     public void setUp() {
-        menuItemsController = new MenuItemsController(createMenuItemUseCase, getMenuItemUseCase, updateMenuItemUseCase, deleteMenuItemUseCase, menuEntityMapper);
+        menuItemsController = new MenuItemsController(createMenuItemUseCase, getMenuItemUseCase, updateMenuItemUseCase, deleteMenuItemUseCase, menuMapper);
     }
 
     @Test
@@ -69,7 +69,7 @@ class MenuItemsControllerTest {
         //GIVEN
         var request = "{\n\t\"nome\": \"Pizza Margherita\",\n\t\"itemDescription\": \"Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco\",\n\t\"itemPrice\": \"29.90\",\n\t\"availability\": true,\n\t\"itemImage\": \"https://exemplo.com/images/pizza-margherita.png\"\n}";
         var requestDto = objectMapper.readValue(request, MenuItemRequestDto.class);
-        var mapper = menuEntityMapper.toMenuDomain(requestDto);
+        var mapper = menuMapper.toMenuDomain(requestDto);
 
         //WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
@@ -94,8 +94,8 @@ class MenuItemsControllerTest {
 
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(menuEntityMapper.toMenuItemResponseDto(menuItemMockOne)).thenReturn(responseDtoMockOne());
-        when(menuEntityMapper.toMenuItemResponseDto(menuItemMockTwo)).thenReturn(responseDtoMockTwo());
+        when(menuMapper.toMenuItemResponseDto(menuItemMockOne)).thenReturn(responseDtoMockOne());
+        when(menuMapper.toMenuItemResponseDto(menuItemMockTwo)).thenReturn(responseDtoMockTwo());
         when(menuItemsRepository.getAll()).thenReturn(List.of(menuItemMockOne, menuItemMockTwo));
         when(getMenuItemUseCase.getAll()).thenReturn(List.of(menuItemMockOne, menuItemMockTwo));
 
@@ -124,7 +124,7 @@ class MenuItemsControllerTest {
         // WHEN
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
         when(getMenuItemUseCase.getById(1L)).thenReturn(Optional.of(menuItem));
-        when(menuEntityMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem))).thenReturn(responseDto);
+        when(menuMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem))).thenReturn(responseDto);
 
         // THEN
         mockMvc.perform(get("/cardapio/{idMenu}", 1L)
@@ -161,7 +161,7 @@ class MenuItemsControllerTest {
         );
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(menuEntityMapper.updateToMenuDomain(dto)).thenReturn(menuItemMockOne());
+        when(menuMapper.updateToMenuDomain(dto)).thenReturn(menuItemMockOne());
 
         // WHEN
         mockMvc.perform(put("/cardapio/1")
