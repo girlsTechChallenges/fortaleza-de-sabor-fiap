@@ -108,7 +108,7 @@ public class MenuItemRepositoryJpaTest {
         Optional<MenuItem> updated = menuItemRepositoryJpa.update(1L, menuDomain);
 
         assertTrue(updated.isPresent());
-        assertEquals("Pizza Margherita", updated.get().getNome());
+        assertEquals("Pizza Margherita", updated.get().getName());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class MenuItemRepositoryJpaTest {
         Optional<MenuItem> found = menuItemRepositoryJpa.getById(2L);
 
         assertTrue(found.isPresent());
-        assertEquals("Pizza Margherita", found.get().getNome());
+        assertEquals("Pizza Margherita", found.get().getName());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class MenuItemRepositoryJpaTest {
         Optional<MenuItem> deleted = menuItemRepositoryJpa.deleteById(3L);
 
         assertTrue(deleted.isPresent());
-        assertEquals("Pizza Margherita", deleted.get().getNome());
+        assertEquals("Pizza Margherita", deleted.get().getName());
         verify(menuItemRepository).deleteById(3L);
     }
 }

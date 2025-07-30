@@ -15,39 +15,39 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private String name;
 
     private String email;
 
     private String login;
 
-    private String senha;
+    private String password;
 
     @Column(name = "data_alteracao")
-    private LocalDate dataAlteracao;
+    private LocalDate changeDate;
 
     @Enumerated(EnumType.STRING)
-    private TypeEntityEnum tipo;
+    private TypeEntityEnum type;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
-    private List<AddressEntity> enderecos;
+    private List<AddressEntity> addresses;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurante_id")
-    private RestaurantEntity restaurante;
+    private RestaurantEntity restaurant;
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+    public UserEntity(Long id, String name, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> addresses) {
         this.id = id;
-        this.nome = nome;
+        this.name = name;
         this.email = email;
         this.login = login;
-        this.senha = senha;
-        this.dataAlteracao = dataAlteracao;
-        this.tipo = tipo;
-        this.enderecos = enderecos;
+        this.password = senha;
+        this.changeDate = dataAlteracao;
+        this.type = tipo;
+        this.addresses = addresses;
     }
 
     // Getters and Setters
@@ -59,12 +59,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String nome) {
+        this.name = nome;
     }
 
     public String getEmail() {
@@ -83,37 +83,37 @@ public class UserEntity {
         this.login = login;
     }
 
-    public LocalDate getDataAlteracao() {
-        return dataAlteracao;
+    public LocalDate getChangeDate() {
+        return changeDate;
     }
 
     @PrePersist
     @PreUpdate
     public void setDataAlteracao() {
-        this.dataAlteracao = LocalDate.now();
+        this.changeDate = LocalDate.now();
     }
 
-    public TypeEntityEnum getTipo() {
-        return tipo;
+    public TypeEntityEnum getType() {
+        return type;
     }
 
-    public void setTipo(TypeEntityEnum tipo) {
-        this.tipo = tipo;
+    public void setType(TypeEntityEnum tipo) {
+        this.type = tipo;
     }
 
-    public List<AddressEntity> getEnderecos() {
-        return enderecos;
+    public List<AddressEntity> getAddresses() {
+        return addresses;
     }
 
-    public void setEnderecos(List<AddressEntity> enderecos) {
-        this.enderecos = enderecos;
+    public void setAddresses(List<AddressEntity> enderecos) {
+        this.addresses = enderecos;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String senha) {
+        this.password = senha;
     }
 }

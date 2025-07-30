@@ -24,22 +24,22 @@ public class UserEntityMapper {
 
         List<Address> addresses = userRequestDto.address().stream()
                 .map(addressEntity -> new Address(
-                        addressEntity.rua(),
-                        addressEntity.bairro(),
-                        addressEntity.complemento(),
-                        addressEntity.numero(),
-                        addressEntity.estado(),
-                        addressEntity.cidade(),
-                        addressEntity.cep()
+                        addressEntity.street(),
+                        addressEntity.district(),
+                        addressEntity.complement(),
+                        addressEntity.number(),
+                        addressEntity.state(),
+                        addressEntity.city(),
+                        addressEntity.postCode()
                 )).toList();
 
         return new User(
-                userRequestDto.nome(),
+                userRequestDto.name(),
                 userRequestDto.email(),
                 userRequestDto.login(),
                 userRequestDto.senha(),
                 userRequestDto.dataAlteracao(),
-                TypeEnum.valueOf(userRequestDto.tipo().name()),
+                TypeEnum.valueOf(userRequestDto.type().name()),
                 addresses);
     }
 
@@ -47,20 +47,20 @@ public class UserEntityMapper {
 
         List<Address> addresses = updateRequestDto.address().stream()
                 .map(addressEntity -> new Address(
-                        addressEntity.rua(),
-                        addressEntity.bairro(),
-                        addressEntity.complemento(),
-                        addressEntity.numero(),
-                        addressEntity.estado(),
-                        addressEntity.cidade(),
-                        addressEntity.cep()
+                        addressEntity.street(),
+                        addressEntity.district(),
+                        addressEntity.complement(),
+                        addressEntity.number(),
+                        addressEntity.state(),
+                        addressEntity.city(),
+                        addressEntity.postCode()
                 )).toList();
 
         return new User(
-                updateRequestDto.nome(),
+                updateRequestDto.name(),
                 updateRequestDto.email(),
                 updateRequestDto.senha(),
-                TypeEnum.valueOf(updateRequestDto.tipo().name()),
+                TypeEnum.valueOf(updateRequestDto.type().name()),
                 addresses);
     }
 
@@ -68,45 +68,45 @@ public class UserEntityMapper {
 
         List<AddressEntity> addressEntities = user.getAddress()
                 .stream().map(address -> new AddressEntity(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getEstado(),
-                        address.getCidade(), address.getCep())).toList();
+                        address.getStreet(),
+                        address.getDistrict(),
+                        address.getComplement(),
+                        address.getNumber(),
+                        address.getState(),
+                        address.getCity(), address.getPostCode())).toList();
 
         return new UserEntity(
                 null, // Assuming ID is auto-generated
-                user.getNome(),
+                user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getSenha(),
-                user.getDataAlteracao(),
-                TypeEntityEnum.valueOf(user.getTipo().name()),
+                user.getPassword(),
+                user.getChangeDate(),
+                TypeEntityEnum.valueOf(user.getType().name()),
                 addressEntities
                 );
     }
 
     public User toUserDomain(UserEntity userEntity) {
 
-        List<Address> addresses = userEntity.getEnderecos().stream()
+        List<Address> addresses = userEntity.getAddresses().stream()
                 .map(addressEntity -> new Address(
-                        addressEntity.getRua(),
-                        addressEntity.getBairro(),
-                        addressEntity.getComplemento(),
-                        addressEntity.getNumero(),
-                        addressEntity.getEstado(),
-                        addressEntity.getCidade(),
-                        addressEntity.getCep()
+                        addressEntity.getStreet(),
+                        addressEntity.getDistrict(),
+                        addressEntity.getComplement(),
+                        addressEntity.getNumber(),
+                        addressEntity.getState(),
+                        addressEntity.getCity(),
+                        addressEntity.getPostCode()
                 )).toList();
 
         return new User(
-                userEntity.getNome(),
+                userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getLogin(),
-                userEntity.getSenha(),
-                userEntity.getDataAlteracao(),
-                TypeEnum.valueOf(userEntity.getTipo().name()),
+                userEntity.getPassword(),
+                userEntity.getChangeDate(),
+                TypeEnum.valueOf(userEntity.getType().name()),
                 addresses
                 );
     }
@@ -115,20 +115,20 @@ public class UserEntityMapper {
 
         List<AddressDto> addressDtos = user.getAddress().stream()
                 .map(address -> new AddressDto(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getCidade(),
-                        address.getEstado(),
-                        address.getCep()))  .toList();
+                        address.getStreet(),
+                        address.getDistrict(),
+                        address.getComplement(),
+                        address.getNumber(),
+                        address.getCity(),
+                        address.getState(),
+                        address.getPostCode()))  .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getName(), user.getLogin(), user.getEmail(), user.getType(), addressDtos);
     }
 
     public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
         if (optionalUser.isEmpty()) {
-            // Aqui você pode lançar uma exceção, retornar null, ou um DTO vazio, conforme sua regra de negócio
+            //Here you can throw an exception, return null, or an empty DTO, according to your business rule.
             throw new IllegalArgumentException("Usuário não encontrado");
         }
 
@@ -136,28 +136,28 @@ public class UserEntityMapper {
 
         List<AddressDto> addressDtos = user.getAddress().stream()
                 .map(address -> new AddressDto(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getCidade(),
-                        address.getEstado(),
-                        address.getCep()))
+                        address.getStreet(),
+                        address.getDistrict(),
+                        address.getComplement(),
+                        address.getNumber(),
+                        address.getCity(),
+                        address.getState(),
+                        address.getPostCode()))
                 .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getName(), user.getLogin(), user.getEmail(), user.getType(), addressDtos);
     }
 
     public List<AddressEntity> toAddressEntityList(List<Address> addresses) {
         return addresses.stream()
                 .map(address -> new AddressEntity(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getEstado(),
-                        address.getCidade(),
-                        address.getCep()))
+                        address.getStreet(),
+                        address.getDistrict(),
+                        address.getComplement(),
+                        address.getNumber(),
+                        address.getState(),
+                        address.getCity(),
+                        address.getPostCode()))
                 .toList();
     }
 

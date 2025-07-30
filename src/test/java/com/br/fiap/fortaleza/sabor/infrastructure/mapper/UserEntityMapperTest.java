@@ -44,9 +44,9 @@ class UserEntityMapperTest {
         User user = mapper.toUserDomain(dto);
 
         assertNotNull(user);
-        assertEquals("Nome Teste", user.getNome());
-        assertEquals(TypeEnum.DONO, user.getTipo());
-        assertEquals("Rua A", user.getAddress().getFirst().getRua());
+        assertEquals("Nome Teste", user.getName());
+        assertEquals(TypeEnum.DONO, user.getType());
+        assertEquals("Rua A", user.getAddress().getFirst().getStreet());
     }
 
     @Test
@@ -60,10 +60,10 @@ class UserEntityMapperTest {
         User user = mapper.updateToUserDomain(dto);
 
         assertNotNull(user);
-        assertEquals("Nome Update", user.getNome());
+        assertEquals("Nome Update", user.getName());
         assertEquals("update@email.com", user.getEmail());
-        assertEquals("novaSenha", user.getSenha());
-        assertEquals(TypeEnum.CLIENTE, user.getTipo());
+        assertEquals("novaSenha", user.getPassword());
+        assertEquals(TypeEnum.CLIENTE, user.getType());
     }
 
     @Test
@@ -74,9 +74,9 @@ class UserEntityMapperTest {
 
         UserEntity entity = mapper.toUserEntity(user);
 
-        assertEquals(user.getNome(), entity.getNome());
-        assertEquals(TypeEntityEnum.DONO, entity.getTipo());
-        assertEquals("Rua B", entity.getEnderecos().getFirst().getRua());
+        assertEquals(user.getName(), entity.getName());
+        assertEquals(TypeEntityEnum.DONO, entity.getType());
+        assertEquals("Rua B", entity.getAddresses().getFirst().getStreet());
     }
 
     @Test
@@ -87,9 +87,9 @@ class UserEntityMapperTest {
 
         User user = mapper.toUserDomain(entity);
 
-        assertEquals("João", user.getNome());
-        assertEquals(TypeEnum.CLIENTE, user.getTipo());
-        assertEquals("Rua 1", user.getAddress().getFirst().getRua());
+        assertEquals("João", user.getName());
+        assertEquals(TypeEnum.CLIENTE, user.getType());
+        assertEquals("Rua 1", user.getAddress().getFirst().getStreet());
     }
 
     @Test
@@ -100,9 +100,9 @@ class UserEntityMapperTest {
 
         UserResponseDto dto = mapper.toUserResponseDto(user);
 
-        assertEquals("Maria", dto.nome());
-        assertEquals(TypeEnum.CLIENTE, dto.tipo());
-        assertEquals("Rua R", dto.address().getFirst().rua());
+        assertEquals("Maria", dto.name());
+        assertEquals(TypeEnum.CLIENTE, dto.type());
+        assertEquals("Rua R", dto.address().getFirst().street());
     }
 
     @Test
@@ -130,6 +130,6 @@ class UserEntityMapperTest {
         List<AddressEntity> entities = mapper.toAddressEntityList(List.of(address));
 
         assertEquals(1, entities.size());
-        assertEquals("Rua S", entities.getFirst().getRua());
+        assertEquals("Rua S", entities.getFirst().getStreet());
     }
 }

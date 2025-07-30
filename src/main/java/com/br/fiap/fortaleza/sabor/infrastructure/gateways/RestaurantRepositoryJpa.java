@@ -50,7 +50,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         var userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if (!TypeEntityEnum.DONO.equals(userEntity.getType())) {
             throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
         }
 
@@ -86,7 +86,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
             throw new RestaurantAlreadyExistsException("Email does not match the registered user. " + restaurant.getEmail());
         }
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if (!TypeEntityEnum.DONO.equals(userEntity.getType())) {
             throw new UserNotFoundException("User with email " + restaurant.getEmail() + " is not a restaurant owner");
         }
 
@@ -145,11 +145,11 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         var userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        if (!TypeEntityEnum.DONO.equals(userEntity.getTipo())) {
+        if (!TypeEntityEnum.DONO.equals(userEntity.getType())) {
             throw new UserTypeMismatchException("User with email " + email + " is not a restaurant owner");
         }
 
-        if (userEntity.getEmail().equals(email) && userEntity.getNome().equals(ownerName)) {
+        if (userEntity.getEmail().equals(email) && userEntity.getName().equals(ownerName)) {
             restaurantEntity.setOwner(userEntity);
             var updatedEntity = restaurantRepository.save(restaurantEntity);
             return Optional.of(mapper.toRestaurantDomain(restaurantEntity));
@@ -178,13 +178,13 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
         return addresses.stream()
                 .map(address -> {
                     AddressRestaurantEntity newAddress = new AddressRestaurantEntity();
-                    newAddress.setRua(address.getRua());
-                    newAddress.setBairro(address.getBairro());
-                    newAddress.setComplemento(address.getComplemento());
-                    newAddress.setNumero(address.getNumero());
-                    newAddress.setEstado(address.getEstado());
-                    newAddress.setCidade(address.getCidade());
-                    newAddress.setCep(address.getCep());
+                    newAddress.setStreet(address.getStreet());
+                    newAddress.setDistrict(address.getDistrict());
+                    newAddress.setComplement(address.getComplement());
+                    newAddress.setNumber(address.getNumber());
+                    newAddress.setState(address.getState());
+                    newAddress.setCity(address.getCity());
+                    newAddress.setPostCode(address.getPostCode());
                     newAddress.setRestaurante(restaurantEntity);
                     return newAddress;
                 })

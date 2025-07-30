@@ -40,7 +40,7 @@ public class MenuEntityMapperTest {
         MenuItem menuItem = menuEntityMapper.toMenuDomain(dto);
 
         assertNotNull(menuItem);
-        assertEquals("Pizza Margherita", menuItem.getNome());
+        assertEquals("Pizza Margherita", menuItem.getName());
         assertEquals("Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco", menuItem.getItemDescription());
         assertEquals("29.90", menuItem.getItemPrice());
         assertTrue(menuItem.getAvailability());
@@ -61,7 +61,7 @@ public class MenuEntityMapperTest {
         MenuItem menuItem = menuEntityMapper.updateToMenuDomain(dto);
 
         assertNotNull(menuItem);
-        assertEquals("Pizza Margherita", menuItem.getNome());
+        assertEquals("Pizza Margherita", menuItem.getName());
         assertEquals("Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco", menuItem.getItemDescription());
         assertEquals("29.90", menuItem.getItemPrice());
         assertEquals(true, menuItem.getAvailability());
@@ -81,7 +81,7 @@ public class MenuEntityMapperTest {
 
         MenuItemsEntity entity = menuEntityMapper.toMenuItemsEntity(menuItem);
 
-        assertEquals(menuItem.getNome(), entity.getNome());
+        assertEquals(menuItem.getName(), entity.getName());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class MenuEntityMapperTest {
 
         MenuItem user = menuEntityMapper.toMenuItemDomain(entity);
 
-        assertEquals("Pizza Margherita", user.getNome());
+        assertEquals("Pizza Margherita", user.getName());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class MenuEntityMapperTest {
 
         MenuItemResponseDto dto = menuEntityMapper.toMenuItemResponseDto(entity);
 
-        assertEquals("Pizza Margherita", dto.nome());
+        assertEquals("Pizza Margherita", dto.name());
     }
 
     @Test

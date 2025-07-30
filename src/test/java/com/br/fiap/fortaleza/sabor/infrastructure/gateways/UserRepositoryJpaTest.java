@@ -104,7 +104,7 @@ class UserRepositoryJpaTest {
         Optional<User> updated = userRepositoryJpa.update(1L, user);
 
         assertTrue(updated.isPresent());
-        assertEquals("Carlos", updated.get().getNome());
+        assertEquals("Carlos", updated.get().getName());
     }
 
     @Test
@@ -130,7 +130,7 @@ class UserRepositoryJpaTest {
         Optional<User> found = userRepositoryJpa.getById(2L);
 
         assertTrue(found.isPresent());
-        assertEquals("Joana", found.get().getNome());
+        assertEquals("Joana", found.get().getName());
     }
 
     @Test
@@ -146,7 +146,7 @@ class UserRepositoryJpaTest {
         Optional<User> deleted = userRepositoryJpa.deleteById(3L);
 
         assertTrue(deleted.isPresent());
-        assertEquals("Pedro", deleted.get().getNome());
+        assertEquals("Pedro", deleted.get().getName());
         verify(userRepository).deleteById(3L);
     }
 }

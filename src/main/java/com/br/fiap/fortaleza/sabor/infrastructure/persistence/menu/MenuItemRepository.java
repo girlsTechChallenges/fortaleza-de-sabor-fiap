@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItemsEntity, Long> {
-    Optional<MenuItemsEntity> findByNome(String nome);
+    Optional<MenuItemsEntity> findByName(String name);
 }

@@ -18,7 +18,7 @@ public class UpdateUserUseCase {
     }
 
     public Optional<User> update(Long idUser, User user) {
-        user.setSenha(passwordEncoder.encode(user.getSenha()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.update(idUser, user);
     }
 }

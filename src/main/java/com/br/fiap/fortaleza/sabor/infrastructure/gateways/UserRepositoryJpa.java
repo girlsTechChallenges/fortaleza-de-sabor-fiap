@@ -56,13 +56,13 @@ public class UserRepositoryJpa implements UsersRepository {
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
         if (user != null) {
-            findUser.setNome(user.getNome());
+            findUser.setName(user.getName());
             findUser.setEmail(user.getEmail());
-            findUser.setSenha(user.getSenha());
-            findUser.setTipo(TypeEntityEnum.valueOf(user.getTipo().name()));
+            findUser.setPassword(user.getPassword());
+            findUser.setType(TypeEntityEnum.valueOf(user.getType().name()));
 
             if (user.getAddress() != null && !user.getAddress().isEmpty()) {
-                findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));
+                findUser.setAddresses(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));
             }
         }
 
@@ -104,15 +104,15 @@ public class UserRepositoryJpa implements UsersRepository {
             if(Objects.isNull(user)){
                 throw new UserNotFoundException(email);
             }
-            user.get().setSenha(passEncoded);
+            user.get().setPassword(passEncoded);
             userRepository.save(user.get());
 
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(email);
 
         } catch (Exception e) {
-            log.error("Erro ao atualizar a senha do usuário", e);
-            throw new RuntimeException("Erro ao atualizar a senha do usuário", e);
+            log.error("Error updating user password", e);
+            throw new RuntimeException("Error updating user password", e);
         }
     }
 }

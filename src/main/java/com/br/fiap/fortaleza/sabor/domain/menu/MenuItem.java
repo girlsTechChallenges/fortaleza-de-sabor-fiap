@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuItem {
-    private String nome;
+    private String name;
     private String itemDescription;
     private String itemPrice;
     private Boolean availability;

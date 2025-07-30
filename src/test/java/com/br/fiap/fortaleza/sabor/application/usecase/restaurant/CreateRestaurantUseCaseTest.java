@@ -264,8 +264,8 @@ class CreateRestaurantUseCaseTest {
         // Assert
         assertNotNull(result);
         assertEquals(2, result.getAddress().size());
-        assertEquals("Rua Principal", result.getAddress().get(0).getRua());
-        assertEquals("Av. Secundária", result.getAddress().get(1).getRua());
+        assertEquals("Rua Principal", result.getAddress().get(0).getStreet());
+        assertEquals("Av. Secundária", result.getAddress().get(1).getStreet());
         verify(restaurantRepository, times(1)).create(restaurantWithMultipleAddresses);
     }
 

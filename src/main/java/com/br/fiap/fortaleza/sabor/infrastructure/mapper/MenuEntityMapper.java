@@ -14,7 +14,7 @@ import java.util.Optional;
 public class MenuEntityMapper {
     public MenuItem toMenuDomain(MenuItemRequestDto menuRequestDto) {
         return new MenuItem(
-                menuRequestDto.nome(),
+                menuRequestDto.name(),
                 menuRequestDto.itemDescription(),
                 menuRequestDto.itemPrice(),
                 menuRequestDto.availability(),
@@ -24,7 +24,7 @@ public class MenuEntityMapper {
 
     public MenuItem updateToMenuDomain(UpdateMenuItemRequestDto updateUserRequestDto) {
         return new MenuItem(
-                updateUserRequestDto.nome(),
+                updateUserRequestDto.name(),
                 updateUserRequestDto.itemDescription(),
                 updateUserRequestDto.itemPrice(),
                 updateUserRequestDto.availability(),
@@ -33,7 +33,7 @@ public class MenuEntityMapper {
 
     public MenuItemsEntity toMenuItemsEntity(MenuItem menuItem) {
         return new MenuItemsEntity(
-                menuItem.getNome(),
+                menuItem.getName(),
                 menuItem.getItemDescription(),
                 menuItem.getItemPrice(),
                 menuItem.getAvailability(),
@@ -43,7 +43,7 @@ public class MenuEntityMapper {
 
     public MenuItem toMenuItemDomain(MenuItemsEntity menuItemsEntity) {
         return new MenuItem(
-                menuItemsEntity.getNome(),
+                menuItemsEntity.getName(),
                 menuItemsEntity.getItemDescription(),
                 menuItemsEntity.getItemPrice(),
                 menuItemsEntity.getAvailability(),
@@ -53,7 +53,7 @@ public class MenuEntityMapper {
 
     public MenuItemRequestDto toMenuItemRequestDto(MenuItemsEntity entity) {
         return new MenuItemRequestDto(
-                entity.getNome(),
+                entity.getName(),
                 entity.getItemDescription(),
                 entity.getItemPrice(),
                 entity.getAvailability(),
@@ -63,7 +63,7 @@ public class MenuEntityMapper {
 
     public MenuItemResponseDto toMenuItemResponseDto(MenuItem menuItem) {
         return new MenuItemResponseDto(
-                menuItem.getNome(),
+                menuItem.getName(),
                 menuItem.getItemDescription(),
                 menuItem.getItemPrice(),
                 menuItem.getAvailability(),
@@ -79,7 +79,7 @@ public class MenuEntityMapper {
         MenuItem menuItem = optionalMenuItem.get();
 
         return new MenuItemResponseDto(
-                menuItem.getNome(),
+                menuItem.getName(),
                 menuItem.getItemDescription(),
                 menuItem.getItemPrice(),
                 menuItem.getAvailability(),

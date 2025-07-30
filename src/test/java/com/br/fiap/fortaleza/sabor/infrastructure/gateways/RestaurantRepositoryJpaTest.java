@@ -47,8 +47,8 @@ class RestaurantRepositoryJpaTest {
         userEntity = new UserEntity();
         userEntity.setId(1L);
         userEntity.setEmail("teste@teste.com");
-        userEntity.setNome("Dono Teste");
-        userEntity.setTipo(com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum.DONO);
+        userEntity.setName("Dono Teste");
+        userEntity.setType(com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum.DONO);
 
         restaurant = new Restaurant(
                 null,

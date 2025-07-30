@@ -27,7 +27,7 @@ public class MockUser {
                 TypeEntityEnum.CLIENTE,
                 List.of(
                         new AddressEntity(
-                                "rua",
+                                "street",
                                 "bairro",
                                 "complemento",
                                 0,
@@ -48,7 +48,7 @@ public class MockUser {
                 new BCryptPasswordEncoder().encode("senha1234"),
                 LocalDate.of(2025,5,16),
                 TypeEnum.DONO,
-                List.of(new Address("rua", "bairro", "complemento",
+                List.of(new Address("street", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
 
@@ -60,7 +60,7 @@ public class MockUser {
                 "senha",
                 LocalDate.of(2025,5,16),
                 TypeEnum.CLIENTE,
-                List.of(new Address("rua", "bairro", "complemento",
+                List.of(new Address("street", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
 
@@ -70,7 +70,7 @@ public class MockUser {
                 "login",
                 "email",
                 TypeEnum.DONO,
-                List.of(new AddressDto("rua", "bairro", "complemento",
+                List.of(new AddressDto("street", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
 
@@ -80,7 +80,7 @@ public class MockUser {
                 "login",
                 "email",
                 TypeEnum.CLIENTE,
-                List.of(new AddressDto("rua", "bairro", "complemento",
+                List.of(new AddressDto("street", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
 

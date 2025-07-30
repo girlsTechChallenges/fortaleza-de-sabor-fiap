@@ -17,7 +17,7 @@ public class CreateUserUseCase {
     }
 
     public User save (User user) {
-        user.setSenha(passwordEncoder.encode(user.getSenha()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.save(user);
     }
 }

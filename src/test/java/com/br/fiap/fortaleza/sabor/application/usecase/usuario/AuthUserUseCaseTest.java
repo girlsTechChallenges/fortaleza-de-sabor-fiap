@@ -48,11 +48,11 @@ class AuthUserUseCaseTest {
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
         User user = new User();
         user.setEmail(email);
-        user.setSenha(hashedPassword);
-        user.setTipo(TypeEnum.CLIENTE);
+        user.setPassword(hashedPassword);
+        user.setType(TypeEnum.CLIENTE);
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(password, user.getSenha())).thenReturn(true);
+        when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
 
         Jwt mockJwt = mock(Jwt.class);
         when(mockJwt.getTokenValue()).thenReturn("mocked-jwt-token");
@@ -75,7 +75,7 @@ class AuthUserUseCaseTest {
         String hashedPassword = new BCryptPasswordEncoder().encode("senha1234");
         User user = new User();
         user.setEmail(email);
-        user.setSenha(hashedPassword);
+        user.setPassword(hashedPassword);
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, hashedPassword)).thenReturn(false);

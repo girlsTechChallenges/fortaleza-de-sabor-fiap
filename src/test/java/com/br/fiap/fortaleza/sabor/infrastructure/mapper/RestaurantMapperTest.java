@@ -97,17 +97,17 @@ class RestaurantMapperTest {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(1L);
         userEntity.setEmail("teste@teste.com");
-        userEntity.setNome("Dono Teste");
+        userEntity.setName("Dono Teste");
 
         // Setup Address Entity
         AddressRestaurantEntity addressEntity = new AddressRestaurantEntity();
-        addressEntity.setRua("Rua Teste");
-        addressEntity.setBairro("Bairro Teste");
-        addressEntity.setComplemento("Apto 1");
-        addressEntity.setNumero(123);
-        addressEntity.setEstado("Estado Teste");
-        addressEntity.setCidade("Cidade Teste");
-        addressEntity.setCep("12345678");
+        addressEntity.setStreet("Rua Teste");
+        addressEntity.setDistrict("Bairro Teste");
+        addressEntity.setComplement("Apto 1");
+        addressEntity.setNumber(123);
+        addressEntity.setState("Estado Teste");
+        addressEntity.setCity("Cidade Teste");
+        addressEntity.setPostCode("12345678");
 
         // Setup Business Hours Entity
         BusinessHoursEntity businessHoursEntity = new BusinessHoursEntity();
@@ -140,7 +140,7 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getStreet());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
@@ -160,7 +160,7 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getStreet());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
@@ -183,7 +183,7 @@ class RestaurantMapperTest {
         
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
+        assertEquals("Rua Teste", result.getAddress().getFirst().getStreet());
         
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());

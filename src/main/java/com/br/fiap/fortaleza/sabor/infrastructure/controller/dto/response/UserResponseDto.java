@@ -6,9 +6,9 @@ import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.Address
 import java.util.List;
 
 public record UserResponseDto(
-        String nome,
+        String name,
         String login,
         String email,
-        TypeEnum tipo,
+        TypeEnum type,
         List<AddressDto> address) {
 }
