@@ -37,8 +37,8 @@ public class UserEntityMapper {
                 userRequestDto.name(),
                 userRequestDto.email(),
                 userRequestDto.login(),
-                userRequestDto.senha(),
-                userRequestDto.dataAlteracao(),
+                userRequestDto.password(),
+                userRequestDto.changeDate(),
                 TypeEnum.valueOf(userRequestDto.type().name()),
                 addresses);
     }

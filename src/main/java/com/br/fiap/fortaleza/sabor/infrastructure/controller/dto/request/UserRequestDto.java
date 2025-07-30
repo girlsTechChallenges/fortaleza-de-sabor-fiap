@@ -26,8 +26,12 @@ public record UserRequestDto(
 
         @NotNull
         @NotBlank
-        @Size(min = 8, max = 100) String senha,
-        LocalDate dataAlteracao,
+        @Size(min = 8, max = 100) String password,
+        LocalDate 
+
+changeDate
+
+,
 
         @NotNull
         TypeEnum type,

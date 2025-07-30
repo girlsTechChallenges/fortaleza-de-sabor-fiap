@@ -67,7 +67,7 @@ class UserControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         // Arrange
-        var request = "{\n\t\"nome\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"senha\": \"RlhllJJPM_sbW02\",\n\t\"dataAlteracao\": \"2025-05-17\",\n\t\"tipo\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"rua\": \"Rua Alves Paulista\",\n\t\t\t\"bairro\": \"Paulista Nova\",\n\t\t\t\"complemento\": \"casa\",\n\t\t\t\"numero\": 130,\n\t\t\t\"estado\": \"São Paulo\",\n\t\t\t\"cidade\": \"São Paulo\",\n\t\t\t\"cep\": 85965000\n\t\t}\n\t]\n}";
+        var request = "{\n\t\"name\": \"Lonnie Stanton II\",\n\t\"email\": \"Malvina98@gmail.com\",\n\t\"login\": \"Hardy_Rempel27\",\n\t\"password\": \"RlhllJJPM_sbW02\",\n\t\"changeDate\": \"2025-05-17\",\n\t\"type\": \"DONO\",\n\t\"address\": [\n\t\t{\n\t\t\t\"street\": \"Rua Alves Paulista\",\n\t\t\t\"district\": \"Paulista Nova\",\n\t\t\t\"complement\": \"casa\",\n\t\t\t\"number\": 130,\n\t\t\t\"state\": \"São Paulo\",\n\t\t\t\"city\": \"São Paulo\",\n\t\t\t\"postCode\": 85965000\n\t\t}\n\t]\n}";
         var requestDto = objectMapper.readValue(request, UserRequestDto.class);
         var mapper = userEntityMapper.toUserDomain(requestDto);
 
@@ -104,8 +104,8 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                 [
-                    { "nome": "João Silva" },
-                    { "nome": "Maria Oliveira" }
+                    { "name": "João Silva" },
+                    { "name": "Maria Oliveira" }
                 ]
             """));
 
@@ -152,7 +152,7 @@ class UserControllerTest {
 
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(
-                "Nome Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
+                "Name Teste", "email@test.com", "loginTeste", TypeEnum.DONO,
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
 

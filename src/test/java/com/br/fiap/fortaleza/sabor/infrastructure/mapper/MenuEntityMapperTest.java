@@ -129,7 +129,7 @@ public class MenuEntityMapperTest {
 
         MenuItemResponseDto dto = menuEntityMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem));
 
-        assertEquals("Pizza Margherita", dto.nome());
+        assertEquals("Pizza Margherita", dto.name());
     }
 
     @Test

@@ -67,7 +67,7 @@ class MenuItemsControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         //GIVEN
-        var request = "{\n\t\"nome\": \"Pizza Margherita\",\n\t\"itemDescription\": \"Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco\",\n\t\"itemPrice\": \"29.90\",\n\t\"availability\": true,\n\t\"itemImage\": \"https://exemplo.com/images/pizza-margherita.png\"\n}";
+        var request = "{\n\t\"name\": \"Pizza Margherita\",\n\t\"itemDescription\": \"Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco\",\n\t\"itemPrice\": \"29.90\",\n\t\"availability\": true,\n\t\"itemImage\": \"https://exemplo.com/images/pizza-margherita.png\"\n}";
         var requestDto = objectMapper.readValue(request, MenuItemRequestDto.class);
         var mapper = menuEntityMapper.toMenuDomain(requestDto);
 
@@ -104,8 +104,8 @@ class MenuItemsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
             [
-                { "nome": "Pizza Margherita" },
-                { "nome": "Spaghetti Carbonara" }
+                { "name": "Pizza Margherita" },
+                { "name": "Spaghetti Carbonara" }
             ]
         """));
 
