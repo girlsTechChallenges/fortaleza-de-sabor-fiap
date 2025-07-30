@@ -39,14 +39,14 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String name, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> addresses) {
+    public UserEntity(Long id, String name, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum type, List<AddressEntity> addresses) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.login = login;
         this.password = senha;
         this.changeDate = dataAlteracao;
-        this.type = tipo;
+        this.type = type;
         this.addresses = addresses;
     }
 
@@ -63,8 +63,8 @@ public class UserEntity {
         return name;
     }
 
-    public void setName(String nome) {
-        this.name = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -97,8 +97,8 @@ public class UserEntity {
         return type;
     }
 
-    public void setType(TypeEntityEnum tipo) {
-        this.type = tipo;
+    public void setType(TypeEntityEnum typo) {
+        this.type = typo;
     }
 
     public List<AddressEntity> getAddresses() {

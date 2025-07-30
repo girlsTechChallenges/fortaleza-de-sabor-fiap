@@ -102,7 +102,7 @@ public class RestaurantMapper {
                             address.getCity(),
                             address.getPostCode()
                     );
-                    ae.setRestaurante(entity);
+                    ae.setRestaurant(entity);
                     return ae;
                 })
                 .toList();

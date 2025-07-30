@@ -54,59 +54,59 @@ public class AddressRestaurantEntity {
         return street;
     }
 
-    public void setStreet(String rua) {
-        this.street = rua;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getDistrict() {
         return district;
     }
 
-    public void setDistrict(String bairro) {
-        this.district = bairro;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
     public String getComplement() {
         return complement;
     }
 
-    public void setComplement(String complemento) {
-        this.complement = complemento;
+    public void setComplement(String complement) {
+        this.complement = complement;
     }
 
     public int getNumber() {
         return number;
     }
 
-    public void setNumber(int numero) {
-        this.number = numero;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public String getState() {
         return state;
     }
 
-    public void setState(String estado) {
-        this.state = estado;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String cidade) {
-        this.city = cidade;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(String cep) {
-        this.postCode = cep;
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 
-    public RestaurantEntity getRestaurante() {return restaurante; }
+    public RestaurantEntity getRestaurant() {return restaurante; }
 
-    public void setRestaurante(RestaurantEntity restaurante) { this.restaurante = restaurante; }
+    public void setRestaurant(RestaurantEntity restaurant) { this.restaurante = restaurant; }
 }

@@ -13,10 +13,10 @@ public class TypeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeEntityEnum tipo;
+    private TypeEntityEnum type;
 
-    public TypeEntity(TypeEntityEnum tipo) {
-        this.tipo = tipo;
+    public TypeEntity(TypeEntityEnum type) {
+        this.type = type;
     }
 
     public TypeEntity() {}
@@ -30,11 +30,11 @@ public class TypeEntity {
         this.id = id;
     }
 
-    public TypeEntityEnum getTipo() {
-        return tipo;
+    public TypeEntityEnum getType() {
+        return type;
     }
 
-    public void setTipo(TypeEntityEnum tipo) {
-        this.tipo = tipo;
+    public void setType(TypeEntityEnum typo) {
+        this.type = typo;
     }
 }

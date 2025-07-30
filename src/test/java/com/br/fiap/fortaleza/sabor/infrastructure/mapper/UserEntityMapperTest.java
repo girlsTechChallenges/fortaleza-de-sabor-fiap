@@ -36,7 +36,7 @@ class UserEntityMapperTest {
     @DisplayName("Should map UserRequestDto to User.")
     void shouldMapUserRequestDtoToUser() {
         UserRequestDto dto = new UserRequestDto(
-                "Nome Teste", "email@test.com", "loginTeste", "senha",
+                "Name Teste", "email@test.com", "loginTeste", "senha",
                 LocalDate.of(2025, 5, 21), TypeEnum.DONO,
                 List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
         );
@@ -44,7 +44,7 @@ class UserEntityMapperTest {
         User user = mapper.toUserDomain(dto);
 
         assertNotNull(user);
-        assertEquals("Nome Teste", user.getName());
+        assertEquals("Name Teste", user.getName());
         assertEquals(TypeEnum.DONO, user.getType());
         assertEquals("Rua A", user.getAddress().getFirst().getStreet());
     }
@@ -53,14 +53,14 @@ class UserEntityMapperTest {
     @DisplayName("Should map UpdateRequestDto to User.")
     void shouldMapUpdateRequestDtoToUser() {
         UpdateRequestDto dto = new UpdateRequestDto(
-                "Nome Update", "update@email.com", "novaSenha", TypeEnum.CLIENTE,
+                "Name Update", "update@email.com", "novaSenha", TypeEnum.CLIENTE,
                 List.of(new AddressDto("Rua Z", "Bairro X", "Ap 101", 50, "Cidade Y", "Estado Z", "03565000"))
         );
 
         User user = mapper.updateToUserDomain(dto);
 
         assertNotNull(user);
-        assertEquals("Nome Update", user.getName());
+        assertEquals("Name Update", user.getName());
         assertEquals("update@email.com", user.getEmail());
         assertEquals("novaSenha", user.getPassword());
         assertEquals(TypeEnum.CLIENTE, user.getType());
@@ -70,7 +70,7 @@ class UserEntityMapperTest {
     @DisplayName("Should map User to UserEntity")
     void shouldMapUserToUserEntity() {
         Address address = new Address("Rua B", "Bairro C", "Comp", 99, "Estado F", "Cidade D", "03565000");
-        User user = new User("Nome", "email", "login", "senha", LocalDate.now(), TypeEnum.DONO, List.of(address));
+        User user = new User("Name", "email", "login", "senha", LocalDate.now(), TypeEnum.DONO, List.of(address));
 
         UserEntity entity = mapper.toUserEntity(user);
 

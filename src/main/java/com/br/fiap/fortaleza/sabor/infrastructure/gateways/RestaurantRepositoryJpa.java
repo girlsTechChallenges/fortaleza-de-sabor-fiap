@@ -185,7 +185,7 @@ public class RestaurantRepositoryJpa implements RestaurantsRepository {
                     newAddress.setState(address.getState());
                     newAddress.setCity(address.getCity());
                     newAddress.setPostCode(address.getPostCode());
-                    newAddress.setRestaurante(restaurantEntity);
+                    newAddress.setRestaurant(restaurantEntity);
                     return newAddress;
                 })
                 .collect(Collectors.toCollection(ArrayList::new));
