@@ -1,11 +1,10 @@
-package com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser;
+package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "typeUser")
-public class TypeUserEntity {
+@Table(name = "userType")
+public class UserTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +13,7 @@ public class TypeUserEntity {
     @Column(nullable = false)
     private String nameType;
 
-    public TypeUserEntity(Long idType, String nameType) {
+    public UserTypeEntity(Long idType, String nameType) {
         this.idType = idType;
         this.nameType = nameType;
     }
@@ -23,9 +22,9 @@ public class TypeUserEntity {
     @JoinColumn(name = "usuario_id")
     private UserEntity usuario;
 
-    public TypeUserEntity() {}
+    public UserTypeEntity() {}
 
-    public TypeUserEntity(String dono) {
+    public UserTypeEntity(String dono) {
     }
 
     public Long getId() {

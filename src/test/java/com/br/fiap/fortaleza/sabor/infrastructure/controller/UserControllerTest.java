@@ -2,7 +2,7 @@ package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.application.usecase.user.*;
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.userType.UserType;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
@@ -146,7 +146,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Should update user successfully - return HTTP 202 response")
     void shouldUpdateUserSuccessfully() throws Exception {
-        TypeUser typeUser = new TypeUser("DONO");
+        UserType typeUser = new UserType("DONO");
 
         // GIVEN
         UpdateRequestDto dto = new UpdateRequestDto(

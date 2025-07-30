@@ -4,10 +4,10 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.typeUser.TypeUserAlreadyRegisteredException;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.*;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserTypeRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,15 +26,15 @@ public class UserRepositoryJpa implements UsersRepository {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserEntityMapper mapper;
-    private final TypeUserEntityMapper typeMapper;
-    private final TypeUserRepository typeUserRepository;
+    private final UserTypeEntityMapper typeMapper;
+    private final UserTypeRepository userTypeRepository;
 
-    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserEntityMapper mapper, TypeUserEntityMapper typeMapper, TypeUserRepository typeUserRepository) {
+    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserEntityMapper mapper, UserTypeEntityMapper typeMapper, UserTypeRepository userTypeRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.typeMapper = typeMapper;
-        this.typeUserRepository = typeUserRepository;
+        this.userTypeRepository = userTypeRepository;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class UserRepositoryJpa implements UsersRepository {
                             "This user already exists. Check your credentials or recover your password."
                     );
                 });
-        typeUserRepository.getByNameType(user.getTipo().getNameType())
+        userTypeRepository.getByNameType(user.getTipo().getNameType())
                 .ifPresentOrElse(
-                        existingTypeUser -> user.setTipo(typeMapper.toTypeUserDomain(existingTypeUser)),
+                        existingUserType -> user.setTipo(typeMapper.toUserTypeDomain(existingUserType)),
                         () -> {
-                            throw new TypeUserAlreadyRegisteredException(
-                                    "This typeUser " + user.getTipo().getNameType() + " does not exist."
+                            throw new UserTypeAlreadyRegisteredException(
+                                    "This userType " + user.getTipo().getNameType() + " does not exist."
                             );
                         }
                 );
@@ -70,12 +70,12 @@ public class UserRepositoryJpa implements UsersRepository {
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
         if (user != null) {
-            typeUserRepository.getByNameType(user.getTipo().getNameType())
+            userTypeRepository.getByNameType(user.getTipo().getNameType())
                     .ifPresentOrElse(
-                            existingTypeUser -> user.setTipo(typeMapper.toTypeUserDomain(existingTypeUser)),
+                            existingUserType -> user.setTipo(typeMapper.toUserTypeDomain(existingUserType)),
                             () -> {
-                                throw new TypeUserAlreadyRegisteredException(
-                                        "This typeUser " + user.getTipo().getNameType() + " does not exist."
+                                throw new UserTypeAlreadyRegisteredException(
+                                        "This userType " + user.getTipo().getNameType() + " does not exist."
                                 );
                             }
                     );
@@ -83,7 +83,7 @@ public class UserRepositoryJpa implements UsersRepository {
             findUser.setNome(user.getNome());
             findUser.setEmail(user.getEmail());
             findUser.setSenha(user.getSenha());
-            findUser.setTipo(typeMapper.toTypeUserEntity(user.getTipo()));
+            findUser.setTipo(typeMapper.toUserTypeEntity(user.getTipo()));
 
             if (user.getAddress() != null && !user.getAddress().isEmpty()) {
                 findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));

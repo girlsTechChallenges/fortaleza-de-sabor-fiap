@@ -1,29 +1,29 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.TypeUserRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.TypeUserResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
+import com.br.fiap.fortaleza.sabor.domain.userType.UserType;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserTypeRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserTypeResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserTypeEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TypeUserEntityMapperTest {
+class UserTypeEntityMapperTest {
 
-    private TypeUserEntityMapper mapper;
+    private UserTypeEntityMapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = new TypeUserEntityMapper();
+        mapper = new UserTypeEntityMapper();
     }
 
     @Test
     void shouldMapEntityToDomain() {
-        TypeUserEntity entity = new TypeUserEntity(1L,"CLIENTE");
+        UserTypeEntity entity = new UserTypeEntity(1L,"CLIENTE");
         entity.setId(10L);
 
-        TypeUser domain = mapper.toTypeUserDomain(entity);
+        UserType domain = mapper.toUserTypeDomain(entity);
 
         assertNotNull(domain);
         assertEquals(10L, domain.getIdType());
@@ -32,9 +32,9 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapRequestDtoToDomain() {
-        TypeUserRequestDto requestDto = new TypeUserRequestDto("ADMIN");
+        UserTypeRequestDto requestDto = new UserTypeRequestDto("ADMIN");
 
-        TypeUser domain = mapper.toTypeUserDomain(requestDto);
+        UserType domain = mapper.toUserTypeDomain(requestDto);
 
         assertNotNull(domain);
         assertEquals("ADMIN", domain.getNameType());
@@ -42,9 +42,9 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapDomainToEntity() {
-        TypeUser domain = new TypeUser("GESTOR");
+        UserType domain = new UserType("GESTOR");
 
-        TypeUserEntity entity = mapper.toTypeUserEntity(domain);
+        UserTypeEntity entity = mapper.toUserTypeEntity(domain);
 
         assertNotNull(entity);
         assertEquals("GESTOR", entity.getType());
@@ -52,9 +52,9 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapDomainToRequestDto() {
-        TypeUser domain = new TypeUser("CLIENTE");
+        UserType domain = new UserType("CLIENTE");
 
-        TypeUserRequestDto dto = mapper.toTypeUserRequestDto(domain);
+        UserTypeRequestDto dto = mapper.toUserTypeRequestDto(domain);
 
         assertNotNull(dto);
         assertEquals("CLIENTE", dto.nameType());
@@ -62,9 +62,9 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapDomainToResponseDto() {
-        TypeUser domain = new TypeUser(5L, "SUPERVISOR");
+        UserType domain = new UserType(5L, "SUPERVISOR");
 
-        TypeUserResponseDto response = mapper.toTypeUserResponseDto(domain);
+        UserTypeResponseDto response = mapper.toUserTypeResponseDto(domain);
 
         assertNotNull(response);
         assertEquals(5L, response.idType());
@@ -73,10 +73,10 @@ class TypeUserEntityMapperTest {
 
     @Test
     void shouldMapEntityToResponseDto() {
-        TypeUserEntity entity = new TypeUserEntity(1L,"ANALISTA");
+        UserTypeEntity entity = new UserTypeEntity(1L,"ANALISTA");
         entity.setId(7L);
 
-        TypeUserResponseDto response = mapper.toTypeUserResponseDto(entity);
+        UserTypeResponseDto response = mapper.toUserTypeResponseDto(entity);
 
         assertNotNull(response);
         assertEquals(7L, response.idType());

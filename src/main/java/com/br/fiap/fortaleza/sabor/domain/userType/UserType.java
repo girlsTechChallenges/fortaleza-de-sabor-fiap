@@ -1,4 +1,4 @@
-package com.br.fiap.fortaleza.sabor.domain.typeUser;
+package com.br.fiap.fortaleza.sabor.domain.userType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TypeUser {
+public class UserType {
 
     private Long idType;
     private String nameType;
 
-    public TypeUser(String nameType) {
+    public UserType(String nameType) {
         this.nameType = nameType;
     }
 }

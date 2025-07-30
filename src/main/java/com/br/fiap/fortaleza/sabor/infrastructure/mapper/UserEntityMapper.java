@@ -14,9 +14,9 @@ import java.util.Optional;
 @Component
 public class UserEntityMapper {
 
-    private final TypeUserEntityMapper typeMapper;
+    private final UserTypeEntityMapper typeMapper;
 
-    public UserEntityMapper(TypeUserEntityMapper typeMapper) {
+    public UserEntityMapper(UserTypeEntityMapper typeMapper) {
         this.typeMapper = typeMapper;
     }
 
@@ -81,7 +81,7 @@ public class UserEntityMapper {
                 user.getLogin(),
                 user.getSenha(),
                 user.getDataAlteracao(),
-                typeMapper.toTypeUserEntity(user.getTipo()),
+                typeMapper.toUserTypeEntity(user.getTipo()),
                 addressEntities
                 );
     }
@@ -105,7 +105,7 @@ public class UserEntityMapper {
                 userEntity.getLogin(),
                 userEntity.getSenha(),
                 userEntity.getDataAlteracao(),
-                typeMapper.toTypeUserDomain(userEntity.getTipo()),
+                typeMapper.toUserTypeDomain(userEntity.getTipo()),
                 addresses
                 );
     }

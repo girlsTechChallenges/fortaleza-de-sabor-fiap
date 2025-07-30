@@ -1,13 +1,13 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 
-import com.br.fiap.fortaleza.sabor.domain.typeUser.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.userType.UserType;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.TypeUserEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserTypeEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserEntityMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.typeUser.TypeUserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserTypeEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserTypeRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.mock.MockUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,15 +39,15 @@ class UserRepositoryJpaTest {
     @Mock
     private UserEntityMapper mapper;
     @Mock
-    private TypeUserEntityMapper typeMapper;
+    private UserTypeEntityMapper typeMapper;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
-    private TypeUserRepository typeUserRepository;
+    private UserTypeRepository userTypeRepository;
 
     @BeforeEach
     public void setUp() {
-        userRepositoryJpa = new UserRepositoryJpa(bCryptPasswordEncoder,userRepository,mapper, typeMapper,typeUserRepository);
+        userRepositoryJpa = new UserRepositoryJpa(bCryptPasswordEncoder,userRepository,mapper, typeMapper,userTypeRepository);
     }
 
     @Test
@@ -77,14 +77,14 @@ class UserRepositoryJpaTest {
     @DisplayName("Service JPA - Save a user in the database")
     void save() {
         // GIVEN
-        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
-        TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
-        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, typeUser, List.of());
-        UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
+        UserType userType = new UserType(1L,"CLIENTE");
+        UserTypeEntity userTypeEntity = new UserTypeEntity(1L,"CLIENTE");
+        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, userType, List.of());
+        UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), userTypeEntity, List.of());
 
         when(userRepository.findByEmail("carlos@email.com")).thenReturn(Optional.empty());
-        when(typeUserRepository.getByNameType("CLIENTE")).thenReturn(Optional.of(typeUserEntity));
-        when(typeMapper.toTypeUserDomain(typeUserEntity)).thenReturn(typeUser);
+        when(userTypeRepository.getByNameType("CLIENTE")).thenReturn(Optional.of(userTypeEntity));
+        when(typeMapper.toUserTypeDomain(userTypeEntity)).thenReturn(userType);
         when(mapper.toUserEntity(user)).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
         when(mapper.toUserDomain(userEntity)).thenReturn(user);
@@ -99,12 +99,12 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should update user successfully.")
     void shouldUpdateUserSuccessfully() {
-        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
-        TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
-        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, typeUser, List.of());
-        UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
+        UserType userType = new UserType(1L,"CLIENTE");
+        UserTypeEntity userTypeEntity = new UserTypeEntity(1L,"CLIENTE");
+        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, userType, List.of());
+        UserEntity userEntity = new UserEntity("Carlos", "carlos@email.com", "login", "senha", LocalDate.now(), userTypeEntity, List.of());
 
-        when(typeUserRepository.getByNameType("CLIENTE")).thenReturn(Optional.of(typeUserEntity));
+        when(userTypeRepository.getByNameType("CLIENTE")).thenReturn(Optional.of(userTypeEntity));
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any())).thenReturn(userEntity);
         when(mapper.toUserDomain(userEntity)).thenReturn(user);
@@ -118,10 +118,10 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should throw exception when user is not found for update.")
     void shouldThrowExceptionWhenUserNotFoundToUpdate() {
-        TypeUser typeUser = new TypeUser("CLIENTE");
+        UserType userType = new UserType("CLIENTE");
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
-        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, typeUser, List.of());
+        User user = new User("Carlos", "carlos@email.com", "login", "novaSenha", null, userType, List.of());
 
         RuntimeException exception = assertThrows(UserNotFoundException.class, () -> userRepositoryJpa.update(1L, user));
         assertTrue(exception.getMessage().contains(String.format("User %s not found", 1L)));
@@ -130,10 +130,10 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should find user by ID.")
     void shouldFindUserById() {
-        TypeUser typeUser = new TypeUser(1L,"DONO");
-        TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"DONO");
-        UserEntity userEntity = new UserEntity("Joana", "joana@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
-        User user = new User("Joana", "joana@email.com", "login", "senha", LocalDate.now(), typeUser, List.of());
+        UserType userType = new UserType(1L,"DONO");
+        UserTypeEntity userTypeEntity = new UserTypeEntity(1L,"DONO");
+        UserEntity userEntity = new UserEntity("Joana", "joana@email.com", "login", "senha", LocalDate.now(), userTypeEntity, List.of());
+        User user = new User("Joana", "joana@email.com", "login", "senha", LocalDate.now(), userType, List.of());
 
         when(userRepository.findById(2L)).thenReturn(Optional.of(userEntity));
         when(mapper.toUserDomain(userEntity)).thenReturn(user);
@@ -147,10 +147,10 @@ class UserRepositoryJpaTest {
     @Test
     @DisplayName("Should delete user by ID")
     void shouldDeleteUserById() {
-        TypeUser typeUser = new TypeUser(1L,"CLIENTE");
-        TypeUserEntity typeUserEntity = new TypeUserEntity(1L,"CLIENTE");
-        UserEntity userEntity = new UserEntity("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), typeUserEntity, List.of());
-        User user = new User("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), typeUser, List.of());
+        UserType userType = new UserType(1L,"CLIENTE");
+        UserTypeEntity userTypeEntity = new UserTypeEntity(1L,"CLIENTE");
+        UserEntity userEntity = new UserEntity("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), userTypeEntity, List.of());
+        User user = new User("Pedro", "pedro@email.com", "login", "senha", LocalDate.now(), userType, List.of());
 
         when(userRepository.findById(3L)).thenReturn(Optional.of(userEntity));
         doNothing().when(userRepository).deleteById(3L);
