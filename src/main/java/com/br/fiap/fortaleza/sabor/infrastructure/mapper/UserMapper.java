@@ -4,8 +4,10 @@ import com.br.fiap.fortaleza.sabor.domain.address.Address;
 import com.br.fiap.fortaleza.sabor.domain.token.Token;
 import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.TypeUserResponse;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
@@ -42,7 +44,7 @@ public class UserMapper {
                 userRequestDto.login(),
                 userRequestDto.senha(),
                 userRequestDto.dataAlteracao(),
-                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(userRequestDto.tipo().type())),
+                userRequestDto.tipo(),
                 addresses);
     }
 
@@ -63,7 +65,7 @@ public class UserMapper {
                 updateRequestDto.nome(),
                 updateRequestDto.email(),
                 updateRequestDto.senha(),
-                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(updateRequestDto.tipo().type())),
+                updateRequestDto.tipo(),
                 addresses);
     }
 
@@ -85,7 +87,7 @@ public class UserMapper {
                 user.getLogin(),
                 user.getSenha(),
                 user.getDataAlteracao(),
-                typeUserMapper.toTypeEntity(new TypeUser(user.getTipo().getId(), user.getTipo().getType())),
+                typeUserMapper.toTypeEntity(new TypeUser(null, user.getTipo())),
                 addressEntities
                 );
     }
@@ -109,7 +111,7 @@ public class UserMapper {
                 userEntity.getLogin(),
                 userEntity.getSenha(),
                 userEntity.getDataAlteracao(),
-                typeUserMapper.toTypeUserDomain(new TypeUserRequestDto(userEntity.getTipo().getNameType())),
+                userEntity.getTipo().getNameType(),
                 addresses
                 );
     }
@@ -126,11 +128,7 @@ public class UserMapper {
                         address.getEstado(),
                         address.getCep()))  .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(),
-                new TypeUserResponse(
-                        null,
-                        user.getTipo().getType()),
-                addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
     }
 
     public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
@@ -148,11 +146,7 @@ public class UserMapper {
                         address.getCep()))
                 .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(),
-                new TypeUserResponse(
-                        user.getTipo().getId(),
-                        user.getTipo().getType()),
-                addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
     }
 
     public List<AddressEntity> toAddressEntityList(List<Address> addresses) {

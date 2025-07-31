@@ -25,11 +25,14 @@ public record UserRequestDto(
 
         @NotNull
         @NotBlank
-        @Size(min = 8, max = 100) String senha,
+        @Size(min = 8, max = 100)
+        String senha,
+
         LocalDate dataAlteracao,
 
         @NotNull
-        TypeUserRequestDto tipo,
+        @NotBlank
+        String tipo,
 
         @NotNull
         @Size(min = 1) 

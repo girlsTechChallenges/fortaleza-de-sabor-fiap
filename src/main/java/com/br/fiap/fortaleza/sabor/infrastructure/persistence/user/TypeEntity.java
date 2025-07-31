@@ -10,7 +10,7 @@ public class TypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome_tipo")
+    @Column(name = "nome_tipo", unique = true, nullable = false)
     private String nameType;
 
     public TypeEntity(Long id, String nameType) {

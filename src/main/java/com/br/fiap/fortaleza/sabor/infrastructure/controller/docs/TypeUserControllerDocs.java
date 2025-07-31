@@ -70,6 +70,8 @@ public interface TypeUserControllerDocs {
             @ApiResponse(responseCode = "204", description = "User type successfully deleted."),
             @ApiResponse(responseCode = "404", description = "User type not found.",
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "409", description = "User type mismatch.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })

@@ -36,7 +36,7 @@ public class AuthUserUseCase {
 
         var now = Instant.now();
         var expiresIn = 300L;
-        var scope = user.stream().map(u -> u.getTipo().getType()).collect(Collectors.joining(" "));
+        var scope = user.stream().map(u -> u.getTipo()).collect(Collectors.joining(" "));
 
         var claims = JwtClaimsSet.builder()
                 .issuer("BackendFortalezaSabor")

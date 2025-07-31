@@ -3,11 +3,14 @@ package com.br.fiap.fortaleza.sabor.infrastructure.gateways;
 import com.br.fiap.fortaleza.sabor.application.gateways.TypeUsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
+import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeMismatchException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.TypeUserMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserRepository;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +21,12 @@ public class TypeUsersRepositoryJpa implements TypeUsersRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TypeUsersRepositoryJpa.class);
     private final TypeUserRepository typeUserRepository;
+    private final UserRepository userRepository;
     private final TypeUserMapper typeMapper;
 
-    public TypeUsersRepositoryJpa(TypeUserRepository typeUserRepository, TypeUserMapper typeMapper) {
+    public TypeUsersRepositoryJpa(TypeUserRepository typeUserRepository, UserRepository userRepository, TypeUserMapper typeMapper) {
         this.typeUserRepository = typeUserRepository;
+        this.userRepository = userRepository;
         this.typeMapper = typeMapper;
     }
 
@@ -29,10 +34,12 @@ public class TypeUsersRepositoryJpa implements TypeUsersRepository {
     public TypeUser create(TypeUser typeUser) {
         log.info("Creating TypeUser with type: {}", typeUser.getType());
 
-        TypeEntity savedEntity = typeUserRepository.save(typeMapper.toTypeEntity(typeUser));
-        TypeUser createdTypeUser = typeMapper.toTypeUserEntity(savedEntity);
+        String normalizedType = normalizeTypeName(typeUser.getType());
+        TypeEntity typeEntity = findOrCreateType(normalizedType);
 
+        TypeUser createdTypeUser = typeMapper.toTypeUserEntity(typeEntity);
         log.info("TypeUser created with ID: {}", createdTypeUser.getId());
+
         return createdTypeUser;
     }
 
@@ -57,6 +64,12 @@ public class TypeUsersRepositoryJpa implements TypeUsersRepository {
     @Override
     public Optional<TypeUser> deleteById(Long id) {
         log.info("Received request to delete TypeUser with id: {}", id);
+        boolean isTypeLinked = userRepository.existsByTipoId(id);
+
+        if (isTypeLinked) {
+            log.error("Cannot delete TypeUser with id {}. It is linked to existing users.", id);
+            throw new UserTypeMismatchException("It is not possible to delete the type. There are users linked to it.");
+        }
 
         return typeUserRepository.findById(id)
                 .map(typeEntity -> {
@@ -100,6 +113,27 @@ public class TypeUsersRepositoryJpa implements TypeUsersRepository {
         } else {
             log.info("No TypeUsers found in database.");
             return List.of();
+        }
+    }
+
+    private String normalizeTypeName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("User type cannot be empty.");
+        }
+        return name.trim().toUpperCase();
+    }
+
+    private TypeEntity findOrCreateType(String normalizedType) {
+        return typeUserRepository.findByNameType(normalizedType)
+                .orElseGet(() -> safelySaveType(normalizedType));
+    }
+
+    private TypeEntity safelySaveType(String normalizedType) {
+        try {
+            return typeUserRepository.save(new TypeEntity(null, normalizedType));
+        } catch (DataIntegrityViolationException e) {
+            return typeUserRepository.findByNameType(normalizedType)
+                    .orElseThrow(() -> new IllegalArgumentException("User type already exists."));
         }
     }
 }

@@ -5,6 +5,7 @@ import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.TypeUserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
@@ -24,11 +25,13 @@ public class UserRepositoryJpa implements UsersRepository {
     private static final Logger log = LoggerFactory.getLogger(UserRepositoryJpa.class);
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final TypeUserRepository typeUserRepository;
     private final UserMapper mapper;
 
-    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, UserMapper mapper) {
+    public UserRepositoryJpa(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, TypeUserRepository typeUserRepository, UserMapper mapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.typeUserRepository = typeUserRepository;
         this.mapper = mapper;
     }
 
@@ -39,14 +42,14 @@ public class UserRepositoryJpa implements UsersRepository {
 
     @Override
     public User save(User user) {
-        userRepository.findByEmail(user.getEmail())
-                .ifPresent(existingUser -> {
-                    throw new UserAlreadyRegisteredException(
-                            "This user already exists. Check your credentials or recover your password."
-                    );
-                });
+        String typeFormat = user.getTipo().trim().toUpperCase();
+        TypeEntity typeEntity = findOrCreateType(typeFormat);
+
+        validateEmailUniqueness(user.getEmail());
 
         UserEntity userEntity = mapper.toUserEntity(user);
+        userEntity.setTipo(typeEntity);
+
         return mapper.toUserDomain(userRepository.save(userEntity));
     }
 
@@ -59,7 +62,7 @@ public class UserRepositoryJpa implements UsersRepository {
             findUser.setNome(user.getNome());
             findUser.setEmail(user.getEmail());
             findUser.setSenha(user.getSenha());
-            findUser.setTipo(new TypeEntity(user.getTipo().getId(), user.getTipo().getType()));
+            findUser.setTipo(new TypeEntity(null, user.getTipo()));
 
             if (user.getAddress() != null && !user.getAddress().isEmpty()) {
                 findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));
@@ -111,8 +114,34 @@ public class UserRepositoryJpa implements UsersRepository {
             throw new UserNotFoundException(email);
 
         } catch (Exception e) {
-            log.error("Erro ao atualizar a senha do usuário", e);
-            throw new RuntimeException("Erro ao atualizar a senha do usuário", e);
+            log.error("Error updating user password", e);
+            throw new RuntimeException("Error updating user password", e);
         }
+    }
+
+    private TypeEntity findOrCreateType(String formattedType) {
+        return typeUserRepository.findByNameType(formattedType)
+                .orElseGet(() -> createNewTypeIfNotExists(formattedType));
+    }
+
+    private TypeEntity createNewTypeIfNotExists(String formattedType) {
+        boolean typeAlreadyExists = typeUserRepository.findAll().stream()
+                .anyMatch(type -> type.getNameType().trim().equalsIgnoreCase(formattedType));
+
+        if (typeAlreadyExists) {
+            throw new IllegalArgumentException("User type already exists with a similar name.");
+        }
+
+        return typeUserRepository.save(new TypeEntity(null, formattedType.trim().toUpperCase()));
+    }
+
+    private void validateEmailUniqueness(String email) {
+        String formattedEmail = email.trim().toLowerCase();
+        userRepository.findByEmail(formattedEmail)
+                .ifPresent(existingUser -> {
+                    throw new UserAlreadyRegisteredException(
+                            "This user already exists. Check your credentials or recover your password."
+                    );
+                });
     }
 }

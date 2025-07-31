@@ -25,7 +25,7 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "tipo_id", referencedColumnName = "id")
     private TypeEntity tipo;
 
