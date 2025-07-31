@@ -5,7 +5,8 @@ import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.MenuNotFoundE
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.MenuItemRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;
-import com.br.fiap.fortaleza.sabor.mock.MockMenu;
+import com.br.fiap.fortaleza.sabor.utils.TestConstants;
+import com.br.fiap.fortaleza.sabor.utils.TestDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,176 +14,257 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class MenuItemRepositoryJpaTest {
+@DisplayName("MenuItemRepositoryJpa Tests")
+class MenuItemRepositoryJpaTest {
 
     @InjectMocks
-    MenuItemRepositoryJpa menuItemRepositoryJpa;
+    private MenuItemRepositoryJpa menuItemRepositoryJpa;
+
     @Mock
     private MenuItemRepository menuItemRepository;
+
     @Mock
-    private MenuMapper mapper;
+    private MenuMapper menuMapper;
 
     @BeforeEach
-    public void setUp() {
-        menuItemRepositoryJpa = new MenuItemRepositoryJpa(menuItemRepository,mapper);
+    void setUp() {
+        // Setup comum se necessário
     }
 
     @Test
-    @DisplayName("Service JPA - GetAll Menu Items")
-    void getAll() {
-        // GIVEN
-        List<MenuItemsEntity> menuItemsEntities = List.of(MockMenu.menuEntityMockOne(), MockMenu.menuEntityMockTwo());
-        List<MenuItem> expectedMenus = List.of(MockMenu.menuItemMockOne(), MockMenu.menuItemMockTwo());
+    @DisplayName("Should return all menu items when items exist in database")
+    void shouldReturnAllMenuItemsWhenItemsExistInDatabase() {
+        // Arrange
+        MenuItemsEntity entity1 = TestDataBuilder.createValidMenuItemEntity();
+        MenuItemsEntity entity2 = TestDataBuilder.createValidMenuItemEntity();
+        List<MenuItemsEntity> entities = Arrays.asList(entity1, entity2);
 
-        when(menuItemRepository.findAll()).thenReturn(menuItemsEntities);
-        when(mapper.toMenuItemDomain(any(MenuItemsEntity.class))).thenAnswer(invocation -> {
-            MenuItemsEntity entity = invocation.getArgument(0);
-            return MockMenu.menuItemMockOne();
-        });
+        MenuItem domain1 = TestDataBuilder.createValidMenuItem();
+        MenuItem domain2 = TestDataBuilder.createValidMenuItem();
 
-        // WHEN
-        List<MenuItem> response = menuItemRepositoryJpa.getAll();
+        when(menuItemRepository.findAll()).thenReturn(entities);
+        when(menuMapper.toMenuItemDomain(entity1)).thenReturn(domain1);
+        when(menuMapper.toMenuItemDomain(entity2)).thenReturn(domain2);
 
-        // THEN
-        assertNotNull(response);
-        assertEquals(expectedMenus.size(), response.size());
-        verify(menuItemRepository).findAll();
-        verify(mapper, times(menuItemsEntities.size())).toMenuItemDomain(any(MenuItemsEntity.class));
+        // Act
+        List<MenuItem> result = menuItemRepositoryJpa.getAll();
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(2, result.size(), "Should return correct number of menu items");
+        assertEquals(domain1, result.get(0), "First item should match");
+        assertEquals(domain2, result.get(1), "Second item should match");
+        
+        verify(menuItemRepository, times(1)).findAll();
+        verify(menuMapper, times(1)).toMenuItemDomain(entity1);
+        verify(menuMapper, times(1)).toMenuItemDomain(entity2);
     }
 
     @Test
-    @DisplayName("Service JPA - Save a menu item in the database")
-    void save() {
-        // GIVEN
-        MenuItem menuItem = MockMenu.menuItemMockOne();
-        MenuItemsEntity menuItemsEntity = MockMenu.menuEntityMockOne();
-        MenuItemsEntity savedEntity = MockMenu.menuEntityMockOne();
-        MenuItem expectedMenuItem = MockMenu.menuItemMockOne();
+    @DisplayName("Should return empty list when no menu items exist in database")
+    void shouldReturnEmptyListWhenNoMenuItemsExistInDatabase() {
+        // Arrange
+        List<MenuItemsEntity> emptyList = Collections.emptyList();
+        when(menuItemRepository.findAll()).thenReturn(emptyList);
 
-        when(mapper.toMenuItemsEntity(menuItem)).thenReturn(menuItemsEntity);
-        when(menuItemRepository.save(menuItemsEntity)).thenReturn(savedEntity);
-        when(mapper.toMenuItemDomain(savedEntity)).thenReturn(expectedMenuItem);
+        // Act
+        List<MenuItem> result = menuItemRepositoryJpa.getAll();
 
-        // WHEN
-        MenuItem response = menuItemRepositoryJpa.save(menuItem);
-
-        // THEN
-        assertNotNull(response);
-        assertEquals(expectedMenuItem, response);
-        verify(mapper).toMenuItemsEntity(menuItem);
-        verify(menuItemRepository).save(menuItemsEntity);
-        verify(mapper).toMenuItemDomain(savedEntity);
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertTrue(result.isEmpty(), "Result should be empty");
+        assertEquals(0, result.size(), "Result size should be zero");
+        
+        verify(menuItemRepository, times(1)).findAll();
+        verifyNoInteractions(menuMapper);
     }
 
     @Test
-    @DisplayName("Should update menu item successfully.")
-    void shouldUpdateMenuItemSuccessfully() {
-        MenuItemsEntity menuEntity = new MenuItemsEntity(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
-        );
+    @DisplayName("Should save menu item successfully when valid item provided")
+    void shouldSaveMenuItemSuccessfullyWhenValidItemProvided() {
+        // Arrange
+        MenuItem menuItemToSave = TestDataBuilder.createValidMenuItem();
+        MenuItemsEntity entityToSave = TestDataBuilder.createValidMenuItemEntity();
+        MenuItemsEntity savedEntity = TestDataBuilder.createValidMenuItemEntity();
+        MenuItem expectedResult = TestDataBuilder.createValidMenuItem();
 
-        MenuItem menuDomain = new MenuItem(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
-        );
+        when(menuMapper.toMenuItemsEntity(menuItemToSave)).thenReturn(entityToSave);
+        when(menuItemRepository.save(entityToSave)).thenReturn(savedEntity);
+        when(menuMapper.toMenuItemDomain(savedEntity)).thenReturn(expectedResult);
 
-        when(menuItemRepository.findById(1L)).thenReturn(Optional.of(menuEntity));
-        when(menuItemRepository.save(any())).thenReturn(menuEntity);
-        when(mapper.toMenuItemDomain(menuEntity)).thenReturn(menuDomain);
+        // Act
+        MenuItem result = menuItemRepositoryJpa.save(menuItemToSave);
 
-        Optional<MenuItem> updated = menuItemRepositoryJpa.update(1L, menuDomain);
-
-        assertTrue(updated.isPresent());
-        assertEquals("Pizza Margherita", updated.get().getNome());
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(expectedResult, result, "Result should match expected menu item");
+        
+        verify(menuMapper, times(1)).toMenuItemsEntity(menuItemToSave);
+        verify(menuItemRepository, times(1)).save(entityToSave);
+        verify(menuMapper, times(1)).toMenuItemDomain(savedEntity);
     }
 
     @Test
-    @DisplayName("Should throw exception when menuItem is not found for update.")
-    void shouldThrowExceptionWhenMenuItemNotFoundToUpdate() {
-        when(menuItemRepository.findById(1L)).thenReturn(Optional.empty());
+    @DisplayName("Should find menu item by ID when item exists")
+    void shouldFindMenuItemByIdWhenItemExists() {
+        // Arrange
+        Long validId = TestConstants.VALID_ID;
+        MenuItemsEntity entity = TestDataBuilder.createValidMenuItemEntity();
+        MenuItem expectedMenuItem = TestDataBuilder.createValidMenuItem();
 
-        MenuItem menuDomain = new MenuItem(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
-        );
+        when(menuItemRepository.findById(validId)).thenReturn(Optional.of(entity));
+        when(menuMapper.toMenuItemDomain(entity)).thenReturn(expectedMenuItem);
 
-        RuntimeException exception = assertThrows(MenuNotFoundException.class, () -> menuItemRepositoryJpa.update(1L, menuDomain));
-        assertTrue(exception.getMessage().contains("Menu 1 was not found"));
+        // Act
+        Optional<MenuItem> result = menuItemRepositoryJpa.getById(validId);
+
+        // Assert
+        assertTrue(result.isPresent(), "Result should be present");
+        assertEquals(expectedMenuItem, result.get(), "Should return correct menu item");
+        
+        verify(menuItemRepository, times(1)).findById(validId);
+        verify(menuMapper, times(1)).toMenuItemDomain(entity);
     }
 
     @Test
-    @DisplayName("Should find menuItem by ID.")
-    void shouldFindMenuItemById() {
-        MenuItemsEntity menuEntity = new MenuItemsEntity(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
-        );
+    @DisplayName("Should throw MenuNotFoundException when menu item not found by ID")
+    void shouldThrowMenuNotFoundExceptionWhenMenuItemNotFoundById() {
+        // Arrange
+        Long invalidId = TestConstants.INVALID_ID;
+        when(menuItemRepository.findById(invalidId)).thenReturn(Optional.empty());
 
-        MenuItem menuDomain = new MenuItem(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
-        );
-
-        when(menuItemRepository.findById(2L)).thenReturn(Optional.of(menuEntity));
-        when(mapper.toMenuItemDomain(menuEntity)).thenReturn(menuDomain);
-
-        Optional<MenuItem> found = menuItemRepositoryJpa.getById(2L);
-
-        assertTrue(found.isPresent());
-        assertEquals("Pizza Margherita", found.get().getNome());
+        // Act & Assert
+        MenuNotFoundException exception = assertThrows(MenuNotFoundException.class, 
+            () -> menuItemRepositoryJpa.getById(invalidId),
+            "Should throw MenuNotFoundException when menu item not found");
+        
+        assertTrue(exception.getMessage().contains(invalidId.toString()), 
+            "Exception message should contain the invalid ID");
+        
+        verify(menuItemRepository, times(1)).findById(invalidId);
+        verifyNoInteractions(menuMapper);
     }
 
     @Test
-    @DisplayName("Should delete menuItem by ID")
-    void shouldDeleteMenuItemById() {
-        MenuItemsEntity menuEntity = new MenuItemsEntity(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
+    @DisplayName("Should update menu item successfully when item exists")
+    void shouldUpdateMenuItemSuccessfullyWhenItemExists() {
+        // Arrange
+        Long itemId = TestConstants.VALID_ID;
+        MenuItem updatedMenuItem = TestDataBuilder.createValidMenuItem();
+        MenuItemsEntity existingEntity = TestDataBuilder.createValidMenuItemEntity();
+        MenuItemsEntity savedEntity = TestDataBuilder.createValidMenuItemEntity();
+        MenuItem expectedResult = TestDataBuilder.createValidMenuItem();
+
+        when(menuItemRepository.findById(itemId)).thenReturn(Optional.of(existingEntity));
+        when(menuItemRepository.save(any(MenuItemsEntity.class))).thenReturn(savedEntity);
+        when(menuMapper.toMenuItemDomain(savedEntity)).thenReturn(expectedResult);
+
+        // Act
+        Optional<MenuItem> result = menuItemRepositoryJpa.update(itemId, updatedMenuItem);
+
+        // Assert
+        assertTrue(result.isPresent(), "Result should be present");
+        assertEquals(expectedResult, result.get(), "Should return updated menu item");
+        
+        verify(menuItemRepository, times(1)).findById(itemId);
+        verify(menuItemRepository, times(1)).save(any(MenuItemsEntity.class));
+        verify(menuMapper, times(1)).toMenuItemDomain(savedEntity);
+    }
+
+    @Test
+    @DisplayName("Should throw MenuNotFoundException when updating non-existent menu item")
+    void shouldThrowMenuNotFoundExceptionWhenUpdatingNonExistentMenuItem() {
+        // Arrange
+        Long nonExistentId = TestConstants.INVALID_ID;
+        MenuItem updatedMenuItem = TestDataBuilder.createValidMenuItem();
+        
+        when(menuItemRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        MenuNotFoundException exception = assertThrows(MenuNotFoundException.class,
+            () -> menuItemRepositoryJpa.update(nonExistentId, updatedMenuItem),
+            "Should throw MenuNotFoundException when menu item not found for update");
+        
+        assertTrue(exception.getMessage().contains(nonExistentId.toString()), 
+            "Exception message should contain the invalid ID");
+        
+        verify(menuItemRepository, times(1)).findById(nonExistentId);
+        verify(menuItemRepository, never()).save(any(MenuItemsEntity.class));
+        verifyNoInteractions(menuMapper);
+    }
+
+    @Test
+    @DisplayName("Should delete menu item successfully when item exists")
+    void shouldDeleteMenuItemSuccessfullyWhenItemExists() {
+        // Arrange
+        Long itemId = TestConstants.VALID_ID;
+        MenuItemsEntity existingEntity = TestDataBuilder.createValidMenuItemEntity();
+        MenuItem expectedDeletedItem = TestDataBuilder.createValidMenuItem();
+        
+        when(menuItemRepository.findById(itemId)).thenReturn(Optional.of(existingEntity));
+        doNothing().when(menuItemRepository).deleteById(itemId);
+        when(menuMapper.toMenuItemDomain(existingEntity)).thenReturn(expectedDeletedItem);
+
+        // Act
+        Optional<MenuItem> result = menuItemRepositoryJpa.deleteById(itemId);
+
+        // Assert
+        assertTrue(result.isPresent(), "Delete operation should return menu item");
+        assertEquals(expectedDeletedItem, result.get(), "Should return deleted menu item");
+        
+        verify(menuItemRepository, times(2)).findById(itemId); // Called twice in deleteById method
+        verify(menuItemRepository, times(1)).deleteById(itemId);
+        verify(menuMapper, times(1)).toMenuItemDomain(existingEntity);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when deleting non-existent menu item")
+    void shouldThrowExceptionWhenDeletingNonExistentMenuItem() {
+        // Arrange
+        Long nonExistentId = TestConstants.INVALID_ID;
+        
+        when(menuItemRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        MenuNotFoundException exception = assertThrows(
+            MenuNotFoundException.class,
+            () -> menuItemRepositoryJpa.deleteById(nonExistentId)
         );
+        
+        assertTrue(exception.getMessage().contains("was not found"), "Should throw appropriate exception");
+        
+        verify(menuItemRepository, times(1)).findById(nonExistentId);
+        verify(menuItemRepository, never()).deleteById(anyLong());
+        verifyNoInteractions(menuMapper);
+    }
 
-        MenuItem menuDomain = new MenuItem(
-                "Pizza Margherita",
-                "Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco",
-                "29.90",
-                true,
-                "https://exemplo.com/images/pizza-margherita.png"
+    @Test
+    @DisplayName("Should handle repository exceptions gracefully")
+    void shouldHandleRepositoryExceptionsGracefully() {
+        // Arrange
+        String errorMessage = "Database connection failed";
+        when(menuItemRepository.findAll()).thenThrow(new RuntimeException(errorMessage));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class,
+            () -> menuItemRepositoryJpa.getAll(),
+            "Should throw exception when repository fails"
         );
-
-        when(menuItemRepository.findById(3L)).thenReturn(Optional.of(menuEntity));
-        doNothing().when(menuItemRepository).deleteById(3L);
-        when(mapper.toMenuItemDomain(menuEntity)).thenReturn(menuDomain);
-
-        Optional<MenuItem> deleted = menuItemRepositoryJpa.deleteById(3L);
-
-        assertTrue(deleted.isPresent());
-        assertEquals("Pizza Margherita", deleted.get().getNome());
-        verify(menuItemRepository).deleteById(3L);
+        
+        assertEquals(errorMessage, exception.getMessage());
+        verify(menuItemRepository, times(1)).findAll();
+        verifyNoInteractions(menuMapper);
     }
 }

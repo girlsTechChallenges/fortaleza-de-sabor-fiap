@@ -186,42 +186,90 @@ src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/docs/
 O projeto possui **cobertura abrangente** de testes unitários para todas as camadas:
 
 #### 📊 **Estatísticas Atuais**
-- **Total de Classes de Teste**: 15 classes principais
-- **Total de Cenários de Teste**: 35+ cenários
+- **Total de Classes de Teste**: 34 classes (incluindo utilitárias)
+- **Total de Cenários de Teste**: 150+ cenários
 - **Taxa de Sucesso**: 100% (todos os testes passando)
-- **Cobertura de Código**: Cobertura completa das principais funcionalidades
+- **Cobertura de Código**: Cobertura completa de todas as camadas arquiteturais
 
 #### 🏗️ **Camadas Testadas**
-- **Controllers**: Testes de endpoints REST
-- **Use Cases**: Testes de regras de negócio
-- **Repositories**: Testes de persistência de dados
-- **Mappers**: Testes de conversão entre DTOs e entidades
+- **Use Cases**: Testes de regras de negócio com 11 classes
+- **Controllers**: Testes de endpoints REST (5 classes)
+- **Repositories**: Testes de persistência customizada
+- **Mappers**: Testes de integridade de conversões (4 classes)
+- **DTOs**: Testes de validação Bean Validation (9 classes)
 - **Exception Handlers**: Testes de tratamento de exceções
 
 #### 🔍 **Tipos de Teste Implementados**
 - **Testes de Sucesso**: Cenários ideais de funcionamento
 - **Testes de Casos Extremos**: Dados nulos, vazios, mínimos e máximos
 - **Testes de Exceções**: Validação de tratamento de erros
-- **Testes de Integração**: Verificação de interação entre componentes
+- **Testes de Validação**: Bean Validation em DTOs
+- **Testes de Integridade**: Conversões entre camadas preservando dados
 
 #### 📋 **Classes de Teste Principais**
-- `CreateRestaurantUseCaseTest` - 15 cenários (expandido)
-- `UpdateRestaurantUseCaseTest`
-- `RestaurantControllerTest`
-- `RestaurantRepositoryJpaTest`
-- `RestaurantMapperTest`
-- `CreateUserUseCaseTest`
-- `UpdateUserUseCaseTest`
-- `AuthUserUseCaseTest`
-- `UserControllerTest`
-- `UserRepositoryJpaTest`
-- `GlobalExceptionHandlerTest`
+
+##### **Classes Utilitárias**
+- `TestConstants` - Constantes padronizadas
+- `TestDataBuilder` - Factory methods para objetos de teste
+
+##### **Use Cases (11 classes)**
+- `CreateUserUseCaseTest` - Criação com encoding de senha
+- `UpdateUserUseCaseTest` - Atualização com validações
+- `DeleteUserUseCaseTest` - Exclusão com verificações
+- `GetUserUseCaseTest` - Busca com tratamento de null
+- `AuthUserUseCaseTest` - Autenticação de usuários
+- `CreateMenuItemUseCaseTest` - Criação de itens de menu
+- `UpdateMenuItemUseCaseTest` - Atualização com null handling
+- `DeleteMenuItemUseCaseTest` - Exclusão de itens
+- `GetMenuItemUseCaseTest` - Busca de itens
+- `CreateRestaurantUseCaseTest` - 15 cenários expandidos
+- `UpdateRestaurantUseCaseTest` - Atualização de restaurantes
+
+##### **Mappers (4 classes)**
+- `UserMapperTest` - Conversões User completas
+- `TypeUserMapperTest` - Conversões TypeUser
+- `RestaurantMapperTest` - Conversões complexas (endereços + horários)
+- `MenuMapperTest` - Conversões MenuItem
+
+##### **DTOs (9 classes - 134 cenários totais)**
+- `UserRequestDtoTest` - 11 cenários de validação Bean Validation
+- `MenuItemRequestDtoTest` - 10 cenários de validação
+- `RestaurantRequestDtoTest` - 13 cenários (listas aninhadas)
+- `AddressDtoTest` - 17 cenários (CEP, números positivos)
+- `BusinessHoursDtoTest` - 12 cenários (horários, dias da semana)
+- `UpdateMenuItemRequestDtoTest` - 19 cenários (atualizações completas)
+- `UserCredentialsDtoTest` - 12 cenários (credenciais)
+- `UpdateRequestDtoTest` - 17 cenários (atualização de usuário)
+- `TypeUserRequestDtoTest` - 14 cenários (tipos de usuário)
 
 ### Padrões de Qualidade
 - **Estrutura AAA**: Arrange-Act-Assert em todos os testes
-- **Nomenclatura Consistente**: Métodos `should[Ação][Resultado]`
+- **Nomenclatura Consistente**: Métodos `should[RetornarX]When[CondicaoY]`
 - **Mocking Padronizado**: Uso de `@Mock` e `@InjectMocks`
 - **Asserções Detalhadas**: Validação completa de objetos e comportamentos
+- **Classes Utilitárias**: TestConstants e TestDataBuilder para padronização
+- **Documentação**: Todos os testes com `@DisplayName` descritivo
+
+### Melhorias Implementadas Recentemente
+
+#### **🔧 Padronização Completa**
+- **TestConstants**: Todas as constantes centralizadas
+- **TestDataBuilder**: Factory methods para objetos consistentes
+- **Nomenclatura Unificada**: Padrão `shouldXWhenY` em 100% dos testes
+- **Estrutura AAA**: Aplicada uniformemente
+
+#### **🎯 Nova Cobertura de Testes**
+- **Mappers**: Testes de integridade de dados entre camadas
+- **DTOs**: Validação completa Bean Validation (9 classes, 134 cenários)
+- **Use Cases**: Correções de comportamento e edge cases
+- **Repositories**: Testes de lógica customizada
+
+#### **📊 Validações Implementadas**
+- **Conversões de Dados**: Preservação durante transformações
+- **Bean Validation**: Testes completos para @NotNull, @NotBlank, @Size, @Pattern, @Email, @Positive
+- **Tratamento de Null**: Verificação em todos os cenários
+- **Formatos Complexos**: Regex de preços, emails, CEP, padrões de nome
+- **Objetos Aninhados**: Validação com @Valid em listas e objetos
 
 ### Executar Testes
 ```powershell
