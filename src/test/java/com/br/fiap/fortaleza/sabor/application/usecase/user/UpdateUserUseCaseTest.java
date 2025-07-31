@@ -2,7 +2,8 @@ package com.br.fiap.fortaleza.sabor.application.usecase.user;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
-
+import com.br.fiap.fortaleza.sabor.utils.TestConstants;
+import com.br.fiap.fortaleza.sabor.utils.TestDataBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class UpdateUserUseCaseTest {
 
-    @InjectMocks
-    private UpdateUserUseCase updateUserUseCase;
+@ExtendWith(MockitoExtension.class)
+@DisplayName("UpdateUserUseCase Tests")
+class UpdateUserUseCaseTest {
 
     @Mock
     private UsersRepository usersRepository;
@@ -28,39 +29,147 @@ class UpdateUserUseCaseTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Test
-    @DisplayName("Should update user successfully")
-    void shouldUpdateUserSuccessfully() {
-        // Arrange
-        Long userId = 1L;
-        User userToUpdate = new User();
-        User updatedUser = new User();
-        Optional<User> expected = Optional.of(updatedUser);
+    @InjectMocks
+    private UpdateUserUseCase updateUserUseCase;
 
-        when(usersRepository.update(userId, userToUpdate)).thenReturn(expected);
+    @Test
+    @DisplayName("Should update user successfully when user exists")
+    void shouldUpdateUserSuccessfullyWhenUserExists() {
+        // Arrange
+        Long userId = TestConstants.VALID_ID;
+        User userToUpdate = TestDataBuilder.createValidUser();
+        User updatedUser = TestDataBuilder.createValidUser();
+        Optional<User> expectedResult = Optional.of(updatedUser);
+        String encodedPassword = "encodedPassword123";
+
+        when(passwordEncoder.encode(TestConstants.VALID_USER_PASSWORD)).thenReturn(encodedPassword);
+        when(usersRepository.update(eq(userId), any(User.class))).thenReturn(expectedResult);
 
         // Act
         Optional<User> result = updateUserUseCase.update(userId, userToUpdate);
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals(expected, result);
-        verify(usersRepository, times(1)).update(userId, userToUpdate);
+        assertTrue(result.isPresent(), "Update result should be present");
+        assertEquals(updatedUser, result.get(), "Should return updated user");
+        
+        verify(passwordEncoder, times(1)).encode(TestConstants.VALID_USER_PASSWORD);
+        verify(usersRepository, times(1)).update(eq(userId), any(User.class));
+        verifyNoMoreInteractions(usersRepository, passwordEncoder);
     }
 
     @Test
-    @DisplayName("Should return empty when user is not found.")
-    void shouldReturnEmptyWhenUserNotFound() {
+    @DisplayName("Should return empty Optional when user not found")
+    void shouldReturnEmptyOptionalWhenUserNotFound() {
         // Arrange
-        Long userId = 2L;
-        User userToUpdate = new User();
-        when(usersRepository.update(userId, userToUpdate)).thenReturn(Optional.empty());
+        Long nonExistentId = TestConstants.INVALID_ID;
+        User userToUpdate = TestDataBuilder.createValidUser();
+        String encodedPassword = "encodedPassword123";
+        
+        when(passwordEncoder.encode(TestConstants.VALID_USER_PASSWORD)).thenReturn(encodedPassword);
+        when(usersRepository.update(eq(nonExistentId), any(User.class))).thenReturn(Optional.empty());
+
+        // Act
+        Optional<User> result = updateUserUseCase.update(nonExistentId, userToUpdate);
+
+        // Assert
+        assertFalse(result.isPresent(), "Result should not be present");
+        assertTrue(result.isEmpty(), "Result should be empty when user not found");
+        
+        verify(passwordEncoder, times(1)).encode(TestConstants.VALID_USER_PASSWORD);
+        verify(usersRepository, times(1)).update(eq(nonExistentId), any(User.class));
+        verifyNoMoreInteractions(usersRepository, passwordEncoder);
+    }
+
+    @Test
+    @DisplayName("Should handle null user gracefully")
+    void shouldHandleNullUserGracefully() {
+        // Arrange
+        Long validId = TestConstants.VALID_ID;
+        User nullUser = null;
+
+        // Act & Assert
+        assertThrows(NullPointerException.class,
+            () -> updateUserUseCase.update(validId, nullUser),
+            "Should throw NullPointerException when user is null"
+        );
+        
+        verifyNoInteractions(usersRepository, passwordEncoder);
+    }
+
+    @Test
+    @DisplayName("Should handle null ID gracefully")
+    void shouldHandleNullIdGracefully() {
+        // Arrange
+        Long nullId = null;
+        User userToUpdate = TestDataBuilder.createValidUser();
+        String encodedPassword = "encodedPassword123";
+        
+        when(passwordEncoder.encode(TestConstants.VALID_USER_PASSWORD)).thenReturn(encodedPassword);
+        when(usersRepository.update(isNull(), any(User.class))).thenReturn(Optional.empty());
+
+        // Act
+        Optional<User> result = updateUserUseCase.update(nullId, userToUpdate);
+
+        // Assert
+        assertFalse(result.isPresent(), "Result should not be present for null ID");
+        
+        verify(passwordEncoder, times(1)).encode(TestConstants.VALID_USER_PASSWORD);
+        verify(usersRepository, times(1)).update(eq(nullId), any(User.class));
+        verifyNoMoreInteractions(usersRepository, passwordEncoder);
+    }
+
+    @Test
+    @DisplayName("Should propagate repository exceptions")
+    void shouldPropagateRepositoryExceptions() {
+        // Arrange
+        Long validId = TestConstants.VALID_ID;
+        User userToUpdate = TestDataBuilder.createValidUser();
+        RuntimeException repositoryException = new RuntimeException("Database connection failed");
+        String encodedPassword = "encodedPassword123";
+        
+        when(passwordEncoder.encode(TestConstants.VALID_USER_PASSWORD)).thenReturn(encodedPassword);
+        when(usersRepository.update(eq(validId), any(User.class))).thenThrow(repositoryException);
+
+        // Act & Assert
+        RuntimeException thrownException = assertThrows(
+            RuntimeException.class,
+            () -> updateUserUseCase.update(validId, userToUpdate),
+            "Should propagate repository exceptions"
+        );
+        
+        assertEquals(repositoryException.getMessage(), thrownException.getMessage(), 
+            "Exception message should be preserved");
+        
+        verify(passwordEncoder, times(1)).encode(TestConstants.VALID_USER_PASSWORD);
+        verify(usersRepository, times(1)).update(eq(validId), any(User.class));
+        verifyNoMoreInteractions(usersRepository, passwordEncoder);
+    }
+
+    @Test
+    @DisplayName("Should handle valid update with specific user details")
+    void shouldHandleValidUpdateWithSpecificUserDetails() {
+        // Arrange
+        Long userId = TestConstants.VALID_ID;
+        User userToUpdate = TestDataBuilder.createValidUser();
+        User updatedUser = TestDataBuilder.createValidUser();
+        Optional<User> expectedResult = Optional.of(updatedUser);
+        String encodedPassword = "encodedPassword123";
+
+        when(passwordEncoder.encode(TestConstants.VALID_USER_PASSWORD)).thenReturn(encodedPassword);
+        when(usersRepository.update(eq(userId), any(User.class))).thenReturn(expectedResult);
 
         // Act
         Optional<User> result = updateUserUseCase.update(userId, userToUpdate);
 
         // Assert
-        assertTrue(result.isEmpty());
-        verify(usersRepository, times(1)).update(userId, userToUpdate);
+        assertTrue(result.isPresent(), "Update result should be present");
+        User returnedUser = result.get();
+        assertNotNull(returnedUser.getNome(), "Updated user should have name");
+        assertNotNull(returnedUser.getEmail(), "Updated user should have email");
+        assertNotNull(returnedUser.getLogin(), "Updated user should have login");
+        
+        verify(passwordEncoder, times(1)).encode(TestConstants.VALID_USER_PASSWORD);
+        verify(usersRepository, times(1)).update(eq(userId), any(User.class));
+        verifyNoMoreInteractions(usersRepository, passwordEncoder);
     }
 }

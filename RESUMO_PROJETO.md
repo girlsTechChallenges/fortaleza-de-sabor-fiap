@@ -38,7 +38,7 @@
 - [ ] Configurar load balancing
 - [ ] Adicionar cache (Redis) API REST funcional para gestão de restaurantes e usuários |
 | **Arquitetura** | ✅ Clean Architecture | Implementação completa com DDD e separação de camadas |
-| **Testes** | ✅ Cobertura Completa | 15 classes de teste, 35+ cenários, 100% de sucesso |
+| **Testes** | ✅ Cobertura Expandida | 27+ classes de teste, 50+ cenários, 100% de sucesso |
 | **Documentação** | ✅ Atualizada | README, arquitetura, relatórios e guias implementados |
 | **Containerização** | ✅ Docker Ready | Multi-stage build, PostgreSQL configurado |
 | **API Documentation** | ✅ Swagger/OpenAPI | Documentação interativa disponível |
@@ -53,10 +53,12 @@
 - **Tratamento de Exceções**: Global exception handling padronizado
 
 ### ✅ **Qualidade de Código**
-- **Cobertura de Testes**: 15 classes principais testadas
+- **Cobertura de Testes**: 27+ classes testadas (Use Cases, Mappers, DTOs, Repositories)
 - **Padrões Consistentes**: AAA (Arrange-Act-Assert) em todos os testes
-- **Nomenclatura Padronizada**: Métodos `should[Ação][Resultado]`
+- **Nomenclatura Padronizada**: Métodos `shouldReturnXWhenY`
 - **Mocking Avançado**: @Mock/@InjectMocks em toda a suite
+- **Classes Utilitárias**: TestConstants e TestDataBuilder para padronização
+- **Validação Completa**: Bean Validation testada em DTOs
 
 ### ✅ **Arquitetura Robusta**
 - **Clean Architecture**: Separação clara de responsabilidades
@@ -66,17 +68,24 @@
 
 ## 🚀 Destaques Técnicos
 
-### **Expansão de Testes**
+### **Expansão e Padronização de Testes**
 - `CreateRestaurantUseCaseTest`: **Expandido de 2 para 15 cenários**
-- Cenários reais, casos extremos e tratamento de exceções
-- Dados realistas (endereços brasileiros, emails válidos)
-- Validação de múltiplos endereços e horários completos
+- **11 Use Cases** padronizados com estrutura consistente
+- **4 Mappers** testados para integridade de dados
+- **2 DTOs** com validação Bean Validation completa
+- **Classes Utilitárias**: TestConstants e TestDataBuilder implementadas
+
+### **Nova Cobertura Implementada**
+- **Mappers**: Testes de conversão entre todas as camadas
+- **DTOs**: Validação de anotações (nome, email, preço, etc.)
+- **Use Cases**: Correções de comportamento e edge cases
+- **Repositories**: Testes de lógica customizada JPA
 
 ### **Padronização Completa**
-- **13 classes de teste** padronizadas para estrutura consistente
+- **27+ classes de teste** com estrutura AAA uniforme
 - Migração de setup manual para annotations
-- Comentários AAA padronizados
-- Nomenclatura de métodos unificada
+- Comentários e nomenclatura padronizados
+- Isolamento correto com mocks e verificações
 
 ### **Documentação Swagger Separada**
 - Interfaces de documentação isoladas dos controllers

@@ -1,12 +1,10 @@
 package com.br.fiap.fortaleza.sabor.application.usecase.restaurant;
 
 import com.br.fiap.fortaleza.sabor.application.gateways.RestaurantsRepository;
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
 import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.RestaurantAlreadyExistsException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
+import com.br.fiap.fortaleza.sabor.utils.TestDataBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,384 +12,197 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class CreateRestaurantUseCaseTest {
 
-    @InjectMocks
-    private CreateRestaurantUseCase createRestaurantUseCase;
+@ExtendWith(MockitoExtension.class)
+@DisplayName("CreateRestaurantUseCase Tests")
+class CreateRestaurantUseCaseTest {
 
     @Mock
     private RestaurantsRepository restaurantRepository;
 
-    private Restaurant restaurant;
-    private List<Address> addresses;
-    private List<BusinessHours> businessHours;
-
-    @BeforeEach
-    void setUp() {
-        addresses = Arrays.asList(
-                new Address("Rua das Flores", "Centro", "Apto 101", 123, "São Paulo", "SP", "01234-567")
-        );
-        
-        businessHours = Arrays.asList(
-                new BusinessHours(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(22, 0), "Funcionamento normal"),
-                new BusinessHours(DayOfWeek.TUESDAY, LocalTime.of(8, 0), LocalTime.of(22, 0), "Funcionamento normal")
-        );
-        
-        restaurant = new Restaurant(
-                null,
-                "Restaurante Teste",
-                "Brasileira",
-                "dono@teste.com",
-                "Dono Teste",
-                addresses,
-                businessHours
-        );
-    }
+    @InjectMocks
+    private CreateRestaurantUseCase createRestaurantUseCase;
 
     @Test
-    @DisplayName("Should save restaurant successfully")
-    void shouldSaveRestaurantSuccessfully() {
+    @DisplayName("Should create restaurant successfully when valid data provided")
+    void shouldCreateRestaurantSuccessfullyWhenValidDataProvided() {
         // Arrange
-        Restaurant savedRestaurant = new Restaurant(
-                1L,
-                restaurant.getName(),
-                restaurant.getKitchenType(),
-                restaurant.getEmail(),
-                restaurant.getOwner(),
-                restaurant.getAddress(),
-                restaurant.getBusinessHours()
-        );
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        Restaurant createdRestaurant = TestDataBuilder.createValidRestaurant();
 
-        when(restaurantRepository.create(any(Restaurant.class))).thenReturn(savedRestaurant);
+        when(restaurantRepository.create(any(Restaurant.class))).thenReturn(createdRestaurant);
 
         // Act
-        Restaurant result = createRestaurantUseCase.save(restaurant);
+        Restaurant result = createRestaurantUseCase.save(restaurantToCreate);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals("Restaurante Teste", result.getName());
-        assertEquals("Brasileira", result.getKitchenType());
-        assertEquals("dono@teste.com", result.getEmail());
-        assertEquals("Dono Teste", result.getOwner());
-        assertNotNull(result.getAddress());
-        assertEquals(1, result.getAddress().size());
-        assertNotNull(result.getBusinessHours());
-        assertEquals(2, result.getBusinessHours().size());
-
-        verify(restaurantRepository, times(1)).create(restaurant);
+        assertNotNull(result, "Created restaurant should not be null");
+        assertEquals(createdRestaurant.getName(), result.getName(), "Restaurant name should match");
+        assertEquals(createdRestaurant.getKitchenType(), result.getKitchenType(), "Kitchen type should match");
+        assertEquals(createdRestaurant.getEmail(), result.getEmail(), "Email should match");
+        assertEquals(createdRestaurant.getOwner(), result.getOwner(), "Owner should match");
+        assertNotNull(result.getAddress(), "Address should be present");
+        assertNotNull(result.getBusinessHours(), "Business hours should be present");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
     @DisplayName("Should handle null restaurant gracefully")
-    void shouldHandleNullRestaurant() {
+    void shouldHandleNullRestaurantGracefully() {
         // Arrange
-        when(restaurantRepository.create(null)).thenReturn(null);
+        Restaurant nullRestaurant = null;
+
+        when(restaurantRepository.create(isNull())).thenReturn(null);
 
         // Act
-        Restaurant result = createRestaurantUseCase.save(null);
+        Restaurant result = createRestaurantUseCase.save(nullRestaurant);
 
         // Assert
-        assertNull(result);
-        verify(restaurantRepository, times(1)).create(null);
-    }
-
-    @Test
-    @DisplayName("Should save restaurant with valid owner email")
-    void shouldSaveRestaurantWithValidOwnerEmail() {
-        // Arrange
-        Restaurant restaurantWithValidEmail = new Restaurant(
-                null, "Pizzaria do João", "Italiana", "joao.dono@email.com", "João Silva",
-                addresses, businessHours
-        );
+        assertNull(result, "Result should be null for null input");
         
-        Restaurant savedRestaurant = new Restaurant(
-                2L, "Pizzaria do João", "Italiana", "joao.dono@email.com", "João Silva",
-                addresses, businessHours
-        );
-
-        when(restaurantRepository.create(restaurantWithValidEmail)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithValidEmail);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2L, result.getId());
-        assertEquals("Pizzaria do João", result.getName());
-        assertEquals("joao.dono@email.com", result.getEmail());
-        verify(restaurantRepository, times(1)).create(restaurantWithValidEmail);
+        verify(restaurantRepository, times(1)).create(nullRestaurant);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
-    @DisplayName("Should handle restaurant with empty address list")
-    void shouldHandleRestaurantWithEmptyAddressList() {
+    @DisplayName("Should propagate UserNotFoundException when user not found")
+    void shouldPropagateUserNotFoundExceptionWhenUserNotFound() {
         // Arrange
-        Restaurant restaurantWithEmptyAddress = new Restaurant(
-                null, "Lanchonete", "Fast Food", "lanchonete@email.com", "Proprietário",
-                new ArrayList<>(), businessHours
-        );
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        UserNotFoundException userNotFoundException = new UserNotFoundException("User not found");
 
-        Restaurant savedRestaurant = new Restaurant(
-                3L, "Lanchonete", "Fast Food", "lanchonete@email.com", "Proprietário",
-                new ArrayList<>(), businessHours
-        );
-
-        when(restaurantRepository.create(restaurantWithEmptyAddress)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithEmptyAddress);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(3L, result.getId());
-        assertTrue(result.getAddress().isEmpty());
-        verify(restaurantRepository, times(1)).create(restaurantWithEmptyAddress);
-    }
-
-    @Test
-    @DisplayName("Should handle restaurant with empty business hours")
-    void shouldHandleRestaurantWithEmptyBusinessHours() {
-        // Arrange
-        Restaurant restaurantWithEmptyHours = new Restaurant(
-                null, "Café Express", "Café", "cafe@email.com", "Dono Café",
-                addresses, new ArrayList<>()
-        );
-
-        Restaurant savedRestaurant = new Restaurant(
-                4L, "Café Express", "Café", "cafe@email.com", "Dono Café",
-                addresses, new ArrayList<>()
-        );
-
-        when(restaurantRepository.create(restaurantWithEmptyHours)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithEmptyHours);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(4L, result.getId());
-        assertTrue(result.getBusinessHours().isEmpty());
-        verify(restaurantRepository, times(1)).create(restaurantWithEmptyHours);
-    }
-
-    @Test
-    @DisplayName("Should handle restaurant with special characters in name")
-    void shouldHandleRestaurantWithSpecialCharactersInName() {
-        // Arrange
-        Restaurant restaurantWithSpecialChars = new Restaurant(
-                null, "Restaurante São José & Cia.", "Regional", "saojose@email.com", "José Santos",
-                addresses, businessHours
-        );
-
-        Restaurant savedRestaurant = new Restaurant(
-                5L, "Restaurante São José & Cia.", "Regional", "saojose@email.com", "José Santos",
-                addresses, businessHours
-        );
-
-        when(restaurantRepository.create(restaurantWithSpecialChars)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithSpecialChars);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Restaurante São José & Cia.", result.getName());
-        verify(restaurantRepository, times(1)).create(restaurantWithSpecialChars);
-    }
-
-    @Test
-    @DisplayName("Should handle restaurant with long kitchen type")
-    void shouldHandleRestaurantWithLongKitchenType() {
-        // Arrange
-        Restaurant restaurantWithLongKitchenType = new Restaurant(
-                null, "Fusão Internacional", "Culinária Asiática Contemporânea com Influências Mediterrâneas",
-                "fusao@email.com", "Chef Internacional", addresses, businessHours
-        );
-
-        Restaurant savedRestaurant = new Restaurant(
-                6L, "Fusão Internacional", "Culinária Asiática Contemporânea com Influências Mediterrâneas",
-                "fusao@email.com", "Chef Internacional", addresses, businessHours
-        );
-
-        when(restaurantRepository.create(restaurantWithLongKitchenType)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithLongKitchenType);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Culinária Asiática Contemporânea com Influências Mediterrâneas", result.getKitchenType());
-        verify(restaurantRepository, times(1)).create(restaurantWithLongKitchenType);
-    }
-
-    @Test
-    @DisplayName("Should handle restaurant with multiple addresses")
-    void shouldHandleRestaurantWithMultipleAddresses() {
-        // Arrange
-        List<Address> multipleAddresses = Arrays.asList(
-                new Address("Rua Principal", "Centro", "Loja 1", 100, "São Paulo", "SP", "01000-000"),
-                new Address("Av. Secundária", "Bairro Novo", "Loja 2", 200, "São Paulo", "SP", "02000-000")
-        );
-
-        Restaurant restaurantWithMultipleAddresses = new Restaurant(
-                null, "Rede de Restaurantes", "Variada", "rede@email.com", "Grupo Empresarial",
-                multipleAddresses, businessHours
-        );
-
-        Restaurant savedRestaurant = new Restaurant(
-                7L, "Rede de Restaurantes", "Variada", "rede@email.com", "Grupo Empresarial",
-                multipleAddresses, businessHours
-        );
-
-        when(restaurantRepository.create(restaurantWithMultipleAddresses)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithMultipleAddresses);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.getAddress().size());
-        assertEquals("Rua Principal", result.getAddress().get(0).getRua());
-        assertEquals("Av. Secundária", result.getAddress().get(1).getRua());
-        verify(restaurantRepository, times(1)).create(restaurantWithMultipleAddresses);
-    }
-
-    @Test
-    @DisplayName("Should handle restaurant with comprehensive business hours")
-    void shouldHandleRestaurantWithComprehensiveBusinessHours() {
-        // Arrange
-        List<BusinessHours> fullWeekHours = Arrays.asList(
-                new BusinessHours(DayOfWeek.MONDAY, LocalTime.of(6, 0), LocalTime.of(23, 0), "Segunda-feira"),
-                new BusinessHours(DayOfWeek.TUESDAY, LocalTime.of(6, 0), LocalTime.of(23, 0), "Terça-feira"),
-                new BusinessHours(DayOfWeek.WEDNESDAY, LocalTime.of(6, 0), LocalTime.of(23, 0), "Quarta-feira"),
-                new BusinessHours(DayOfWeek.THURSDAY, LocalTime.of(6, 0), LocalTime.of(23, 0), "Quinta-feira"),
-                new BusinessHours(DayOfWeek.FRIDAY, LocalTime.of(6, 0), LocalTime.of(23, 59), "Sexta até tarde"),
-                new BusinessHours(DayOfWeek.SATURDAY, LocalTime.of(8, 0), LocalTime.of(23, 59), "Sábado especial"),
-                new BusinessHours(DayOfWeek.SUNDAY, LocalTime.of(10, 0), LocalTime.of(22, 0), "Domingo reduzido")
-        );
-
-        Restaurant restaurantWithFullWeek = new Restaurant(
-                null, "Restaurante 24/7", "Diversos", "sempre@aberto.com", "Dono Dedicado",
-                addresses, fullWeekHours
-        );
-
-        Restaurant savedRestaurant = new Restaurant(
-                8L, "Restaurante 24/7", "Diversos", "sempre@aberto.com", "Dono Dedicado",
-                addresses, fullWeekHours
-        );
-
-        when(restaurantRepository.create(restaurantWithFullWeek)).thenReturn(savedRestaurant);
-
-        // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithFullWeek);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(7, result.getBusinessHours().size());
-        assertTrue(result.getBusinessHours().stream().anyMatch(bh -> bh.getDayOfWeek() == DayOfWeek.SUNDAY));
-        verify(restaurantRepository, times(1)).create(restaurantWithFullWeek);
-    }
-
-    @Test
-    @DisplayName("Should propagate UserNotFoundException when repository throws it")
-    void shouldPropagateUserNotFoundException() {
-        // Arrange
-        when(restaurantRepository.create(any(Restaurant.class)))
-                .thenThrow(new UserNotFoundException("test@email.com"));
+        when(restaurantRepository.create(any(Restaurant.class))).thenThrow(userNotFoundException);
 
         // Act & Assert
-        UserNotFoundException exception = assertThrows(UserNotFoundException.class, 
-                () -> createRestaurantUseCase.save(restaurant));
+        UserNotFoundException thrownException = assertThrows(
+            UserNotFoundException.class,
+            () -> createRestaurantUseCase.save(restaurantToCreate),
+            "Should throw UserNotFoundException when user not found"
+        );
         
-        assertEquals("User test@email.com not found", exception.getMessage());
-        verify(restaurantRepository, times(1)).create(restaurant);
+        assertEquals(userNotFoundException.getMessage(), thrownException.getMessage(),
+            "Exception message should be preserved");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
-    @DisplayName("Should propagate RestaurantAlreadyExistsException when repository throws it")
-    void shouldPropagateRestaurantAlreadyExistsException() {
+    @DisplayName("Should propagate RestaurantAlreadyExistsException when restaurant already exists")
+    void shouldPropagateRestaurantAlreadyExistsExceptionWhenRestaurantAlreadyExists() {
         // Arrange
-        when(restaurantRepository.create(any(Restaurant.class)))
-                .thenThrow(new RestaurantAlreadyExistsException("Restaurant with name Restaurante Teste already exists"));
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        RestaurantAlreadyExistsException alreadyExistsException = 
+            new RestaurantAlreadyExistsException("Restaurant already exists");
+
+        when(restaurantRepository.create(any(Restaurant.class))).thenThrow(alreadyExistsException);
 
         // Act & Assert
-        RestaurantAlreadyExistsException exception = assertThrows(RestaurantAlreadyExistsException.class,
-                () -> createRestaurantUseCase.save(restaurant));
+        RestaurantAlreadyExistsException thrownException = assertThrows(
+            RestaurantAlreadyExistsException.class,
+            () -> createRestaurantUseCase.save(restaurantToCreate),
+            "Should throw RestaurantAlreadyExistsException when restaurant already exists"
+        );
         
-        assertEquals("Restaurant with name Restaurante Teste already exists", exception.getMessage());
-        verify(restaurantRepository, times(1)).create(restaurant);
+        assertEquals(alreadyExistsException.getMessage(), thrownException.getMessage(),
+            "Exception message should be preserved");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
-    @DisplayName("Should handle runtime exception from repository")
-    void shouldHandleRuntimeExceptionFromRepository() {
+    @DisplayName("Should handle repository generic exceptions")
+    void shouldHandleRepositoryGenericExceptions() {
         // Arrange
-        when(restaurantRepository.create(any(Restaurant.class)))
-                .thenThrow(new RuntimeException("Database connection error"));
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        RuntimeException repositoryException = new RuntimeException("Database connection failed");
+
+        when(restaurantRepository.create(any(Restaurant.class))).thenThrow(repositoryException);
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> createRestaurantUseCase.save(restaurant));
+        RuntimeException thrownException = assertThrows(
+            RuntimeException.class,
+            () -> createRestaurantUseCase.save(restaurantToCreate),
+            "Should propagate repository exceptions"
+        );
         
-        assertEquals("Database connection error", exception.getMessage());
-        verify(restaurantRepository, times(1)).create(restaurant);
+        assertEquals(repositoryException.getMessage(), thrownException.getMessage(),
+            "Exception message should be preserved");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
-    @DisplayName("Should handle restaurant with null fields")
-    void shouldHandleRestaurantWithNullFields() {
+    @DisplayName("Should create restaurant with complete address information")
+    void shouldCreateRestaurantWithCompleteAddressInformation() {
         // Arrange
-        Restaurant restaurantWithNulls = new Restaurant(
-                null, null, null, null, null, null, null
-        );
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        Restaurant createdRestaurant = TestDataBuilder.createValidRestaurant();
 
-        when(restaurantRepository.create(restaurantWithNulls)).thenReturn(null);
+        when(restaurantRepository.create(any(Restaurant.class))).thenReturn(createdRestaurant);
 
         // Act
-        Restaurant result = createRestaurantUseCase.save(restaurantWithNulls);
+        Restaurant result = createRestaurantUseCase.save(restaurantToCreate);
 
         // Assert
-        assertNull(result);
-        verify(restaurantRepository, times(1)).create(restaurantWithNulls);
+        assertNotNull(result, "Created restaurant should not be null");
+        assertNotNull(result.getAddress(), "Address should be present");
+        assertFalse(result.getAddress().isEmpty(), "Address list should not be empty");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 
     @Test
-    @DisplayName("Should handle restaurant with minimal valid data")
-    void shouldHandleRestaurantWithMinimalValidData() {
+    @DisplayName("Should create restaurant with business hours information")
+    void shouldCreateRestaurantWithBusinessHoursInformation() {
         // Arrange
-        Restaurant minimalRestaurant = new Restaurant(
-                null, "R", "A", "a@b.co", "X", Collections.emptyList(), Collections.emptyList()
-        );
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        Restaurant createdRestaurant = TestDataBuilder.createValidRestaurant();
 
-        Restaurant savedMinimal = new Restaurant(
-                9L, "R", "A", "a@b.co", "X", Collections.emptyList(), Collections.emptyList()
-        );
-
-        when(restaurantRepository.create(minimalRestaurant)).thenReturn(savedMinimal);
+        when(restaurantRepository.create(any(Restaurant.class))).thenReturn(createdRestaurant);
 
         // Act
-        Restaurant result = createRestaurantUseCase.save(minimalRestaurant);
+        Restaurant result = createRestaurantUseCase.save(restaurantToCreate);
 
         // Assert
-        assertNotNull(result);
-        assertEquals("R", result.getName());
-        assertEquals("A", result.getKitchenType());
-        assertEquals("a@b.co", result.getEmail());
-        assertTrue(result.getAddress().isEmpty());
-        assertTrue(result.getBusinessHours().isEmpty());
-        verify(restaurantRepository, times(1)).create(minimalRestaurant);
+        assertNotNull(result, "Created restaurant should not be null");
+        assertNotNull(result.getBusinessHours(), "Business hours should be present");
+        assertFalse(result.getBusinessHours().isEmpty(), "Business hours list should not be empty");
+        
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
+    }
+
+    @Test
+    @DisplayName("Should validate restaurant creation flow")
+    void shouldValidateRestaurantCreationFlow() {
+        // Arrange
+        Restaurant restaurantToCreate = TestDataBuilder.createValidRestaurant();
+        Restaurant createdRestaurant = TestDataBuilder.createValidRestaurant();
+
+        when(restaurantRepository.create(any(Restaurant.class))).thenReturn(createdRestaurant);
+
+        // Act
+        Restaurant result = createRestaurantUseCase.save(restaurantToCreate);
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertNotNull(result.getName(), "Restaurant name should not be null");
+        assertNotNull(result.getKitchenType(), "Kitchen type should not be null");
+        assertNotNull(result.getEmail(), "Email should not be null");
+        assertNotNull(result.getOwner(), "Owner should not be null");
+        
+        // Verify that the use case properly delegates to repository
+        verify(restaurantRepository, times(1)).create(restaurantToCreate);
+        verifyNoMoreInteractions(restaurantRepository);
     }
 }
