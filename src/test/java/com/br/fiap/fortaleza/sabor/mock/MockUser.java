@@ -68,7 +68,7 @@ public class MockUser {
                 "João Silva",
                 "login",
                 "email",
-                new UserType("DONO"),
+                "DONO",
                 List.of(new AddressDto("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }
@@ -78,7 +78,7 @@ public class MockUser {
                 "Maria Oliveira",
                 "login",
                 "email",
-                new UserType("CLIENTE"),
+                "CLIENTE",
                 List.of(new AddressDto("rua", "bairro", "complemento",
                         0, "estado", "cidade","03565000")));
     }

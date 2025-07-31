@@ -9,6 +9,6 @@ public record UserResponseDto(
         String nome,
         String login,
         String email,
-        UserType tipo,
+        String tipo,
         List<AddressDto> address) {
 }

@@ -4,6 +4,7 @@ import com.br.fiap.fortaleza.sabor.domain.userType.UserType;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserTypeEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserTypeEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class UserTypeRepositoryJpaTest {
     void setUp() {
         userTypeRepository = mock(UserTypeRepository.class);
         mapper = mock(UserTypeEntityMapper.class);
-        repositoryJpa = new UserTypeRepositoryJpa(userTypeRepository, mapper);
+        repositoryJpa = new UserTypeRepositoryJpa(userTypeRepository,  mapper);
     }
 
     @Test

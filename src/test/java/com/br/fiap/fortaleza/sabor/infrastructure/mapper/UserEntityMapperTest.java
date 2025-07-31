@@ -109,7 +109,7 @@ class UserEntityMapperTest {
         UserResponseDto dto = mapper.toUserResponseDto(user);
 
         assertEquals("Maria", dto.nome());
-        assertEquals(userType, dto.tipo());
+        assertEquals(userType.getNameType(), dto.tipo());
         assertEquals("Rua R", dto.address().getFirst().rua());
     }
 

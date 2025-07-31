@@ -4,7 +4,6 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserNotFoundException;
-import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.UserTypeAlreadyRegisteredException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserTypeRepository;
@@ -54,43 +53,51 @@ public class UserRepositoryJpa implements UsersRepository {
                 .ifPresentOrElse(
                         existingUserType -> user.setTipo(typeMapper.toUserTypeDomain(existingUserType)),
                         () -> {
-                            throw new UserTypeAlreadyRegisteredException(
-                                    "This userType " + user.getTipo().getNameType() + " does not exist."
-                            );
+                            var savedType = userTypeRepository.save(typeMapper.toUserTypeEntity(user.getTipo()));
+                            user.setTipo(typeMapper.toUserTypeDomain(savedType));
                         }
                 );
+
         UserEntity userEntity = mapper.toUserEntity(user);
         var result = userRepository.save(userEntity);
         return mapper.toUserDomain(result);
     }
 
     @Override
-    public Optional<User> update(Long idUser, User user) {
-        UserEntity findUser = userRepository.findById(idUser)
+    public Optional<User> update(Long idUser, User userRequest) {
+        UserEntity findUserByID = userRepository.findById(idUser)
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
-        if (user != null) {
-            userTypeRepository.getByNameType(user.getTipo().getNameType())
+        if (userRequest != null) {
+            userTypeRepository.getByNameType(userRequest.getTipo().getNameType())
                     .ifPresentOrElse(
-                            existingUserType -> user.setTipo(typeMapper.toUserTypeDomain(existingUserType)),
+                            existingUserType -> userRequest.setTipo(typeMapper.toUserTypeDomain(existingUserType)),
                             () -> {
-                                throw new UserTypeAlreadyRegisteredException(
-                                        "This userType " + user.getTipo().getNameType() + " does not exist."
-                                );
+                                var savedType = userTypeRepository.save(typeMapper.toUserTypeEntity(userRequest.getTipo()));
+                                userRequest.setTipo(typeMapper.toUserTypeDomain(savedType));
                             }
                     );
+            Optional<UserEntity> findUserByEmail = userRepository.findByEmail(userRequest.getEmail());
+            if (findUserByEmail.isPresent() && !findUserByEmail.get().getId().equals(idUser))
+                throw new UserAlreadyRegisteredException("This user already exists. Check your credentials or recover your password.");
+            if ("DONO".equals(findUserByID.getTipo().getType())
+               && findUserByID.getRestaurante() != null
+               && !"DONO".equals(userRequest.getTipo().getNameType())
+            ) {
+                throw new UserAlreadyRegisteredException("This user is owner of a restaurant.");
+            }
 
-            findUser.setNome(user.getNome());
-            findUser.setEmail(user.getEmail());
-            findUser.setSenha(user.getSenha());
-            findUser.setTipo(typeMapper.toUserTypeEntity(user.getTipo()));
+            findUserByID.setNome(userRequest.getNome());
+            findUserByID.setSenha(userRequest.getSenha());
+            findUserByID.setEmail(userRequest.getEmail());
+            findUserByID.setTipo(typeMapper.toUserTypeEntity(userRequest.getTipo()));
 
-            if (user.getAddress() != null && !user.getAddress().isEmpty()) {
-                findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));
+            if (userRequest.getAddress() != null && !userRequest.getAddress().isEmpty()) {
+                findUserByID.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(userRequest.getAddress())));
             }
         }
 
-        UserEntity actualization = userRepository.save(findUser);
+        UserEntity actualization = userRepository.save(findUserByID);
         return Optional.ofNullable(mapper.toUserDomain(actualization));
     }
 

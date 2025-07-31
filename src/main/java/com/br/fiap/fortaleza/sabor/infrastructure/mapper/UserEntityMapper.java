@@ -122,7 +122,7 @@ public class UserEntityMapper {
                         address.getEstado(),
                         address.getCep()))  .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo().getNameType(), addressDtos);
     }
 
     public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
@@ -144,7 +144,7 @@ public class UserEntityMapper {
                         address.getCep()))
                 .toList();
 
-        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo(), addressDtos);
+        return new UserResponseDto(user.getNome(), user.getLogin(), user.getEmail(), user.getTipo().getNameType(), addressDtos);
     }
 
     public List<AddressEntity> toAddressEntityList(List<Address> addresses) {

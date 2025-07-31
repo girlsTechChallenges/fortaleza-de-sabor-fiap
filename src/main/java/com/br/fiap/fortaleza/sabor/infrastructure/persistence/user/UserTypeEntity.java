@@ -2,6 +2,8 @@ package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "userType")
 public class UserTypeEntity {
@@ -13,14 +15,13 @@ public class UserTypeEntity {
     @Column(nullable = false)
     private String nameType;
 
+    @OneToMany(mappedBy = "tipo")
+    private List<UserEntity> usuarios;
+
     public UserTypeEntity(Long idType, String nameType) {
         this.idType = idType;
         this.nameType = nameType;
     }
-
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private UserEntity usuario;
 
     public UserTypeEntity() {}
 
@@ -43,4 +44,11 @@ public class UserTypeEntity {
         this.nameType = nameType;
     }
 
+    public List<UserEntity> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<UserEntity> usuarios) {
+        this.usuarios = usuarios;
+    }
 }

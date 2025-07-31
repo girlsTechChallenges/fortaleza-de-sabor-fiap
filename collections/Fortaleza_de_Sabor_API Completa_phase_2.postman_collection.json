@@ -25,14 +25,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/typeUser",
+							"raw": "http://localhost:8080/userTypes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser"
+								"userTypes"
 							]
 						}
 					},
@@ -53,14 +53,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/typeUser",
+							"raw": "http://localhost:8080/userTypes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser"
+								"userTypes"
 							]
 						}
 					},
@@ -72,14 +72,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/typeUser",
+							"raw": "http://localhost:8080/userTypes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser"
+								"userTypes"
 							]
 						}
 					},
@@ -91,14 +91,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/typeUser/1",
+							"raw": "http://localhost:8080/userTypes/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser",
+								"userTypes",
 								"1"
 							]
 						}
@@ -120,14 +120,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/typeUser/1",
+							"raw": "http://localhost:8080/userTypes/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser",
+								"userTypes",
 								"1"
 							]
 						}
@@ -140,14 +140,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/typeUser/1",
+							"raw": "http://localhost:8080/userTypes/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"typeUser",
+								"userTypes",
 								"1"
 							]
 						}

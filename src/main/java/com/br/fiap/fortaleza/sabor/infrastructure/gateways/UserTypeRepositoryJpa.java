@@ -4,6 +4,7 @@ import com.br.fiap.fortaleza.sabor.application.gateways.UserTypesRepository;
 import com.br.fiap.fortaleza.sabor.domain.userType.UserType;
 import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserTypeEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserRepository;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserTypeEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.UserTypeRepository;
 import org.slf4j.Logger;
@@ -30,9 +31,7 @@ public class UserTypeRepositoryJpa implements UserTypesRepository {
     public UserType save(UserType userType) {
         userTypeRepository.getByNameType(userType.getNameType())
                 .ifPresent(existingUserType -> {
-                    throw new UserTypeAlreadyRegisteredException(
-                            "This userType " + userType.getNameType() + " already exists."
-                    );
+                    throw new UserTypeAlreadyRegisteredException(userType.getNameType());
                 });
         UserTypeEntity userTypeEntity = mapper.toUserTypeEntity(userType);
         return mapper.toUserTypeDomain(userTypeRepository.save(userTypeEntity));
@@ -42,13 +41,15 @@ public class UserTypeRepositoryJpa implements UserTypesRepository {
     public Optional<UserType> update(Long idUserType, UserType userType) {
         userTypeRepository.getByNameType(userType.getNameType())
                 .ifPresent(existingUserType -> {
-                    throw new UserTypeAlreadyRegisteredException(
-                            "This userType " + userType.getNameType() + " already exists."
-                    );
+                    throw new UserTypeAlreadyRegisteredException(userType.getNameType());
                 });
 
         UserTypeEntity findUserType = userTypeRepository.findById(idUserType)
                 .orElseThrow(() -> new UserTypeNotFoundException(idUserType));
+
+        if(findUserType.getUsuarios() != null){
+            throw new UserTypeWithUserRegisteredException(findUserType.getType());
+        }
 
         findUserType.setType(userType.getNameType());
 

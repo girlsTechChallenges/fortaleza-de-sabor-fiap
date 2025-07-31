@@ -25,7 +25,7 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type", referencedColumnName = "idType")
     private UserTypeEntity tipo;
 
@@ -114,5 +114,13 @@ public class UserEntity {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public RestaurantEntity getRestaurante() {
+        return restaurante;
+    }
+
+    public void setRestaurante(RestaurantEntity restaurante) {
+        this.restaurante = restaurante;
     }
 }
