@@ -59,7 +59,7 @@ public class UserEntityMapper {
         return new User(
                 updateRequestDto.name(),
                 updateRequestDto.email(),
-                updateRequestDto.senha(),
+                updateRequestDto.password(),
                 TypeEnum.valueOf(updateRequestDto.type().name()),
                 addresses);
     }

@@ -12,7 +12,7 @@ import java.util.List;
 public record UpdateRequestDto(
         @NotNull(message = "This field cannot be empty") @NotBlank @Size(min = 2, max = 50) String name,
         @NotNull @NotBlank @Email String email,
-        @NotNull @NotBlank @Size(min = 8, max = 100) String senha,
+        @NotNull @NotBlank @Size(min = 8, max = 100) String password,
         @NotNull TypeEnum type,
         @NotNull @Size(min = 1) @Valid List<AddressDto> address
 ) {}
