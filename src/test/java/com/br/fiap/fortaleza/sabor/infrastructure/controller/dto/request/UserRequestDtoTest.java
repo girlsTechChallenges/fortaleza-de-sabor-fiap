@@ -52,7 +52,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -74,7 +74,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -96,7 +96,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -118,7 +118,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -140,7 +140,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -162,7 +162,7 @@ class UserRequestDtoTest {
             "abc",
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -184,7 +184,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             "123",
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -206,7 +206,7 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
 
@@ -246,14 +246,11 @@ class UserRequestDtoTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            createValidTypeUserRequest(),
+            "CLIENTE",
             createValidAddressList()
         );
     }
 
-    private TypeUserRequestDto createValidTypeUserRequest() {
-        return new TypeUserRequestDto("CLIENTE");
-    }
 
     private List<AddressDto> createValidAddressList() {
         return List.of(new AddressDto(
@@ -267,3 +264,4 @@ class UserRequestDtoTest {
         ));
     }
 }
+

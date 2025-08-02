@@ -1,11 +1,11 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
 import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
 import com.br.fiap.fortaleza.sabor.domain.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.TypeEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import com.br.fiap.fortaleza.sabor.utils.TestConstants;
 import com.br.fiap.fortaleza.sabor.utils.TestDataBuilder;
@@ -22,7 +22,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserMapper Tests")
@@ -49,9 +48,7 @@ class UserMapperTest {
     @DisplayName("Should convert UserRequestDto to User domain successfully")
     void shouldConvertUserRequestDtoToUserDomainSuccessfully() {
         // Arrange
-        TypeUser expectedTypeUser = TestDataBuilder.createValidTypeUser();
-        when(typeUserMapper.toTypeUserDomain(any(TypeUserRequestDto.class)))
-            .thenReturn(expectedTypeUser);
+        String expectedTypeUser = "CLIENTE";
 
         // Act
         User result = userMapper.toUserDomain(userRequestDto);
@@ -73,13 +70,15 @@ class UserMapperTest {
         assertEquals(originalAddress.rua(), convertedAddress.getRua(), "Street should match");
         assertEquals(originalAddress.bairro(), convertedAddress.getBairro(), "Neighborhood should match");
         assertEquals(originalAddress.numero(), convertedAddress.getNumero(), "Number should match");
-
-        verify(typeUserMapper, times(1)).toTypeUserDomain(any(TypeUserRequestDto.class));
     }
 
     @Test
     @DisplayName("Should convert User domain to UserEntity successfully")
     void shouldConvertUserDomainToUserEntitySuccessfully() {
+        // Arrange
+        TypeEntity mockTypeEntity = new TypeEntity(1L, "DONO");
+        when(typeUserMapper.toTypeEntity(any())).thenReturn(mockTypeEntity);
+        
         // Act
         UserEntity result = userMapper.toUserEntity(userDomain);
 
@@ -103,11 +102,6 @@ class UserMapperTest {
     @Test
     @DisplayName("Should convert UserEntity to User domain successfully")
     void shouldConvertUserEntityToUserDomainSuccessfully() {
-        // Arrange
-        TypeUser expectedTypeUser = TestDataBuilder.createValidTypeUser();
-        when(typeUserMapper.toTypeUserDomain(any(TypeUserRequestDto.class)))
-            .thenReturn(expectedTypeUser);
-
         // Act
         User result = userMapper.toUserDomain(userEntity);
 
@@ -118,11 +112,9 @@ class UserMapperTest {
         assertEquals(userEntity.getLogin(), result.getLogin(), "Login should match");
         assertEquals(userEntity.getSenha(), result.getSenha(), "Password should match");
         assertEquals(userEntity.getDataAlteracao(), result.getDataAlteracao(), "Birth date should match");
-        assertEquals(expectedTypeUser, result.getTipo(), "Type should match mapped value");
+        assertEquals("DONO", result.getTipo(), "Type should match mapped value");
         
         assertNotNull(result.getAddress(), "Address should not be null");
-        
-        verify(typeUserMapper, times(1)).toTypeUserDomain(any(TypeUserRequestDto.class));
     }
 
     @Test
@@ -133,10 +125,10 @@ class UserMapperTest {
 
         // Assert
         assertNotNull(result, "Converted DTO should not be null");
-        assertEquals(userDomain.getNome(), result.nome(), "Name should match");
+        assertEquals(userDomain.getNome(), result.name(), "Name should match");
         assertEquals(userDomain.getEmail(), result.email(), "Email should match");
         assertEquals(userDomain.getLogin(), result.login(), "Login should match");
-        assertNotNull(result.tipo(), "Type should not be null");
+        assertNotNull(result.type(), "Type should not be null");
         assertNotNull(result.address(), "Address should not be null");
     }
 
@@ -147,7 +139,7 @@ class UserMapperTest {
             TestConstants.VALID_USER_LOGIN,
             TestConstants.VALID_USER_PASSWORD,
             TestConstants.VALID_USER_DATE,
-            new TypeUserRequestDto("CLIENTE"),
+            "CLIENTE",
             List.of(new AddressDto(
                 TestConstants.VALID_STREET,
                 TestConstants.VALID_NEIGHBORHOOD,

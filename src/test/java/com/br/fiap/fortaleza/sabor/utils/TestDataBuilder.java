@@ -37,7 +37,7 @@ public final class TestDataBuilder {
                 VALID_USER_LOGIN,
                 VALID_USER_PASSWORD,
                 VALID_USER_DATE,
-                createValidTypeUser(),
+                OWNER_TYPE_NAME,
                 List.of(createValidAddress())
         );
     }
@@ -189,7 +189,7 @@ public final class TestDataBuilder {
                 VALID_USER_LOGIN,
                 VALID_USER_PASSWORD,
                 VALID_USER_DATE,
-                new TypeUserRequestDto(OWNER_TYPE_NAME),
+                OWNER_TYPE_NAME,
                 List.of(createValidAddressDto())
         );
     }
@@ -245,7 +245,7 @@ public final class TestDataBuilder {
                 VALID_USER_NAME,
                 VALID_USER_LOGIN,
                 VALID_USER_EMAIL,
-                new TypeUserResponse(OWNER_TYPE_ID, OWNER_TYPE_NAME),
+                OWNER_TYPE_NAME,
                 List.of(createValidAddressDto())
         );
     }

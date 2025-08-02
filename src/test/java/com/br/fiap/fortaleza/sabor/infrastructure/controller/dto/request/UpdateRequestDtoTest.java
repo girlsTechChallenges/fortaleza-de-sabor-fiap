@@ -53,7 +53,7 @@ class UpdateRequestDtoTest {
             null,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -73,7 +73,7 @@ class UpdateRequestDtoTest {
             "",
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -93,7 +93,7 @@ class UpdateRequestDtoTest {
             "A",
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -114,7 +114,7 @@ class UpdateRequestDtoTest {
             longName,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -134,7 +134,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             null,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -154,7 +154,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             "",
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -177,7 +177,7 @@ class UpdateRequestDtoTest {
                 TestConstants.VALID_USER_NAME,
                 invalidEmail,
                 TestConstants.VALID_PASSWORD,
-                TestDataBuilder.createValidTypeUserRequestDto(),
+                TestConstants.OWNER_TYPE_NAME,
                 Arrays.asList(TestDataBuilder.createValidAddressDto())
             );
 
@@ -198,7 +198,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             null,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -218,7 +218,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             "",
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -238,7 +238,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             "1234567", // 7 characters, minimum is 8
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -259,7 +259,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             longPassword,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -299,7 +299,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             null
         );
 
@@ -319,7 +319,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             new ArrayList<>()
         );
 
@@ -352,7 +352,7 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             addresses
         );
 
@@ -374,7 +374,7 @@ class UpdateRequestDtoTest {
             maxName,
             TestConstants.VALID_EMAIL,
             maxPassword,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -396,7 +396,7 @@ class UpdateRequestDtoTest {
             minName,
             TestConstants.VALID_EMAIL,
             minPassword,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
 
@@ -412,8 +412,9 @@ class UpdateRequestDtoTest {
             TestConstants.VALID_USER_NAME,
             TestConstants.VALID_EMAIL,
             TestConstants.VALID_PASSWORD,
-            TestDataBuilder.createValidTypeUserRequestDto(),
+            TestConstants.OWNER_TYPE_NAME,
             Arrays.asList(TestDataBuilder.createValidAddressDto())
         );
     }
 }
+
