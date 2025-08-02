@@ -1,9 +1,9 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.token.Token;
-import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.domain.model.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.model.token.Token;
+import com.br.fiap.fortaleza.sabor.domain.model.user.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.model.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;

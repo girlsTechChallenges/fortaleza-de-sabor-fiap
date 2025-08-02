@@ -1,6 +1,6 @@
 //package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 //
-//import com.br.fiap.fortaleza.sabor.application.usecase.user.AuthUserUseCase;
+//import com.br.fiap.fortaleza.sabor.application.usecase.auth.AuthUserUseCase;
 //import com.br.fiap.fortaleza.sabor.domain.token.Token;
 //import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 //import lombok.SneakyThrows;

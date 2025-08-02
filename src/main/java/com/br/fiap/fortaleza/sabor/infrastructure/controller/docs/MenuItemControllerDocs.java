@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.docs;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
+import com.br.fiap.fortaleza.sabor.infrastructure.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;

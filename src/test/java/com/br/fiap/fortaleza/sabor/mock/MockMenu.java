@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.mock;
 
-import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
+import com.br.fiap.fortaleza.sabor.domain.model.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;

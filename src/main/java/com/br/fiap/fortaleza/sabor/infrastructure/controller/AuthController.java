@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.user.AuthUserUseCase;
+import com.br.fiap.fortaleza.sabor.application.ports.in.AuthUseCasePort;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.AuthControllerDocs;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserAuthDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserCredentialsDto;
@@ -19,24 +19,24 @@ public class AuthController implements AuthControllerDocs {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    private final AuthUserUseCase authUserUseCase;
+    private final AuthUseCasePort authUseCasePort;
     private final UserMapper userMapper;
 
-    public AuthController(AuthUserUseCase authUserUseCase, UserMapper userMapper) {
-        this.authUserUseCase = authUserUseCase;
+    public AuthController(AuthUseCasePort authUseCasePort, UserMapper userMapper) {
+        this.authUseCasePort = authUseCasePort;
         this.userMapper = userMapper;
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAuthDto> login(@Valid @RequestBody UserCredentialsDto loginRequest) {
-        var response = authUserUseCase.validateLogin(loginRequest.email(), loginRequest.password());
+        var response = authUseCasePort.validateLogin(loginRequest.email(), loginRequest.password());
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.toTokenResponseDto(response));
     }
 
     @PatchMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody UserCredentialsDto request) {
         log.info("UPDATE USER PASSWORD {}", request);
-        authUserUseCase.updatePassword(request.email(), request.password());
+        authUseCasePort.updatePassword(request.email(), request.password());
         return ResponseEntity.noContent().build();
     }
 }

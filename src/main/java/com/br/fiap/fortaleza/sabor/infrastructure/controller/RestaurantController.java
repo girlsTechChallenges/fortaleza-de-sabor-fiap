@@ -1,10 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.CreateRestaurantUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.DeleteRestaurantUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.GetRestaurantUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.restaurant.UpdateRestaurantUseCase;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
+import com.br.fiap.fortaleza.sabor.application.ports.in.RestaurantUseCasePort;
+import com.br.fiap.fortaleza.sabor.domain.model.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.RestaurantControllerDocs;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.OwnerRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
@@ -29,18 +26,12 @@ public class RestaurantController implements RestaurantControllerDocs {
 
     private static final Logger log = LoggerFactory.getLogger(RestaurantController.class);
 
-    private final CreateRestaurantUseCase createRestaurantUseCase;
-    private final GetRestaurantUseCase getRestaurantUseCase;
-    private final UpdateRestaurantUseCase updateRestaurantUseCase;
-    private final DeleteRestaurantUseCase deleteRestaurantUseCase;
+    private final RestaurantUseCasePort restaurantUseCasePort;
     private final RestaurantMapper restaurantMapper;
 
-    public RestaurantController(CreateRestaurantUseCase createRestaurantUseCase, GetRestaurantUseCase getRestaurantUseCase, UpdateRestaurantUseCase updateRestaurantUseCase, DeleteRestaurantUseCase deleteRestaurantUseCase, RestaurantMapper restaurantMapper) {
-        this.createRestaurantUseCase = createRestaurantUseCase;
-        this.getRestaurantUseCase = getRestaurantUseCase;
-        this.updateRestaurantUseCase = updateRestaurantUseCase;
-        this.deleteRestaurantUseCase = deleteRestaurantUseCase;
-        this.restaurantMapper = restaurantMapper;
+    public RestaurantController(RestaurantUseCasePort restaurantUseCasePort, RestaurantMapper restaurantMapper) {
+       this.restaurantUseCasePort = restaurantUseCasePort;
+       this.restaurantMapper = restaurantMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,7 +39,7 @@ public class RestaurantController implements RestaurantControllerDocs {
         log.info("Received request to create restaurant: {}", request);
 
         var restaurant = restaurantMapper.toRestaurantDomain(request);
-        var createdRestaurant = createRestaurantUseCase.save(restaurant);
+        var createdRestaurant = restaurantUseCasePort.create(restaurant);
         var responseDto = restaurantMapper.toRestaurantResponseDto(createdRestaurant);
 
         URI location = URI.create("/restaurants/" + createdRestaurant.getId());
@@ -64,7 +55,7 @@ public class RestaurantController implements RestaurantControllerDocs {
         log.info("Received request to update restaurant with ID: {}", idRestaurant);
 
         var restaurantDomain = restaurantMapper.toRestaurantDomain(restaurant);
-        var updatedRestaurant = updateRestaurantUseCase.update(idRestaurant, restaurantDomain);
+        var updatedRestaurant = restaurantUseCasePort.update(idRestaurant, restaurantDomain);
         var responseDto = restaurantMapper.toRestaurantResponseDto(updatedRestaurant);
 
         log.info("Restaurant with ID: {} updated successfully", idRestaurant);
@@ -75,7 +66,7 @@ public class RestaurantController implements RestaurantControllerDocs {
     public ResponseEntity<List<RestaurantFullDto>> getAllRestaurants() {
         log.info("Received request to get all restaurants");
 
-       return ResponseEntity.ok(getRestaurantUseCase.getAll()
+       return ResponseEntity.ok(restaurantUseCasePort.getAll()
                 .stream()
                 .map(restaurantMapper::toRestaurantFullDto)
                 .toList());
@@ -85,17 +76,17 @@ public class RestaurantController implements RestaurantControllerDocs {
     public ResponseEntity<RestaurantFullDto> getById(Long id) {
         log.info("Received request to get restaurant by ID: {}", id);
 
-        Optional<Restaurant> restaurantOptional = getRestaurantUseCase.getById(id);
+        Optional<Restaurant> restaurantOptional = restaurantUseCasePort.getById(id);
         log.info("Restaurant with ID: {} found", id);
 
         return ResponseEntity.ok(restaurantMapper.toRestaurantFullByIdDto(restaurantOptional.orElse(null)));
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(Long id) {
         log.info("Received request to delete restaurant with ID: {}", id);
 
-        deleteRestaurantUseCase.delete(id);
+        restaurantUseCasePort.deleteById(id);
         log.info("Restaurant with ID: {} deleted successfully", id);
 
         return ResponseEntity.noContent().build();
@@ -106,7 +97,7 @@ public class RestaurantController implements RestaurantControllerDocs {
         log.info("Received request to update owner - restaurant ID: {}", id);
 
         var updatedRestaurant =
-                updateRestaurantUseCase.updateOwner(id, ownerRequestDto.owner(), ownerRequestDto.email());
+                restaurantUseCasePort.updateOwner(id, ownerRequestDto.owner(), ownerRequestDto.email());
 
         return ResponseEntity.ok(restaurantMapper.toRestaurantResponseDto(updatedRestaurant));
     }

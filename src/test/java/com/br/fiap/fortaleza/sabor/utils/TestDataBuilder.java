@@ -1,11 +1,11 @@
 package com.br.fiap.fortaleza.sabor.utils;
 
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
-import com.br.fiap.fortaleza.sabor.domain.user.TypeUser;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.domain.model.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.model.menu.MenuItem;
+import com.br.fiap.fortaleza.sabor.domain.model.restaurant.BusinessHours;
+import com.br.fiap.fortaleza.sabor.domain.model.restaurant.Restaurant;
+import com.br.fiap.fortaleza.sabor.domain.model.user.TypeUser;
+import com.br.fiap.fortaleza.sabor.domain.model.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.menu.MenuItemsEntity;

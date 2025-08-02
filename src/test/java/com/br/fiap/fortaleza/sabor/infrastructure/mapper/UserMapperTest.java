@@ -1,7 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.domain.model.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.model.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.*;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.AddressEntity;

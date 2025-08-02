@@ -1,10 +1,7 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.usecase.user.CreateUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.DeleteUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.GetUserUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.user.UpdateUserUseCase;
-import com.br.fiap.fortaleza.sabor.domain.user.User;
+import com.br.fiap.fortaleza.sabor.application.ports.in.UserUseCasePort;
+import com.br.fiap.fortaleza.sabor.domain.model.user.User;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.UserControllerDocs;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
@@ -27,52 +24,46 @@ import java.util.Optional;
 public class UserController implements UserControllerDocs {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private final CreateUserUseCase createUserUseCase;
-    private final GetUserUseCase getUserUseCase;
-    private final UpdateUserUseCase updateUserUseCase;
-    private final DeleteUserUseCase deleteUserUseCase;
+    private final UserUseCasePort userUseCasePort;
     private final UserMapper userMapper;
 
-    public UserController(CreateUserUseCase createUserUseCase, GetUserUseCase getAllUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, UserMapper userMapper) {
-        this.createUserUseCase = createUserUseCase;
-        this.getUserUseCase = getAllUseCase;
-        this.updateUserUseCase = updateUserUseCase;
-        this.deleteUserUseCase = deleteUserUseCase;
+    public UserController(UserUseCasePort userUseCasePort, UserMapper userMapper) {
+        this.userUseCasePort = userUseCasePort;
         this.userMapper = userMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userRequestDto) {
         log.info("POST USER REQUEST: {} ", userRequestDto);
-        var resp = createUserUseCase.save(userMapper.toUserDomain(userRequestDto));
+        var resp = userUseCasePort.save(userMapper.toUserDomain(userRequestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponseDto(resp));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserResponseDto>> getAll() {
         log.info("START GET ALL USERS");
-        var resp = getUserUseCase.getAll();
+        var resp = userUseCasePort.getAll();
         return ResponseEntity.ok(resp.stream().map(userMapper::toUserResponseDto).toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getById(@PathVariable @NotNull Long id) {
         log.info("GET USER BY ID REQUEST {} ", id);
-        Optional<User> user = getUserUseCase.getById(id);
+        Optional<User> user = userUseCasePort.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.getUserByIdToUserResponseDto(user));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDto> update(@PathVariable @NotNull Long id, @RequestBody @Valid UpdateRequestDto updateRequestDto) {
         log.info("UPDATE USER REQUEST {} ", updateRequestDto);
-        var updatedUser = updateUserUseCase.update(id, userMapper.updateToUserDomain(updateRequestDto));
+        var updatedUser = userUseCasePort.update(id, userMapper.updateToUserDomain(updateRequestDto));
         return ResponseEntity.ok(userMapper.getUserByIdToUserResponseDto(updatedUser));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long id) {
         log.info("DELETE USER BY ID REQUEST {}", id);
-        deleteUserUseCase.delete(id);
+        userUseCasePort.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

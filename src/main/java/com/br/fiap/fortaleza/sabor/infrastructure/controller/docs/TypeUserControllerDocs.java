@@ -1,6 +1,6 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.docs;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
+import com.br.fiap.fortaleza.sabor.infrastructure.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.TypeUserRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.TypeUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
