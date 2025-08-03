@@ -41,6 +41,7 @@ public interface MenuItemControllerDocs {
     @Operation(summary = "Search all menus", description = "Returns a list of all menus registered in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Menu list returned successfully."),
+            @ApiResponse(responseCode = "404", description = "Menu not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
     List<MenuItemResponseDto> getAll();
