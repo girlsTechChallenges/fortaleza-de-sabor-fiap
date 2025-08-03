@@ -1,8 +1,8 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.mapper;
 
-import com.br.fiap.fortaleza.sabor.domain.address.Address;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.BusinessHours;
-import com.br.fiap.fortaleza.sabor.domain.restaurant.Restaurant;
+import com.br.fiap.fortaleza.sabor.domain.model.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.model.restaurant.BusinessHours;
+import com.br.fiap.fortaleza.sabor.domain.model.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.BusinessHoursDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -214,5 +215,10 @@ public class RestaurantMapper {
                         bh.getClosingTime(),
                         bh.getObservations()))
                 .toList();
+    }
+
+    public RestaurantResponseDto toRestaurantResponseDto(Optional<Restaurant> updatedRestaurant) {
+        return updatedRestaurant.map(this::toRestaurantResponseDto)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
     }
 }

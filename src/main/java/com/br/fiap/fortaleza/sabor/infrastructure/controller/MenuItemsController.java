@@ -1,16 +1,13 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
+import com.br.fiap.fortaleza.sabor.application.ports.in.MenuItemsUseCasePort;
+import com.br.fiap.fortaleza.sabor.domain.model.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.docs.MenuItemControllerDocs;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -27,25 +24,19 @@ import java.util.Optional;
 @RequestMapping("/cardapio")
 public class MenuItemsController implements MenuItemControllerDocs {
     private static final Logger log = LoggerFactory.getLogger(MenuItemsController.class);
-    private final CreateMenuItemUseCase createMenuUseCase;
-    private final GetMenuItemUseCase getMenuItemUseCase;
-    private final UpdateMenuItemUseCase updateMenuItemUseCase;
-    private final DeleteMenuItemUseCase deleteMenuItemUseCase;
-    private final MenuEntityMapper menuEntityMapper;
+    private final MenuItemsUseCasePort menuItemsUseCasePort;
+    private final MenuMapper menuMapper;
 
-    public MenuItemsController(CreateMenuItemUseCase createMenuUseCase, GetMenuItemUseCase getMenuItemUseCase, UpdateMenuItemUseCase updateMenuItemUseCase, DeleteMenuItemUseCase deleteMenuItemUseCase, MenuEntityMapper menuEntityMapper) {
-        this.createMenuUseCase = createMenuUseCase;
-        this.getMenuItemUseCase = getMenuItemUseCase;
-        this.updateMenuItemUseCase = updateMenuItemUseCase;
-        this.deleteMenuItemUseCase = deleteMenuItemUseCase;
-        this.menuEntityMapper = menuEntityMapper;
+    public MenuItemsController( MenuItemsUseCasePort menuItemsUseCasePort, MenuMapper menuMapper) {
+        this.menuItemsUseCasePort = menuItemsUseCasePort;
+        this.menuMapper = menuMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto) {
         log.info("POST MENU REQUEST: {} ", menuItemRequestDto);
-        var resp = createMenuUseCase.save(menuEntityMapper.toMenuDomain(menuItemRequestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(menuEntityMapper.toMenuItemResponseDto(resp));
+        var resp = menuItemsUseCasePort.save(menuMapper.toMenuDomain(menuItemRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(menuMapper.toMenuItemResponseDto(resp));
     }
 
     @GetMapping("/{idMenu}")
@@ -53,15 +44,15 @@ public class MenuItemsController implements MenuItemControllerDocs {
             @PathVariable @NotNull Long idMenu
     ) {
         log.info("GET USER BY ID REQUEST {} ", idMenu);
-        Optional<MenuItem> menu = getMenuItemUseCase.getById(idMenu);
-        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(menuEntityMapper.getMenuByIdToMenuResponseDto(menu)), HttpStatus.ACCEPTED);
+        Optional<MenuItem> menu = menuItemsUseCasePort.getById(idMenu);
+        return new ResponseEntity<>(ResponseEntity.status(HttpStatus.ACCEPTED).body(menuMapper.getMenuByIdToMenuResponseDto(menu)), HttpStatus.ACCEPTED);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MenuItemResponseDto> getAll() {
         log.info("START GET ALL USERS");
-        var resp = getMenuItemUseCase.getAll();
-        return resp.stream().map(menuEntityMapper::toMenuItemResponseDto).toList();
+        var resp = menuItemsUseCasePort.getAll();
+        return resp.stream().map(menuMapper::toMenuItemResponseDto).toList();
     }
 
     @PutMapping(value = "/{idMenu}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,14 +61,14 @@ public class MenuItemsController implements MenuItemControllerDocs {
             @RequestBody @Valid UpdateMenuItemRequestDto updateMenuItemRequestDto
     ) {
         log.info("UPDATE USER REQUEST {} ", updateMenuItemRequestDto);
-        updateMenuItemUseCase.update(idMenu, menuEntityMapper.updateToMenuDomain(updateMenuItemRequestDto));
+        menuItemsUseCasePort.update(idMenu, menuMapper.updateToMenuDomain(updateMenuItemRequestDto));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{idMenu}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull Long idMenu) {
         log.info("DELETE USER BY ID REQUEST {}", idMenu);
-        deleteMenuItemUseCase.delete(idMenu);
+        menuItemsUseCasePort.deleteById(idMenu);
         return ResponseEntity.noContent().build();
     }
 

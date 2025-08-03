@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,17 +10,18 @@ public class TypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TypeEntityEnum tipo;
+    @Column(name = "nome_tipo", unique = true, nullable = false)
+    private String nameType;
 
-    public TypeEntity(TypeEntityEnum tipo) {
-        this.tipo = tipo;
+    public TypeEntity(Long id, String nameType) {
+        this.id = id;
+        this.nameType = nameType;
     }
 
-    public TypeEntity() {}
+    public TypeEntity() {
 
-    // Getters and Setters
+    }
+
     public Long getId() {
         return id;
     }
@@ -30,11 +30,11 @@ public class TypeEntity {
         this.id = id;
     }
 
-    public TypeEntityEnum getTipo() {
-        return tipo;
+    public String getNameType() {
+        return nameType;
     }
 
-    public void setTipo(TypeEntityEnum tipo) {
-        this.tipo = tipo;
+    public void setNameType(String nameType) {
+        this.nameType = nameType;
     }
 }

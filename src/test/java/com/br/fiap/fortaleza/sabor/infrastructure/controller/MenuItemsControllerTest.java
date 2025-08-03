@@ -1,175 +1,292 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
-import com.br.fiap.fortaleza.sabor.application.gateways.MenuItemsRepository;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.CreateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.DeleteMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.GetMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.application.usecase.menu.UpdateMenuItemUseCase;
-import com.br.fiap.fortaleza.sabor.domain.menu.MenuItem;
+import com.br.fiap.fortaleza.sabor.application.ports.in.MenuItemsUseCasePort;
+import com.br.fiap.fortaleza.sabor.domain.model.menu.MenuItem;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuEntityMapper;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.MenuMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.br.fiap.fortaleza.sabor.mock.MockMenu.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = MenuItemsController.class)
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(MenuItemsController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@DisplayName("MenuItemsController Tests")
 class MenuItemsControllerTest {
 
-    @InjectMocks
-    private MenuItemsController menuItemsController;
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockitoBean
-    private MenuEntityMapper menuEntityMapper;
+    private MenuItemsUseCasePort menuItemsUseCasePort;
+
     @MockitoBean
-    private MenuItemsRepository menuItemsRepository;
-    @MockitoBean
-    private CreateMenuItemUseCase createMenuItemUseCase;
-    @MockitoBean
-    private GetMenuItemUseCase getMenuItemUseCase;
-    @MockitoBean
-    private UpdateMenuItemUseCase updateMenuItemUseCase;
-    @MockitoBean
-    private DeleteMenuItemUseCase deleteMenuItemUseCase;
+    private MenuMapper menuMapper;
+
+    private ObjectMapper objectMapper;
+    private MenuItem menuItem;
+    private MenuItemRequestDto menuItemRequest;
+    private UpdateMenuItemRequestDto updateMenuItemRequest;
+    private MenuItemResponseDto menuItemResponse;
 
     @BeforeEach
-    public void setUp() {
-        menuItemsController = new MenuItemsController(createMenuItemUseCase, getMenuItemUseCase, updateMenuItemUseCase, deleteMenuItemUseCase, menuEntityMapper);
+    void setUp() {
+        objectMapper = new ObjectMapper();
+        
+        // Setup common test data
+        menuItem = new MenuItem("Pizza Margherita", "Delicious pizza with tomato and mozzarella", "25.90", true, "pizza.jpg");
+        menuItemRequest = new MenuItemRequestDto("Pizza Margherita", "Delicious pizza with tomato and mozzarella", "25.90", true, "pizza.jpg");
+        updateMenuItemRequest = new UpdateMenuItemRequestDto("Pizza Napolitana", "Pizza with tomato, mozzarella and anchovies", "28.90", true, "pizza_napolitana.jpg");
+        menuItemResponse = new MenuItemResponseDto("Pizza Margherita", "Delicious pizza with tomato and mozzarella", "25.90", true, "pizza.jpg");
     }
 
     @Test
-    @DisplayName("Should engrave object MENU ITEM in database - return response HTTP 201 CREATE")
-    void create() throws Exception {
+    @DisplayName("Should create menu item successfully")
+    void shouldCreateMenuItemSuccessfully() throws Exception {
+        // Arrange
+        String requestJson = objectMapper.writeValueAsString(menuItemRequest);
+        
+        when(menuMapper.toMenuDomain(any(MenuItemRequestDto.class))).thenReturn(menuItem);
+        when(menuItemsUseCasePort.save(any(MenuItem.class))).thenReturn(menuItem);
+        when(menuMapper.toMenuItemResponseDto(any(MenuItem.class))).thenReturn(menuItemResponse);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
-        //GIVEN
-        var request = "{\n\t\"nome\": \"Pizza Margherita\",\n\t\"itemDescription\": \"Deliciosa pizza tradicional com molho de tomate, queijo mussarela e manjericão fresco\",\n\t\"itemPrice\": \"29.90\",\n\t\"availability\": true,\n\t\"itemImage\": \"https://exemplo.com/images/pizza-margherita.png\"\n}";
-        var requestDto = objectMapper.readValue(request, MenuItemRequestDto.class);
-        var mapper = menuEntityMapper.toMenuDomain(requestDto);
-
-        //WHEN
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(createMenuItemUseCase.save(mapper)).thenReturn(menuItemMockOne());
-
+        // Act & Assert
         mockMvc.perform(post("/cardapio")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isCreated());
+                        .content(requestJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.nome").value("Pizza Margherita"))
+                .andExpect(jsonPath("$.itemDescription").value("Delicious pizza with tomato and mozzarella"))
+                .andExpect(jsonPath("$.itemPrice").value("25.90"))
+                .andExpect(jsonPath("$.availability").value(true))
+                .andExpect(jsonPath("$.itemImage").value("pizza.jpg"));
 
-        //THEN
-        verify(createMenuItemUseCase, times(1)).save(mapper);
+        verify(menuMapper).toMenuDomain(any(MenuItemRequestDto.class));
+        verify(menuItemsUseCasePort).save(any(MenuItem.class));
+        verify(menuMapper).toMenuItemResponseDto(any(MenuItem.class));
     }
 
     @Test
-    @DisplayName("Should return a list of menus - return response HTTP 200 OK")
-    void getAll() throws Exception {
-        // GIVEN
-        var menuItemMockOne = menuItemMockOne();
-        var menuItemMockTwo = menuItemMockTwo();
+    @DisplayName("Should return validation error when creating menu item with invalid data")
+    void shouldReturnValidationErrorWhenCreatingMenuItemWithInvalidData() throws Exception {
+        // Arrange - JSON with empty required field
+        String invalidJson = "{\"nome\":\"\",\"itemDescription\":\"Description\",\"itemPrice\":\"25.90\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
 
-        // WHEN
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(menuEntityMapper.toMenuItemResponseDto(menuItemMockOne)).thenReturn(responseDtoMockOne());
-        when(menuEntityMapper.toMenuItemResponseDto(menuItemMockTwo)).thenReturn(responseDtoMockTwo());
-        when(menuItemsRepository.getAll()).thenReturn(List.of(menuItemMockOne, menuItemMockTwo));
-        when(getMenuItemUseCase.getAll()).thenReturn(List.of(menuItemMockOne, menuItemMockTwo));
-
-        mockMvc.perform(get("/cardapio")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-            [
-                { "nome": "Pizza Margherita" },
-                { "nome": "Spaghetti Carbonara" }
-            ]
-        """));
-
-        // THEN
-        verify(getMenuItemUseCase, times(1)).getAll();
+        // Act & Assert
+        mockMvc.perform(post("/cardapio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidJson))
+                .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("Should return validation error when creating menu item with invalid price format")
+    void shouldReturnValidationErrorWhenCreatingMenuItemWithInvalidPriceFormat() throws Exception {
+        // Arrange - JSON with invalid price format
+        String invalidPriceJson = "{\"nome\":\"Pizza\",\"itemDescription\":\"Description\",\"itemPrice\":\"invalid-price\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
+
+        // Act & Assert
+        mockMvc.perform(post("/cardapio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidPriceJson))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
-    @DisplayName("Should return menu item by ID - return response HTTP 201 CREATED")
-    void getById() throws Exception {
-        // GIVEN
-        var menuItem = menuItemMockOne();
-        var responseDto = responseDtoMockOne();
+    @DisplayName("Should get menu item by id successfully")
+    void shouldGetMenuItemByIdSuccessfully() throws Exception {
+        // Arrange
+        Long menuId = 1L;
+        
+        when(menuItemsUseCasePort.getById(menuId)).thenReturn(Optional.of(menuItem));
+        when(menuMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem))).thenReturn(menuItemResponse);
 
-        // WHEN
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(getMenuItemUseCase.getById(1L)).thenReturn(Optional.of(menuItem));
-        when(menuEntityMapper.getMenuByIdToMenuResponseDto(Optional.of(menuItem))).thenReturn(responseDto);
+        // Act & Assert - O controller retorna uma estrutura aninhada devido ao ResponseEntity duplo
+        mockMvc.perform(get("/cardapio/{idMenu}", menuId))
+                .andExpect(status().isAccepted())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        // THEN
-        mockMvc.perform(get("/cardapio/{idMenu}", 1L)
-                        .param("idMenu", "1"))
+        verify(menuItemsUseCasePort).getById(menuId);
+        verify(menuMapper).getMenuByIdToMenuResponseDto(Optional.of(menuItem));
+    }
+
+    @Test
+    @DisplayName("Should return not found when getting menu item by non-existent id")
+    void shouldReturnNotFoundWhenGettingMenuItemByNonExistentId() throws Exception {
+        // Arrange
+        Long nonExistentId = 999L;
+        
+        when(menuItemsUseCasePort.getById(nonExistentId)).thenReturn(Optional.empty());
+        when(menuMapper.getMenuByIdToMenuResponseDto(Optional.empty())).thenReturn(null);
+
+        // Act & Assert
+        mockMvc.perform(get("/cardapio/{idMenu}", nonExistentId))
                 .andExpect(status().isAccepted());
 
-        verify(getMenuItemUseCase, times(1)).getById(1L);
+        verify(menuItemsUseCasePort).getById(nonExistentId);
+        verify(menuMapper).getMenuByIdToMenuResponseDto(Optional.empty());
     }
 
+    @Test
+    @DisplayName("Should get all menu items successfully")
+    void shouldGetAllMenuItemsSuccessfully() throws Exception {
+        // Arrange
+        MenuItem menuItem1 = new MenuItem("Pizza Margherita", "Pizza with tomato and mozzarella", "25.90", true, "pizza1.jpg");
+        MenuItem menuItem2 = new MenuItem("Pizza Pepperoni", "Pizza with pepperoni", "28.90", true, "pizza2.jpg");
+        MenuItemResponseDto response1 = new MenuItemResponseDto("Pizza Margherita", "Pizza with tomato and mozzarella", "25.90", true, "pizza1.jpg");
+        MenuItemResponseDto response2 = new MenuItemResponseDto("Pizza Pepperoni", "Pizza with pepperoni", "28.90", true, "pizza2.jpg");
+
+        when(menuItemsUseCasePort.getAll()).thenReturn(List.of(menuItem1, menuItem2));
+        when(menuMapper.toMenuItemResponseDto(menuItem1)).thenReturn(response1);
+        when(menuMapper.toMenuItemResponseDto(menuItem2)).thenReturn(response2);
+
+        // Act & Assert
+        mockMvc.perform(get("/cardapio"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].nome").value("Pizza Margherita"))
+                .andExpect(jsonPath("$[0].itemPrice").value("25.90"))
+                .andExpect(jsonPath("$[1].nome").value("Pizza Pepperoni"))
+                .andExpect(jsonPath("$[1].itemPrice").value("28.90"));
+
+        verify(menuItemsUseCasePort).getAll();
+        verify(menuMapper).toMenuItemResponseDto(menuItem1);
+        verify(menuMapper).toMenuItemResponseDto(menuItem2);
+    }
 
     @Test
-    @DisplayName("Should delete menu item by ID - return response HTTP 204 NO CONTENT")
-    void deleteById() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
+    @DisplayName("Should return empty list when no menu items exist")
+    void shouldReturnEmptyListWhenNoMenuItemsExist() throws Exception {
+        // Arrange
+        when(menuItemsUseCasePort.getAll()).thenReturn(List.of());
 
-        mockMvc.perform(delete("/cardapio/{idMenu}", 1L)
-                        .param("idMenu", "1"))
+        // Act & Assert
+        mockMvc.perform(get("/cardapio"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(0));
+
+        verify(menuItemsUseCasePort).getAll();
+    }
+
+    @Test
+    @DisplayName("Should update menu item successfully")
+    void shouldUpdateMenuItemSuccessfully() throws Exception {
+        // Arrange
+        Long menuId = 1L;
+        String updateJson = objectMapper.writeValueAsString(updateMenuItemRequest);
+        MenuItem updatedMenuItem = new MenuItem("Pizza Napolitana", "Pizza with tomato, mozzarella and anchovies", "28.90", true, "pizza_napolitana.jpg");
+
+        when(menuMapper.updateToMenuDomain(any(UpdateMenuItemRequestDto.class))).thenReturn(updatedMenuItem);
+
+        // Act & Assert
+        mockMvc.perform(put("/cardapio/{idMenu}", menuId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateJson))
+                .andExpect(status().isAccepted());
+
+        verify(menuMapper).updateToMenuDomain(any(UpdateMenuItemRequestDto.class));
+        verify(menuItemsUseCasePort).update(menuId, updatedMenuItem);
+    }
+
+    @Test
+    @DisplayName("Should return internal server error when updating menu item with use case failure")
+    void shouldReturnInternalServerErrorWhenUpdatingMenuItemWithUseCaseFailure() throws Exception {
+        // Arrange
+        Long menuId = 1L;
+        String validUpdateJson = objectMapper.writeValueAsString(updateMenuItemRequest);
+        MenuItem updatedMenuItem = new MenuItem("Pizza Napolitana", "Pizza with tomato, mozzarella and anchovies", "28.90", true, "pizza_napolitana.jpg");
+
+        when(menuMapper.updateToMenuDomain(any(UpdateMenuItemRequestDto.class))).thenReturn(updatedMenuItem);
+        doThrow(new RuntimeException("Use case error")).when(menuItemsUseCasePort).update(menuId, updatedMenuItem);
+
+        // Act & Assert
+        mockMvc.perform(put("/cardapio/{idMenu}", menuId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validUpdateJson))
+                .andExpect(status().isInternalServerError());
+
+        verify(menuMapper).updateToMenuDomain(any(UpdateMenuItemRequestDto.class));
+        verify(menuItemsUseCasePort).update(menuId, updatedMenuItem);
+    }
+
+    @Test
+    @DisplayName("Should delete menu item successfully")
+    void shouldDeleteMenuItemSuccessfully() throws Exception {
+        // Arrange
+        Long menuId = 1L;
+
+        // Act & Assert
+        mockMvc.perform(delete("/cardapio/{idMenu}", menuId))
                 .andExpect(status().isNoContent());
 
-        verify(deleteMenuItemUseCase, times(1)).delete(1L);
+        verify(menuItemsUseCasePort).deleteById(menuId);
     }
 
     @Test
-    @DisplayName("Should update menu successfully - return HTTP 202 response")
-    void shouldUpdateMenuItemSuccessfully() throws Exception {
+    @DisplayName("Should return internal server error when use case fails")
+    void shouldReturnInternalServerErrorWhenUseCaseFails() throws Exception {
+        // Arrange
+        String requestJson = objectMapper.writeValueAsString(menuItemRequest);
 
-        // GIVEN
-        UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
-                "Pizza Quatro Queijos",
-                "Pizza com mix de queijos: mussarela, provolone, parmesão e gorgonzola",
-                "34.90",
-                true,
-                "https://exemplo.com/images/pizza-quatro-queijos.png"
-        );
+        when(menuMapper.toMenuDomain(any(MenuItemRequestDto.class))).thenThrow(new RuntimeException("Use case error"));
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(menuItemsController).build();
-        when(menuEntityMapper.updateToMenuDomain(dto)).thenReturn(menuItemMockOne());
+        // Act & Assert
+        mockMvc.perform(post("/cardapio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isInternalServerError());
 
-        // WHEN
-        mockMvc.perform(put("/cardapio/1")
-                        .content(new ObjectMapper().writeValueAsString(dto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
+        verify(menuMapper).toMenuDomain(any(MenuItemRequestDto.class));
+    }
 
-        // THEN
-        verify(updateMenuItemUseCase, times(1)).update(eq(1L), any(MenuItem.class));
+    @Test
+    @DisplayName("Should handle menu item with unavailable status")
+    void shouldHandleMenuItemWithUnavailableStatus() throws Exception {
+        // Arrange
+        MenuItemRequestDto unavailableRequest = new MenuItemRequestDto("Pizza Especial", "Special pizza", "35.90", false, "special.jpg");
+        MenuItem unavailableItem = new MenuItem("Pizza Especial", "Special pizza", "35.90", false, "special.jpg");
+        MenuItemResponseDto unavailableResponse = new MenuItemResponseDto("Pizza Especial", "Special pizza", "35.90", false, "special.jpg");
+        
+        String requestJson = objectMapper.writeValueAsString(unavailableRequest);
+
+        when(menuMapper.toMenuDomain(any(MenuItemRequestDto.class))).thenReturn(unavailableItem);
+        when(menuItemsUseCasePort.save(any(MenuItem.class))).thenReturn(unavailableItem);
+        when(menuMapper.toMenuItemResponseDto(any(MenuItem.class))).thenReturn(unavailableResponse);
+
+        // Act & Assert
+        mockMvc.perform(post("/cardapio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.nome").value("Pizza Especial"))
+                .andExpect(jsonPath("$.availability").value(false));
+
+        verify(menuMapper).toMenuDomain(any(MenuItemRequestDto.class));
+        verify(menuItemsUseCasePort).save(any(MenuItem.class));
+        verify(menuMapper).toMenuItemResponseDto(any(MenuItem.class));
     }
 }

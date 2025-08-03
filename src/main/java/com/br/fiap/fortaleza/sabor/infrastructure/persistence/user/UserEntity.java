@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.persistence.user;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.enums.TypeEntityEnum;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
 import jakarta.persistence.*;
 
@@ -26,8 +25,9 @@ public class UserEntity {
     @Column(name = "data_alteracao")
     private LocalDate dataAlteracao;
 
-    @Enumerated(EnumType.STRING)
-    private TypeEntityEnum tipo;
+    @ManyToOne
+    @JoinColumn(name = "tipo_id", referencedColumnName = "id")
+    private TypeEntity tipo;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario" , referencedColumnName = "id" )
@@ -39,7 +39,7 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntityEnum tipo, List<AddressEntity> enderecos) {
+    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntity tipo, List<AddressEntity> enderecos) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -50,7 +50,6 @@ public class UserEntity {
         this.enderecos = enderecos;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -93,11 +92,11 @@ public class UserEntity {
         this.dataAlteracao = LocalDate.now();
     }
 
-    public TypeEntityEnum getTipo() {
+    public TypeEntity getTipo() {
         return tipo;
     }
 
-    public void setTipo(TypeEntityEnum tipo) {
+    public void setTipo(TypeEntity tipo) {
         this.tipo = tipo;
     }
 

@@ -1,9 +1,9 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.docs;
 
-import com.br.fiap.fortaleza.sabor.infrastructure.config.exception.ApiErrorMessage;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.MenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateMenuItemRequestDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.MenuItemResponseDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.exception.ApiErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +28,7 @@ public interface MenuItemControllerDocs {
             @ApiResponse(responseCode = "409", description = "Menu already registered.", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto);
+    ResponseEntity<MenuItemResponseDto> create(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto);
 
     @Operation(summary = "Rescue the menu by Id", description = "Allows the retrieval of information from a specific menu")
     @ApiResponses(value = {
@@ -36,7 +36,7 @@ public interface MenuItemControllerDocs {
             @ApiResponse(responseCode = "404", description = "Menu not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity getMenuByID(@PathVariable @NotNull Long idMenu);
+    ResponseEntity<MenuItemResponseDto> getMenuByID(@PathVariable @NotNull Long idMenu);
 
     @Operation(summary = "Search all menus", description = "Returns a list of all menus registered in the system.")
     @ApiResponses(value = {
@@ -52,7 +52,7 @@ public interface MenuItemControllerDocs {
             @ApiResponse(responseCode = "404", description = "Menu not found", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
-    ResponseEntity update(@PathVariable @NotNull Long idMenu, @RequestBody @Valid UpdateMenuItemRequestDto updateMenuItemRequestDto
+    ResponseEntity<MenuItemResponseDto> update(@PathVariable @NotNull Long idMenu, @RequestBody @Valid UpdateMenuItemRequestDto updateMenuItemRequestDto
     );
 
     @Operation(summary = "Delete menu by ID", description = "Allows deletion of a specific menu's information")
