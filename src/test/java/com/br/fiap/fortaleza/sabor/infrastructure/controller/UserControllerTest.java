@@ -1,165 +1,206 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller;
 
 import com.br.fiap.fortaleza.sabor.application.ports.in.UserUseCasePort;
+import com.br.fiap.fortaleza.sabor.domain.model.address.Address;
+import com.br.fiap.fortaleza.sabor.domain.model.user.User;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
+import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.UserResponseDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.br.fiap.fortaleza.sabor.mock.MockUser.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = UserController.class)
 @ExtendWith(MockitoExtension.class)
+@WebMvcTest(UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@DisplayName("UserController Tests")
 class UserControllerTest {
 
-    @InjectMocks
-    private UserController userController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @MockitoBean
-    private UserMapper userMapper;
     @MockitoBean
     private UserUseCasePort userUseCasePort;
 
+    @MockitoBean
+    private UserMapper userMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private User user;
+    private UserRequestDto userRequestDto;
+    private UserResponseDto userResponseDto;
+    private UpdateRequestDto updateRequestDto;
+
     @BeforeEach
-    public void setUp() {
-        userController = new UserController(userUseCasePort, userMapper);
+    void setUp() {
+        Address address = new Address("Rua Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
+        user = new User("João Silva", "joao@email.com", "password123", "ADMIN", Arrays.asList(address));
+        user.setLogin("joao123");
+        user.setDataAlteracao(LocalDate.now());
+
+        AddressDto addressDto = new AddressDto("Rua Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
+        userRequestDto = new UserRequestDto("João Silva", "joao@email.com", "joao123", "password123", 
+                                          LocalDate.now(), "ADMIN", Arrays.asList(addressDto));
+
+        userResponseDto = new UserResponseDto("João Silva", "joao123", "joao@email.com", "ADMIN", Arrays.asList(addressDto));
+
+        updateRequestDto = new UpdateRequestDto("João Silva Updated", "joao.updated@email.com", "password123", 
+                                              "ADMIN", Arrays.asList(addressDto));
     }
-    
+
     @Test
-    @DisplayName("Setup test")
-    void setup() {
-        // Basic setup test
+    @DisplayName("Should create user successfully")
+    void shouldCreateUserSuccessfully() throws Exception {
+        // Arrange
+        when(userMapper.toUserDomain(any(UserRequestDto.class))).thenReturn(user);
+        when(userUseCasePort.save(any(User.class))).thenReturn(user);
+        when(userMapper.toUserResponseDto(any(User.class))).thenReturn(userResponseDto);
+
+        // Act & Assert
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("João Silva"))
+                .andExpect(jsonPath("$.email").value("joao@email.com"))
+                .andExpect(jsonPath("$.login").value("joao123"));
+
+        verify(userMapper).toUserDomain(any(UserRequestDto.class));
+        verify(userUseCasePort).save(any(User.class));
+        verify(userMapper).toUserResponseDto(any(User.class));
+    }
+
+    @Test
+    @DisplayName("Should return validation error when creating user with invalid data")
+    void shouldReturnValidationErrorWhenCreatingUserWithInvalidData() throws Exception {
+        // Arrange
+        UserRequestDto invalidUserDto = new UserRequestDto("", "invalid-email", "", "", 
+                                                          null, "", Arrays.asList());
+
+        // Act & Assert
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidUserDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should get all users successfully")
+    void shouldGetAllUsersSuccessfully() throws Exception {
+        // Arrange
+        List<User> users = Arrays.asList(user);
+        List<UserResponseDto> userResponseDtos = Arrays.asList(userResponseDto);
+        
+        when(userUseCasePort.getAll()).thenReturn(users);
+        when(userMapper.toUserResponseDto(any(User.class))).thenReturn(userResponseDto);
+
+        // Act & Assert
+        mockMvc.perform(get("/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value("João Silva"))
+                .andExpect(jsonPath("$[0].email").value("joao@email.com"));
+
+        verify(userUseCasePort).getAll();
+        verify(userMapper).toUserResponseDto(any(User.class));
+    }
+
+    @Test
+    @DisplayName("Should get user by id successfully")
+    void shouldGetUserByIdSuccessfully() throws Exception {
+        // Arrange
+        when(userUseCasePort.getById(anyLong())).thenReturn(Optional.of(user));
+        when(userMapper.getUserByIdToUserResponseDto(any(Optional.class))).thenReturn(userResponseDto);
+
+        // Act & Assert
+        mockMvc.perform(get("/users/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("João Silva"))
+                .andExpect(jsonPath("$.email").value("joao@email.com"));
+
+        verify(userUseCasePort).getById(1L);
+        verify(userMapper).getUserByIdToUserResponseDto(any(Optional.class));
+    }
+
+    @Test
+    @DisplayName("Should update user successfully")
+    void shouldUpdateUserSuccessfully() throws Exception {
+        // Arrange
+        when(userMapper.updateToUserDomain(any(UpdateRequestDto.class))).thenReturn(user);
+        when(userUseCasePort.update(anyLong(), any(User.class))).thenReturn(Optional.of(user));
+        when(userMapper.getUserByIdToUserResponseDto(any(Optional.class))).thenReturn(userResponseDto);
+
+        // Act & Assert
+        mockMvc.perform(put("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateRequestDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("João Silva"))
+                .andExpect(jsonPath("$.email").value("joao@email.com"));
+
+        verify(userMapper).updateToUserDomain(any(UpdateRequestDto.class));
+        verify(userUseCasePort).update(anyLong(), any(User.class));
+        verify(userMapper).getUserByIdToUserResponseDto(any(Optional.class));
+    }
+
+    @Test
+    @DisplayName("Should delete user successfully")
+    void shouldDeleteUserSuccessfully() throws Exception {
+        // Act & Assert
+        mockMvc.perform(delete("/users/1"))
+                .andExpect(status().isNoContent());
+
+        verify(userUseCasePort).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("Should return bad request when creating user without required fields")
+    void shouldReturnBadRequestWhenCreatingUserWithoutRequiredFields() throws Exception {
+        // Act & Assert
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should return internal server error when updating user with invalid id format")
+    void shouldReturnInternalServerErrorWhenUpdatingUserWithInvalidIdFormat() throws Exception {
+        // Act & Assert
+        mockMvc.perform(put("/users/invalid-id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateRequestDto)))
+                .andExpect(status().isInternalServerError());
     }
 }
-//
-//    @Test
-//    @DisplayName("Should engrave object USER in database - return response HTTP 201 CREATE")
-//    void shouldCreateUser() throws Exception {
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//
-//        // Arrange
-//        var request = "{\n  \"nome\": \"Lonnie Stanton II\",\n  \"email\": \"Malvina98@gmail.com\",\n  \"login\": \"Hardy_Rempel27\",\n  \"senha\": \"RlhllJJPM_sbW02\",\n  \"dataAlteracao\": \"2025-05-17\",\n  \"tipo\": {\n    \"type\": \"DONO\"\n  },\n  \"address\": [\n    {\n      \"rua\": \"Rua Alves Paulista\",\n      \"bairro\": \"Paulista Nova\",\n      \"complemento\": \"casa\",\n      \"numero\": 130,\n      \"estado\": \"São Paulo\",\n      \"cidade\": \"São Paulo\",\n      \"cep\": 85965000\n    }\n  ]\n}";
-//        var requestDto = objectMapper.readValue(request, UserRequestDto.class);
-//        var mapper = userMapper.toUserDomain(requestDto);
-//
-//        // Act & Assert
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        when(createUseCase.save(mapper)).thenReturn(userMockOne());
-//
-//        mockMvc.perform(post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .content(request))
-//                .andExpect(status().isCreated());
-//
-//
-//        verify(createUseCase, times(1)).save(mapper);
-//    }
-//
-//    @Test
-//    @DisplayName("Should return a list of users - return response HTTP 200 OK")
-//    void shouldGetAllUsers() throws Exception {
-//        // GIVEN
-//        var userOne = userMockOne();
-//        var userTwo = userMockTwo();
-//
-//        // WHEN
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        when(userMapper.toUserResponseDto(userOne)).thenReturn(responseDtoMockOne());
-//        when(userMapper.toUserResponseDto(userTwo)).thenReturn(responseDtoMockTwo());
-//        when(usersRepository.getAll()).thenReturn(List.of(userOne, userTwo));
-//        when(getUserUseCase.getAll()).thenReturn(List.of(userOne, userTwo));
-//
-//        mockMvc.perform(get("/users")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json("""
-//                [
-//                    { "nome": "João Silva" },
-//                    { "nome": "Maria Oliveira" }
-//                ]
-//            """));
-//
-//        // THEN
-//        verify(getUserUseCase, times(1)).getAll();
-//    }
-//
-//    @Test
-//    @DisplayName("Should return user by ID - return response HTTP 201 CREATED")
-//    void shouldGetUserById() throws Exception {
-//        // GIVEN
-//        var user = userMockOne();
-//        var responseDto = responseDtoMockOne();
-//
-//        // WHEN
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        when(getUserUseCase.getById(1L)).thenReturn(Optional.of(user));
-//        when(userMapper.getUserByIdToUserResponseDto(Optional.of(user))).thenReturn(responseDto);
-//
-//        // THEN
-//        mockMvc.perform(get("/users/{idUsuario}", 1L)
-//                        .param("idUsuario", "1"))
-//                .andExpect(status().isOk());
-//
-//        verify(getUserUseCase, times(1)).getById(1L);
-//    }
-//
-//
-//    @Test
-//    @DisplayName("Should delete user by ID - return response HTTP 204 NO CONTENT")
-//    void shouldDeleteUserById() throws Exception {
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//
-//        mockMvc.perform(delete("/users/{idUsuario}", 1L)
-//                        .param("idUsuario", "1"))
-//                .andExpect(status().isNoContent());
-//
-//        verify(deleteUseCase, times(1)).delete(1L);
-//    }
-//
-//    @Test
-//    @DisplayName("Should update user successfully - return HTTP 202 response")
-//    void shouldUpdateUserSuccessfully() throws Exception {
-//
-//        // GIVEN
-//        UpdateRequestDto dto = new UpdateRequestDto(
-//                "Nome Teste", "email@test.com", "loginTeste", new TypeUserRequestDto("CLIENTE"),
-//                List.of(new AddressDto("Rua A", "Bairro B", "Comp", 10, "Cidade C", "Estado E", "03565000"))
-//        );
-//
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        when(userMapper.updateToUserDomain(dto)).thenReturn(userMockOne());
-//
-//        // WHEN
-//        mockMvc.perform(put("/users/1")
-//                        .content(new ObjectMapper().writeValueAsString(dto))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//
-//        // THEN
-//        verify(updateUseCase, times(1)).update(eq(1L), any(User.class));
-//    }
-//
-//}
-//
-//
-//
