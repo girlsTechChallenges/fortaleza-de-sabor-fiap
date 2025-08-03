@@ -1,63 +1,53 @@
-//package com.br.fiap.fortaleza.sabor.infrastructure.controller;
-//
-//import com.br.fiap.fortaleza.sabor.application.gateways.UsersRepository;
-//import com.br.fiap.fortaleza.sabor.application.usecase.user.CreateUserUseCase;
-//import com.br.fiap.fortaleza.sabor.application.usecase.user.DeleteUserUseCase;
-//import com.br.fiap.fortaleza.sabor.application.usecase.user.GetUserUseCase;
-//import com.br.fiap.fortaleza.sabor.application.usecase.user.UpdateUserUseCase;
-//import com.br.fiap.fortaleza.sabor.domain.user.User;
-//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
-//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.TypeUserRequestDto;
-//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UpdateRequestDto;
-//import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto;
-//import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.context.bean.override.mockito.MockitoBean;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static com.br.fiap.fortaleza.sabor.mock.MockUser.*;
-//import static org.mockito.Mockito.*;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//@WebMvcTest(controllers = UserController.class)
-//@ExtendWith(MockitoExtension.class)
-//class UserControllerTest {
-//
-//    @InjectMocks
-//    private UserController userController;
-//
-//    @MockitoBean
-//    private UserMapper userMapper;
-//    @MockitoBean
-//    private UsersRepository usersRepository;
-//    @MockitoBean
-//    private CreateUserUseCase createUseCase;
-//    @MockitoBean
-//    private GetUserUseCase getUserUseCase;
-//    @MockitoBean
-//    private UpdateUserUseCase updateUseCase;
-//    @MockitoBean
-//    private DeleteUserUseCase deleteUseCase;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        userController = new UserController(createUseCase, getUserUseCase,updateUseCase, deleteUseCase, userMapper);
-//    }
+package com.br.fiap.fortaleza.sabor.infrastructure.controller;
+
+import com.br.fiap.fortaleza.sabor.application.ports.in.UserUseCasePort;
+import com.br.fiap.fortaleza.sabor.infrastructure.mapper.UserMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.br.fiap.fortaleza.sabor.mock.MockUser.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = UserController.class)
+@ExtendWith(MockitoExtension.class)
+class UserControllerTest {
+
+    @InjectMocks
+    private UserController userController;
+
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private UserUseCasePort userUseCasePort;
+
+    @BeforeEach
+    public void setUp() {
+        userController = new UserController(userUseCasePort, userMapper);
+    }
+    
+    @Test
+    @DisplayName("Setup test")
+    void setup() {
+        // Basic setup test
+    }
+}
 //
 //    @Test
 //    @DisplayName("Should engrave object USER in database - return response HTTP 201 CREATE")
