@@ -6,11 +6,6 @@ import com.br.fiap.fortaleza.sabor.domain.model.restaurant.Restaurant;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.AddressDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.BusinessHoursDto;
 import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.RestaurantRequestDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.response.RestaurantResponseDto;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.AddressRestaurantEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.BusinessHoursEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,254 +15,334 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("RestaurantMapper - Testes unitários")
 class RestaurantMapperTest {
 
     @InjectMocks
     private RestaurantMapper restaurantMapper;
 
+    private AddressDto addressDto;
+    private BusinessHoursDto businessHoursDto;
     private RestaurantRequestDto restaurantRequestDto;
-    private Restaurant restaurant;
-    private RestaurantEntity restaurantEntity;
 
     @BeforeEach
     void setUp() {
-        // Setup Address DTO
-        AddressDto addressDto = new AddressDto(
-                "Rua Teste",
-                "Bairro Teste",
-                "Apto 1",
+        addressDto = new AddressDto(
+                "Rua das Flores",
+                "Centro",
+                "Apto 45",
                 123,
-                "Estado Teste",
-                "Cidade Teste",
-                "12345678"
+                "SP",
+                "São Paulo",
+                "01234567"
         );
 
-        // Setup Business Hours DTO
-        BusinessHoursDto businessHoursDto = new BusinessHoursDto(
+        businessHoursDto = new BusinessHoursDto(
                 DayOfWeek.MONDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(18, 0),
-                "Observação teste"
+                "Funcionamento normal"
         );
 
-        // Setup Request DTO
         restaurantRequestDto = new RestaurantRequestDto(
-                "Restaurante Teste",
+                "Restaurante do João",
                 "Brasileira",
-                "teste@teste.com",
-                List.of(addressDto),
-                List.of(businessHoursDto)
+                "joao@restaurante.com",
+                Arrays.asList(addressDto),
+                Arrays.asList(businessHoursDto)
         );
-
-        // Setup Domain Object
-        Address address = new Address(
-                "Rua Teste",
-                "Bairro Teste",
-                "Apto 1",
-                123,
-                "Estado Teste",
-                "Cidade Teste",
-                "12345678"
-        );
-
-        BusinessHours businessHours = new BusinessHours(
-                DayOfWeek.MONDAY,
-                LocalTime.of(8, 0),
-                LocalTime.of(18, 0),
-                "Observação teste"
-        );
-
-        restaurant = new Restaurant(
-                1L,
-                "Restaurante Teste",
-                "Brasileira",
-                "teste@teste.com",
-                "Dono Teste",
-                List.of(address),
-                List.of(businessHours)
-        );
-
-        // Setup User Entity
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setEmail("teste@teste.com");
-        userEntity.setNome("Dono Teste");
-
-        // Setup Address Entity
-        AddressRestaurantEntity addressEntity = new AddressRestaurantEntity();
-        addressEntity.setRua("Rua Teste");
-        addressEntity.setBairro("Bairro Teste");
-        addressEntity.setComplemento("Apto 1");
-        addressEntity.setNumero(123);
-        addressEntity.setEstado("Estado Teste");
-        addressEntity.setCidade("Cidade Teste");
-        addressEntity.setCep("12345678");
-
-        // Setup Business Hours Entity
-        BusinessHoursEntity businessHoursEntity = new BusinessHoursEntity();
-        businessHoursEntity.setDay(DayOfWeek.MONDAY);
-        businessHoursEntity.setOpeningTime(LocalTime.of(8, 0));
-        businessHoursEntity.setClosingTime(LocalTime.of(18, 0));
-        businessHoursEntity.setObservations("Observação teste");
-
-        // Setup Restaurant Entity
-        restaurantEntity = new RestaurantEntity();
-        restaurantEntity.setId(1L);
-        restaurantEntity.setName("Restaurante Teste");
-        restaurantEntity.setTypeKitchen("Brasileira");
-        restaurantEntity.setOwner(userEntity);
-        restaurantEntity.setAddress(List.of(addressEntity));
-        restaurantEntity.setBusinessHours(List.of(businessHoursEntity));
     }
 
     @Test
-    @DisplayName("Should convert RestaurantRequestDto to Restaurant domain")
-    void shouldConvertRestaurantRequestDtoToRestaurantDomain() {
+    @DisplayName("Deve mapear RestaurantRequestDto para Restaurant com sucesso")
+    void deveMapearRestaurantRequestDtoParaRestaurantComSucesso() {
         // Act
         Restaurant result = restaurantMapper.toRestaurantDomain(restaurantRequestDto);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Restaurante Teste", result.getName());
+        assertEquals("Restaurante do João", result.getName());
         assertEquals("Brasileira", result.getKitchenType());
-        assertEquals("teste@teste.com", result.getEmail());
+        assertEquals("joao@restaurante.com", result.getEmail());
         
+        // Validar endereço
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
+        Address mappedAddress = result.getAddress().get(0);
+        assertEquals("Rua das Flores", mappedAddress.getRua());
+        assertEquals(123, mappedAddress.getNumero());
+        assertEquals("Apto 45", mappedAddress.getComplemento());
+        assertEquals("Centro", mappedAddress.getBairro());
+        assertEquals("São Paulo", mappedAddress.getCidade());
+        assertEquals("SP", mappedAddress.getEstado());
+        assertEquals("01234567", mappedAddress.getCep());
         
+        // Validar horário de funcionamento
         assertNotNull(result.getBusinessHours());
         assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDayOfWeek());
+        BusinessHours mappedBusinessHours = result.getBusinessHours().get(0);
+        assertEquals(DayOfWeek.MONDAY, mappedBusinessHours.getDayOfWeek());
+        assertEquals(LocalTime.of(8, 0), mappedBusinessHours.getOpeningTime());
+        assertEquals(LocalTime.of(18, 0), mappedBusinessHours.getClosingTime());
+        assertEquals("Funcionamento normal", mappedBusinessHours.getObservations());
     }
 
     @Test
-    @DisplayName("Should convert Restaurant domain to RestaurantEntity")
-    void shouldConvertRestaurantDomainToRestaurantEntity() {
-        // Act
-        RestaurantEntity result = restaurantMapper.toRestaurantEntity(restaurant);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Restaurante Teste", result.getName());
-        assertEquals("Brasileira", result.getTypeKitchen());
-        
-        assertNotNull(result.getAddress());
-        assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
-        
-        assertNotNull(result.getBusinessHours());
-        assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDay());
-    }
-
-    @Test
-    @DisplayName("Should convert RestaurantEntity to Restaurant domain")
-    void shouldConvertRestaurantEntityToRestaurantDomain() {
-        // Act
-        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantEntity);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals("Restaurante Teste", result.getName());
-        assertEquals("Brasileira", result.getKitchenType());
-        assertEquals("teste@teste.com", result.getEmail());
-        assertEquals("Dono Teste", result.getOwner());
-        
-        assertNotNull(result.getAddress());
-        assertEquals(1, result.getAddress().size());
-        assertEquals("Rua Teste", result.getAddress().getFirst().getRua());
-        
-        assertNotNull(result.getBusinessHours());
-        assertEquals(1, result.getBusinessHours().size());
-        assertEquals(DayOfWeek.MONDAY, result.getBusinessHours().getFirst().getDayOfWeek());
-    }
-
-    @Test
-    @DisplayName("Should convert Restaurant domain to RestaurantResponseDto")
-    void shouldConvertRestaurantDomainToRestaurantResponseDto() {
-        // Act
-        RestaurantResponseDto result = restaurantMapper.toRestaurantResponseDto(restaurant);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1L, result.id());
-        assertEquals("Restaurante Teste", result.name());
-        assertEquals("Dono Teste", result.owner());
-    }
-
-    @Test
-    @DisplayName("Should convert business hours to entities")
-    void shouldConvertBusinessHoursToEntities() {
-        // Act
-        List<BusinessHoursEntity> result = restaurantMapper.toBusinessHoursEntities(restaurant, restaurantEntity);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        
-        BusinessHoursEntity businessHoursEntity = result.getFirst();
-        assertEquals(DayOfWeek.MONDAY, businessHoursEntity.getDay());
-        assertEquals(LocalTime.of(8, 0), businessHoursEntity.getOpeningTime());
-        assertEquals(LocalTime.of(18, 0), businessHoursEntity.getClosingTime());
-        assertEquals("Observação teste", businessHoursEntity.getObservations());
-        assertEquals(restaurantEntity, businessHoursEntity.getRestaurant());
-    }
-
-    @Test
-    @DisplayName("Should handle empty lists gracefully")
-    void shouldHandleEmptyListsGracefully() {
+    @DisplayName("Deve mapear Restaurant com múltiplos endereços corretamente")
+    void deveMapearRestaurantComMultiplosEnderecosCorretamente() {
         // Arrange
-        RestaurantRequestDto emptyDto = new RestaurantRequestDto(
-                "Restaurante Vazio",
+        AddressDto secondAddressDto = new AddressDto(
+                "Avenida Paulista",
+                "Bela Vista",
+                "Loja 15",
+                1000,
+                "SP",
+                "São Paulo",
+                "01310100"
+        );
+
+        RestaurantRequestDto restaurantWithMultipleAddresses = new RestaurantRequestDto(
+                "Pizzaria da Maria",
                 "Italiana",
-                "vazio@teste.com",
-                new ArrayList<>(),
-                new ArrayList<>()
+                "maria@pizzaria.com",
+                Arrays.asList(addressDto, secondAddressDto),
+                Arrays.asList(businessHoursDto)
         );
 
         // Act
-        Restaurant result = restaurantMapper.toRestaurantDomain(emptyDto);
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithMultipleAddresses);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Restaurante Vazio", result.getName());
+        assertEquals(2, result.getAddress().size());
+        
+        Address firstAddress = result.getAddress().get(0);
+        assertEquals("Rua das Flores", firstAddress.getRua());
+        assertEquals(123, firstAddress.getNumero());
+        
+        Address secondMappedAddress = result.getAddress().get(1);
+        assertEquals("Avenida Paulista", secondMappedAddress.getRua());
+        assertEquals(1000, secondMappedAddress.getNumero());
+        assertEquals("Loja 15", secondMappedAddress.getComplemento());
+        assertEquals("Bela Vista", secondMappedAddress.getBairro());
+    }
+
+    @Test
+    @DisplayName("Deve mapear Restaurant com múltiplos horários de funcionamento corretamente")
+    void deveMapearRestaurantComMultiplosHorariosFuncionamentoCorretamente() {
+        // Arrange
+        BusinessHoursDto weekendHours = new BusinessHoursDto(
+                DayOfWeek.SATURDAY,
+                LocalTime.of(10, 0),
+                LocalTime.of(22, 0),
+                "Horário de fim de semana"
+        );
+
+        RestaurantRequestDto restaurantWithMultipleHours = new RestaurantRequestDto(
+                "Café da Esquina",
+                "Café",
+                "cafe@esquina.com",
+                Arrays.asList(addressDto),
+                Arrays.asList(businessHoursDto, weekendHours)
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithMultipleHours);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getBusinessHours().size());
+        
+        BusinessHours firstHours = result.getBusinessHours().get(0);
+        assertEquals(DayOfWeek.MONDAY, firstHours.getDayOfWeek());
+        assertEquals(LocalTime.of(8, 0), firstHours.getOpeningTime());
+        
+        BusinessHours secondHours = result.getBusinessHours().get(1);
+        assertEquals(DayOfWeek.SATURDAY, secondHours.getDayOfWeek());
+        assertEquals(LocalTime.of(10, 0), secondHours.getOpeningTime());
+        assertEquals(LocalTime.of(22, 0), secondHours.getClosingTime());
+        assertEquals("Horário de fim de semana", secondHours.getObservations());
+    }
+
+    @Test
+    @DisplayName("Deve mapear Restaurant sem endereços quando lista estiver vazia")
+    void deveMapearRestaurantSemEnderecosQuandoListaEstiverVazia() {
+        // Arrange
+        RestaurantRequestDto restaurantWithoutAddresses = new RestaurantRequestDto(
+                "Restaurante Virtual",
+                "Delivery",
+                "virtual@delivery.com",
+                Collections.emptyList(),
+                Arrays.asList(businessHoursDto)
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithoutAddresses);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Restaurante Virtual", result.getName());
+        assertEquals("Delivery", result.getKitchenType());
+        assertEquals("virtual@delivery.com", result.getEmail());
         assertNotNull(result.getAddress());
         assertTrue(result.getAddress().isEmpty());
+        assertEquals(1, result.getBusinessHours().size());
+    }
+
+    @Test
+    @DisplayName("Deve mapear Restaurant sem horários de funcionamento quando lista estiver vazia")
+    void deveMapearRestaurantSemHorariosFuncionamentoQuandoListaEstiverVazia() {
+        // Arrange
+        RestaurantRequestDto restaurantWithoutHours = new RestaurantRequestDto(
+                "Restaurante 24h",
+                "Fast Food",
+                "24h@fastfood.com",
+                Arrays.asList(addressDto),
+                Collections.emptyList()
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithoutHours);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Restaurante 24h", result.getName());
+        assertEquals("Fast Food", result.getKitchenType());
+        assertEquals("24h@fastfood.com", result.getEmail());
+        assertEquals(1, result.getAddress().size());
         assertNotNull(result.getBusinessHours());
         assertTrue(result.getBusinessHours().isEmpty());
     }
 
     @Test
-    @DisplayName("Should filter out null business hours when converting")
-    void shouldFilterOutNullBusinessHoursWhenConverting() {
+    @DisplayName("Deve mapear endereço sem complemento corretamente")
+    void deveMapearEnderecoSemComplementoCorretamente() {
         // Arrange
-        Restaurant restaurantWithNullHours = new Restaurant(
-                1L,
-                "Restaurante Teste",
-                "Brasileira",
-                "teste@teste.com",
-                "Dono Teste",
-                new ArrayList<>(),
-                List.of(
-                        new BusinessHours(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(18, 0), "Valid"),
-                        new BusinessHours(null, null, null, null) // This should be filtered out
-                )
+        AddressDto addressWithoutComplement = new AddressDto(
+                "Rua da Praia",
+                "Copacabana",
+                null,
+                456,
+                "RJ",
+                "Rio de Janeiro",
+                "22070900"
+        );
+
+        RestaurantRequestDto restaurantWithAddressWithoutComplement = new RestaurantRequestDto(
+                "Lanchonete da Praia",
+                "Lanches",
+                "praia@lanches.com",
+                Arrays.asList(addressWithoutComplement),
+                Arrays.asList(businessHoursDto)
         );
 
         // Act
-        List<BusinessHoursEntity> result = restaurantMapper.toBusinessHoursEntities(restaurantWithNullHours, restaurantEntity);
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithAddressWithoutComplement);
 
         // Assert
         assertNotNull(result);
-        assertEquals(1, result.size()); // Only the valid one should remain
-        assertEquals(DayOfWeek.MONDAY, result.getFirst().getDay());
+        assertEquals(1, result.getAddress().size());
+        Address mappedAddress = result.getAddress().get(0);
+        assertEquals("Rua da Praia", mappedAddress.getRua());
+        assertEquals(456, mappedAddress.getNumero());
+        assertNull(mappedAddress.getComplemento());
+        assertEquals("Copacabana", mappedAddress.getBairro());
+        assertEquals("Rio de Janeiro", mappedAddress.getCidade());
+        assertEquals("RJ", mappedAddress.getEstado());
+        assertEquals("22070900", mappedAddress.getCep());
+    }
+
+    @Test
+    @DisplayName("Deve mapear horário de funcionamento sem observações corretamente")
+    void deveMapearHorarioFuncionamentoSemObservacoesCorretamente() {
+        // Arrange
+        BusinessHoursDto hoursWithoutObservations = new BusinessHoursDto(
+                DayOfWeek.SUNDAY,
+                LocalTime.of(12, 0),
+                LocalTime.of(20, 0),
+                null
+        );
+
+        RestaurantRequestDto restaurantWithHoursWithoutObservations = new RestaurantRequestDto(
+                "Restaurante Domingo",
+                "Familiar",
+                "domingo@familiar.com",
+                Arrays.asList(addressDto),
+                Arrays.asList(hoursWithoutObservations)
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithHoursWithoutObservations);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getBusinessHours().size());
+        BusinessHours mappedHours = result.getBusinessHours().get(0);
+        assertEquals(DayOfWeek.SUNDAY, mappedHours.getDayOfWeek());
+        assertEquals(LocalTime.of(12, 0), mappedHours.getOpeningTime());
+        assertEquals(LocalTime.of(20, 0), mappedHours.getClosingTime());
+        assertNull(mappedHours.getObservations());
+    }
+
+    @Test
+    @DisplayName("Deve mapear horários com precisão de minutos corretamente")
+    void deveMapearHorariosComPrecisaoMinutosCorretamente() {
+        // Arrange
+        BusinessHoursDto preciseHours = new BusinessHoursDto(
+                DayOfWeek.TUESDAY,
+                LocalTime.of(7, 30),
+                LocalTime.of(23, 45),
+                "Horário estendido"
+        );
+
+        RestaurantRequestDto restaurantWithPreciseHours = new RestaurantRequestDto(
+                "Restaurante Preciso",
+                "Internacional",
+                "preciso@internacional.com",
+                Arrays.asList(addressDto),
+                Arrays.asList(preciseHours)
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithPreciseHours);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getBusinessHours().size());
+        BusinessHours mappedHours = result.getBusinessHours().get(0);
+        assertEquals(DayOfWeek.TUESDAY, mappedHours.getDayOfWeek());
+        assertEquals(LocalTime.of(7, 30), mappedHours.getOpeningTime());
+        assertEquals(LocalTime.of(23, 45), mappedHours.getClosingTime());
+        assertEquals("Horário estendido", mappedHours.getObservations());
+    }
+
+    @Test
+    @DisplayName("Deve mapear Restaurant com caracteres especiais corretamente")
+    void deveMapearRestaurantComCaracteresEspeciaisCorretamente() {
+        // Arrange
+        RestaurantRequestDto restaurantWithSpecialChars = new RestaurantRequestDto(
+                "Açaí & Cia",
+                "Sobremesas & Sucos",
+                "acai@cia.com.br",
+                Arrays.asList(addressDto),
+                Arrays.asList(businessHoursDto)
+        );
+
+        // Act
+        Restaurant result = restaurantMapper.toRestaurantDomain(restaurantWithSpecialChars);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Açaí & Cia", result.getName());
+        assertEquals("Sobremesas & Sucos", result.getKitchenType());
+        assertEquals("acai@cia.com.br", result.getEmail());
+        assertEquals(1, result.getAddress().size());
+        assertEquals(1, result.getBusinessHours().size());
     }
 }

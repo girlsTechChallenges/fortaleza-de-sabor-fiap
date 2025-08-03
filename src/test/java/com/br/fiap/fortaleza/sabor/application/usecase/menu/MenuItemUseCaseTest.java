@@ -2,7 +2,7 @@ package com.br.fiap.fortaleza.sabor.application.usecase.menu;
 
 import com.br.fiap.fortaleza.sabor.application.ports.out.MenuItemsRepositoryPort;
 import com.br.fiap.fortaleza.sabor.domain.model.menu.MenuItem;
-import com.br.fiap.fortaleza.sabor.utils.TestDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,103 +10,207 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("CreateMenuItemUseCase Tests")
+@DisplayName("MenuItemUseCase Tests")
 class MenuItemUseCaseTest {
-
-    @InjectMocks
-    private MenuItemUseCase menuItemUseCase;
 
     @Mock
     private MenuItemsRepositoryPort menuItemsRepositoryPort;
 
-    @Test
-    @DisplayName("Should create menu item successfully when valid item provided")
-    void shouldCreateMenuItemSuccessfullyWhenValidItemProvided() {
-        // Arrange
-        MenuItem menuItemToCreate = TestDataBuilder.createValidMenuItem();
-        MenuItem savedMenuItem = TestDataBuilder.createValidMenuItem();
+    @InjectMocks
+    private MenuItemUseCase menuItemUseCase;
 
-        when(menuItemsRepositoryPort.save(any(MenuItem.class))).thenReturn(savedMenuItem);
+    private MenuItem menuItem;
+    private MenuItem anotherMenuItem;
+
+    @BeforeEach
+    void setUp() {
+        menuItem = new MenuItem();
+        menuItem.setNome("Pizza Margherita");
+        menuItem.setItemDescription("Traditional Italian pizza with tomato, mozzarella and basil");
+        menuItem.setItemPrice("29.90");
+        menuItem.setAvailability(true);
+
+        anotherMenuItem = new MenuItem();
+        anotherMenuItem.setNome("Pasta Carbonara");
+        anotherMenuItem.setItemDescription("Classic pasta with eggs, cheese, pancetta and pepper");
+        anotherMenuItem.setItemPrice("24.50");
+        anotherMenuItem.setAvailability(true);
+    }
+
+    @Test
+    @DisplayName("Should return all menu items when getAll is called")
+    void shouldReturnAllMenuItemsWhenGetAllIsCalled() {
+        // Arrange
+        List<MenuItem> expectedMenuItems = Arrays.asList(menuItem, anotherMenuItem);
+        when(menuItemsRepositoryPort.getAll()).thenReturn(expectedMenuItems);
 
         // Act
-        MenuItem result = menuItemUseCase.save(menuItemToCreate);
+        List<MenuItem> actualMenuItems = menuItemUseCase.getAll();
 
         // Assert
-        assertNotNull(result, "Created menu item should not be null");
-        assertEquals(savedMenuItem.getNome(), result.getNome(), "Menu item name should match");
-        assertEquals(savedMenuItem.getItemDescription(), result.getItemDescription(), "Menu item description should match");
-        assertEquals(savedMenuItem.getItemPrice(), result.getItemPrice(), "Menu item price should match");
-        assertEquals(savedMenuItem.getAvailability(), result.getAvailability(), "Menu item availability should match");
-        assertEquals(savedMenuItem.getItemImage(), result.getItemImage(), "Menu item image should match");
-        
-        verify(menuItemsRepositoryPort, times(1)).save(menuItemToCreate);
-        verifyNoMoreInteractions(menuItemsRepositoryPort);
+        assertThat(actualMenuItems).isNotNull();
+        assertThat(actualMenuItems).hasSize(2);
+        assertThat(actualMenuItems).containsExactly(menuItem, anotherMenuItem);
+        verify(menuItemsRepositoryPort, times(1)).getAll();
     }
 
     @Test
-    @DisplayName("Should throw exception when repository fails to save menu item")
-    void shouldThrowExceptionWhenRepositoryFailsToSaveMenuItem() {
+    @DisplayName("Should return empty list when no menu items exist")
+    void shouldReturnEmptyListWhenNoMenuItemsExist() {
         // Arrange
-        MenuItem menuItemToCreate = TestDataBuilder.createValidMenuItem();
-        String errorMessage = "Database connection failed";
-        
-        when(menuItemsRepositoryPort.save(any(MenuItem.class)))
-            .thenThrow(new RuntimeException(errorMessage));
+        when(menuItemsRepositoryPort.getAll()).thenReturn(Arrays.asList());
 
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class,
-            () -> menuItemUseCase.save(menuItemToCreate),
-            "Should throw RuntimeException when repository fails"
-        );
-        
-        assertEquals(errorMessage, exception.getMessage());
-        verify(menuItemsRepositoryPort, times(1)).save(menuItemToCreate);
-        verifyNoMoreInteractions(menuItemsRepositoryPort);
+        // Act
+        List<MenuItem> actualMenuItems = menuItemUseCase.getAll();
+
+        // Assert
+        assertThat(actualMenuItems).isNotNull();
+        assertThat(actualMenuItems).isEmpty();
+        verify(menuItemsRepositoryPort, times(1)).getAll();
     }
 
     @Test
-    @DisplayName("Should handle null menu item gracefully")
-    void shouldHandleNullMenuItemGracefully() {
+    @DisplayName("Should save menu item when save is called")
+    void shouldSaveMenuItemWhenSaveIsCalled() {
+        // Arrange
+        when(menuItemsRepositoryPort.save(any(MenuItem.class))).thenReturn(menuItem);
+
+        // Act
+        MenuItem savedMenuItem = menuItemUseCase.save(menuItem);
+
+        // Assert
+        assertThat(savedMenuItem).isNotNull();
+        assertThat(savedMenuItem.getNome()).isEqualTo("Pizza Margherita");
+        assertThat(savedMenuItem.getItemDescription()).isEqualTo("Traditional Italian pizza with tomato, mozzarella and basil");
+        assertThat(savedMenuItem.getItemPrice()).isEqualTo("29.90");
+        assertThat(savedMenuItem.getAvailability()).isTrue();
+        verify(menuItemsRepositoryPort, times(1)).save(menuItem);
+    }
+
+    @Test
+    @DisplayName("Should update menu item when update is called with valid id")
+    void shouldUpdateMenuItemWhenUpdateIsCalledWithValidId() {
+        // Arrange
+        Long menuItemId = 1L;
+        MenuItem updatedMenuItem = new MenuItem();
+        updatedMenuItem.setNome("Updated Pizza");
+        updatedMenuItem.setItemDescription("Updated description");
+        updatedMenuItem.setItemPrice("35.90");
+        updatedMenuItem.setAvailability(false);
+
+        when(menuItemsRepositoryPort.update(menuItemId, menuItem)).thenReturn(Optional.of(updatedMenuItem));
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.update(menuItemId, menuItem);
+
+        // Assert
+        assertThat(result).isPresent();
+        assertThat(result.get().getNome()).isEqualTo("Updated Pizza");
+        assertThat(result.get().getItemDescription()).isEqualTo("Updated description");
+        assertThat(result.get().getItemPrice()).isEqualTo("35.90");
+        assertThat(result.get().getAvailability()).isFalse();
+        verify(menuItemsRepositoryPort, times(1)).update(menuItemId, menuItem);
+    }
+
+    @Test
+    @DisplayName("Should return empty optional when update is called with invalid id")
+    void shouldReturnEmptyOptionalWhenUpdateIsCalledWithInvalidId() {
+        // Arrange
+        Long invalidMenuItemId = 999L;
+        when(menuItemsRepositoryPort.update(invalidMenuItemId, menuItem)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.update(invalidMenuItemId, menuItem);
+
+        // Assert
+        assertThat(result).isEmpty();
+        verify(menuItemsRepositoryPort, times(1)).update(invalidMenuItemId, menuItem);
+    }
+
+    @Test
+    @DisplayName("Should return menu item when getById is called with valid id")
+    void shouldReturnMenuItemWhenGetByIdIsCalledWithValidId() {
+        // Arrange
+        Long menuItemId = 1L;
+        when(menuItemsRepositoryPort.getById(menuItemId)).thenReturn(Optional.of(menuItem));
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.getById(menuItemId);
+
+        // Assert
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(menuItem);
+        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        verify(menuItemsRepositoryPort, times(1)).getById(menuItemId);
+    }
+
+    @Test
+    @DisplayName("Should return empty optional when getById is called with invalid id")
+    void shouldReturnEmptyOptionalWhenGetByIdIsCalledWithInvalidId() {
+        // Arrange
+        Long invalidMenuItemId = 999L;
+        when(menuItemsRepositoryPort.getById(invalidMenuItemId)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.getById(invalidMenuItemId);
+
+        // Assert
+        assertThat(result).isEmpty();
+        verify(menuItemsRepositoryPort, times(1)).getById(invalidMenuItemId);
+    }
+
+    @Test
+    @DisplayName("Should delete menu item when deleteById is called with valid id")
+    void shouldDeleteMenuItemWhenDeleteByIdIsCalledWithValidId() {
+        // Arrange
+        Long menuItemId = 1L;
+        when(menuItemsRepositoryPort.deleteById(menuItemId)).thenReturn(Optional.of(menuItem));
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.deleteById(menuItemId);
+
+        // Assert
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(menuItem);
+        verify(menuItemsRepositoryPort, times(1)).deleteById(menuItemId);
+    }
+
+    @Test
+    @DisplayName("Should return empty optional when deleteById is called with invalid id")
+    void shouldReturnEmptyOptionalWhenDeleteByIdIsCalledWithInvalidId() {
+        // Arrange
+        Long invalidMenuItemId = 999L;
+        when(menuItemsRepositoryPort.deleteById(invalidMenuItemId)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<MenuItem> result = menuItemUseCase.deleteById(invalidMenuItemId);
+
+        // Assert
+        assertThat(result).isEmpty();
+        verify(menuItemsRepositoryPort, times(1)).deleteById(invalidMenuItemId);
+    }
+
+    @Test
+    @DisplayName("Should handle null menu item gracefully when save is called")
+    void shouldHandleNullMenuItemGracefullyWhenSaveIsCalled() {
         // Arrange
         MenuItem nullMenuItem = null;
-
-        when(menuItemsRepositoryPort.save(isNull())).thenThrow(new NullPointerException("Menu item cannot be null"));
-
-        // Act & Assert
-        assertThrows(NullPointerException.class,
-            () -> menuItemUseCase.save(nullMenuItem),
-            "Should throw NullPointerException when menu item is null"
-        );
-        
-        verify(menuItemsRepositoryPort, times(1)).save(nullMenuItem);
-        verifyNoMoreInteractions(menuItemsRepositoryPort);
-    }
-
-    @Test
-    @DisplayName("Should save menu item with all required fields")
-    void shouldSaveMenuItemWithAllRequiredFields() {
-        // Arrange
-        MenuItem menuItem = TestDataBuilder.createValidMenuItem();
-        MenuItem expectedResult = TestDataBuilder.createValidMenuItem();
-        
-        when(menuItemsRepositoryPort.save(menuItem)).thenReturn(expectedResult);
+        when(menuItemsRepositoryPort.save(nullMenuItem)).thenReturn(null);
 
         // Act
-        MenuItem result = menuItemUseCase.save(menuItem);
+        MenuItem result = menuItemUseCase.save(nullMenuItem);
 
         // Assert
-        assertNotNull(result);
-        assertNotNull(result.getNome(), "Menu item name should not be null");
-        assertNotNull(result.getItemDescription(), "Menu item description should not be null");
-        assertNotNull(result.getItemPrice(), "Menu item price should not be null");
-        assertNotNull(result.getAvailability(), "Menu item availability should not be null");
-        assertNotNull(result.getItemImage(), "Menu item image should not be null");
-        
-        verify(menuItemsRepositoryPort, times(1)).save(menuItem);
+        assertThat(result).isNull();
+        verify(menuItemsRepositoryPort, times(1)).save(nullMenuItem);
     }
 }

@@ -1,6 +1,5 @@
 package com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request;
 
-import com.br.fiap.fortaleza.sabor.utils.TestConstants;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,15 +7,11 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-
-@ExtendWith(MockitoExtension.class)
 @DisplayName("MenuItemRequestDto Validation Tests")
 class MenuItemRequestDtoTest {
 
@@ -29,275 +24,360 @@ class MenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should pass validation with valid data")
-    void shouldPassValidationWithValidData() {
+    @DisplayName("Should pass validation with valid MenuItemRequestDto")
+    void shouldPassValidationWithValidMenuItemRequestDto() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = createValidMenuItemRequestDto();
-
-        // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
-
-        // Assert
-        assertTrue(violations.isEmpty(), "Should have no validation violations");
-    }
-
-    @Test
-    @DisplayName("Should fail validation when name is null")
-    void shouldFailValidationWhenNameIsNull() {
-        // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            null,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for null name");
+        assertThat(violations).isEmpty();
     }
 
     @Test
-    @DisplayName("Should fail validation when name is blank")
-    void shouldFailValidationWhenNameIsBlank() {
+    @DisplayName("Should fail validation when nome is null")
+    void shouldFailValidationWhenNomeIsNull() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            "",
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                null,
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for blank name");
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
     }
 
     @Test
-    @DisplayName("Should fail validation when name is too short")
-    void shouldFailValidationWhenNameIsTooShort() {
+    @DisplayName("Should fail validation when nome is blank")
+    void shouldFailValidationWhenNomeIsBlank() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            "A",
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "   ",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for short name");
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
     }
 
     @Test
-    @DisplayName("Should fail validation when name contains numbers")
-    void shouldFailValidationWhenNameContainsNumbers() {
+    @DisplayName("Should fail validation when nome is too short")
+    void shouldFailValidationWhenNomeIsTooShort() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            "Pizza123",
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "P",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for invalid name pattern");
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
     }
 
     @Test
-    @DisplayName("Should fail validation when description is null")
-    void shouldFailValidationWhenDescriptionIsNull() {
+    @DisplayName("Should fail validation when nome is too long")
+    void shouldFailValidationWhenNomeIsTooLong() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            null,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        String longName = "A".repeat(51);
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                longName,
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for null description");
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
     }
 
     @Test
-    @DisplayName("Should fail validation when description is too short")
-    void shouldFailValidationWhenDescriptionIsTooShort() {
+    @DisplayName("Should fail validation when nome contains numbers")
+    void shouldFailValidationWhenNomeContainsNumbers() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            "A",
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza123",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for short description");
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getMessage().contains("The name must contain only letters"));
     }
 
     @Test
-    @DisplayName("Should fail validation when price is null")
-    void shouldFailValidationWhenPriceIsNull() {
+    @DisplayName("Should fail validation when itemDescription is null")
+    void shouldFailValidationWhenItemDescriptionIsNull() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            null,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                null,
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for null price");
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemDescription"));
     }
 
     @Test
-    @DisplayName("Should fail validation when price format is invalid")
-    void shouldFailValidationWhenPriceFormatIsInvalid() {
+    @DisplayName("Should fail validation when itemDescription is too short")
+    void shouldFailValidationWhenItemDescriptionIsTooShort() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            "invalid-price",
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "A",
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for invalid price format");
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemDescription"));
+    }
+
+    @Test
+    @DisplayName("Should fail validation when itemDescription is too long")
+    void shouldFailValidationWhenItemDescriptionIsTooLong() {
+        // Arrange
+        String longDescription = "A".repeat(251);
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                longDescription,
+                "29.90",
+                true,
+                "pizza-margherita.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemDescription"));
+    }
+
+    @Test
+    @DisplayName("Should fail validation when itemPrice is null")
+    void shouldFailValidationWhenItemPriceIsNull() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                null,
+                true,
+                "pizza-margherita.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemPrice"));
+    }
+
+    @Test
+    @DisplayName("Should fail validation when itemPrice has invalid format")
+    void shouldFailValidationWhenItemPriceHasInvalidFormat() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.999", // 3 decimal places - invalid
+                true,
+                "pizza-margherita.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemPrice"));
+        assertThat(violations).anyMatch(v -> v.getMessage().contains("The price must be a valid number"));
+    }
+
+    @Test
+    @DisplayName("Should pass validation with valid integer price")
+    void shouldPassValidationWithValidIntegerPrice() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29",
+                true,
+                "pizza-margherita.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should pass validation with valid decimal price")
+    void shouldPassValidationWithValidDecimalPrice() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.50",
+                true,
+                "pizza-margherita.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isEmpty();
     }
 
     @Test
     @DisplayName("Should fail validation when availability is null")
     void shouldFailValidationWhenAvailabilityIsNull() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            null,
-            TestConstants.VALID_MENU_IMAGE
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                null,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for null availability");
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("availability"));
     }
 
     @Test
-    @DisplayName("Should allow valid price formats")
-    void shouldAllowValidPriceFormats() {
-        // Test cases for valid prices
-        String[] validPrices = {"10.50", "100", "1.99", "999.99", "12345678.99"};
-        
-        for (String validPrice : validPrices) {
-            // Arrange
-            MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-                TestConstants.VALID_MENU_NAME,
-                TestConstants.VALID_MENU_DESCRIPTION,
-                validPrice,
-                TestConstants.VALID_MENU_AVAILABILITY,
-                TestConstants.VALID_MENU_IMAGE
-            );
-
-            // Act
-            Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
-
-            // Assert
-            assertTrue(violations.isEmpty(), 
-                "Should have no validation violations for valid price: " + validPrice);
-        }
-    }
-
-    @Test
-    @DisplayName("Should reject invalid price formats")
-    void shouldRejectInvalidPriceFormats() {
-        // Test cases for invalid prices
-        String[] invalidPrices = {"10.5", "10.123", "abc", "10.99.99", "123456789.99", "-10.50"};
-        
-        for (String invalidPrice : invalidPrices) {
-            // Arrange
-            MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-                TestConstants.VALID_MENU_NAME,
-                TestConstants.VALID_MENU_DESCRIPTION,
-                invalidPrice,
-                TestConstants.VALID_MENU_AVAILABILITY,
-                TestConstants.VALID_MENU_IMAGE
-            );
-
-            // Act
-            Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
-
-            // Assert
-            assertFalse(violations.isEmpty(), 
-                "Should have validation violations for invalid price: " + invalidPrice);
-        }
-    }
-
-    @Test
-    @DisplayName("Should fail validation when image is null")
-    void shouldFailValidationWhenImageIsNull() {
+    @DisplayName("Should pass validation when availability is false")
+    void shouldPassValidationWhenAvailabilityIsFalse() {
         // Arrange
-        MenuItemRequestDto menuItemRequestDto = new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            null
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                false,
+                "pizza-margherita.jpg"
         );
 
         // Act
-        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemRequestDto);
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
 
         // Assert
-        assertFalse(violations.isEmpty(), "Should have validation violations when image is null");
-        assertTrue(violations.size() >= 1, "Should have at least one violation for null image");
+        assertThat(violations).isEmpty();
     }
 
-    private MenuItemRequestDto createValidMenuItemRequestDto() {
-        return new MenuItemRequestDto(
-            TestConstants.VALID_MENU_NAME,
-            TestConstants.VALID_MENU_DESCRIPTION,
-            TestConstants.VALID_MENU_PRICE,
-            TestConstants.VALID_MENU_AVAILABILITY,
-            TestConstants.VALID_MENU_IMAGE
+    @Test
+    @DisplayName("Should fail validation when itemImage is null")
+    void shouldFailValidationWhenItemImageIsNull() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Pizza Margherita",
+                "Traditional Italian pizza with tomato, mozzarella and basil",
+                "29.90",
+                true,
+                null
         );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).hasSize(1);
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("itemImage"));
+    }
+
+    @Test
+    @DisplayName("Should accept valid names with accents and spaces")
+    void shouldAcceptValidNamesWithAccentsAndSpaces() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Açaí com Granola",
+                "Delicious açaí bowl with granola and fruits",
+                "15.90",
+                true,
+                "acai-granola.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should accept large valid price")
+    void shouldAcceptLargeValidPrice() {
+        // Arrange
+        MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
+                "Premium Dish",
+                "An expensive premium dish for special occasions",
+                "99999999.99",
+                true,
+                "premium-dish.jpg"
+        );
+
+        // Act
+        Set<ConstraintViolation<MenuItemRequestDto>> violations = validator.validate(menuItemDto);
+
+        // Assert
+        assertThat(violations).isEmpty();
     }
 }
