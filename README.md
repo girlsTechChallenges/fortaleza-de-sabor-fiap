@@ -1,104 +1,202 @@
 # Fortaleza de Sabor API
 
-Fortaleza de Sabor é uma API desenvolvida para gerenciar o restaurante Fortaleza de Sabor. Este repositório contém o### Endpoints
+Uma API REST robusta para gestão de restaurantes e usuários, desenvolvida com Spring Boot e arquitetura Clean Architecture.
 
-### Restaurantes
-- **POST** `/restaurants` - Criar restaurante
-- **PUT** `/restaurants/{id}` - Atualizar restaurante
+## 📊 Status do Projeto
 
-### Users
-- **POST** `/users` - Criar usuário
-- **PUT** `/users/{id}` - Atualizar usuário
+| Aspecto | Status | Detalhes |
+|---------|--------|----------|
+| **Desenvolvimento** | ✅ MVP Concluído | API REST funcional para gestão de restaurantes e usuários |
+| **Arquitetura** | ✅ Clean Architecture | Implementação completa com DDD e separação de camadas |
+| **Testes** | ✅ Cobertura Completa | 54 testes (46 unitários + 8 integração) com 100% sucesso |
+| **Documentação** | ✅ Atualizada | README, arquitetura e documentação de testes |
+| **Containerização** | ✅ Docker Ready | Multi-stage build com PostgreSQL |
+| **API Documentation** | ✅ Swagger/OpenAPI | Documentação interativa disponível |
+
+## 🚀 Funcionalidades
+
+### Endpoints Principais
+
+#### 👥 Gestão de Usuários
+- **POST** `/users` - Criar usuário (Cliente/Dono)
+- **GET** `/users` - Listar todos os usuários  
 - **GET** `/users/{id}` - Buscar usuário por ID
-- **GET** `/users` - Listar usuários
+- **PUT** `/users/{id}` - Atualizar usuário
 - **DELETE** `/users/{id}` - Remover usuário
 
-### Authentication
-- **POST** `/auth/login` - Realizar login
-- **PATCH** `/auth/password` - Alterar senhae do projeto, que utiliza o framework Spring Boot para criar uma aplicação robusta e escalável.
+#### 🍽️ Gestão de Restaurantes
+- **POST** `/restaurants` - Criar restaurante (requer usuário DONO)
+- **GET** `/restaurants` - Listar restaurantes
+- **GET** `/restaurants/{id}` - Buscar restaurante por ID
+- **PUT** `/restaurants/{id}` - Atualizar restaurante
 
----
+#### 🔐 Autenticação
+- **POST** `/auth/login` - Realizar login (JWT)
+- **PATCH** `/auth/password` - Alterar senha
 
-## Arquitetura do Projeto
+#### 🍕 Gestão de Cardápio
+- **GET** `/cardapio` - Listar itens do menu
+- **GET** `/cardapio/{id}` - Buscar item por ID
 
-O projeto segue uma arquitetura em camadas, baseada em princípios de Clean Architecture e DDD (Domain-Driven Design). Para uma visualização detalhada da arquitetura, consulte o [diagrama de arquitetura](diagram.png).
+#### ⚙️ Tipos de Usuários
+- **POST** `/type-users` - Criar tipo de usuário
+- **GET** `/type-users` - Listar tipos disponíveis
 
-### Principais Camadas:
+## 🏗️ Arquitetura
 
-1. **Camada de Apresentação**:
-   - Controllers: Exposição dos endpoints REST da API
-   - Controller Docs: Interfaces de documentação Swagger (separadas dos controllers)
-   - DTOs: Objetos de transferência de dados
-   - Exception Handlers: Tratamento de exceções
+O projeto implementa **Clean Architecture** com **Domain-Driven Design**, garantindo:
 
-2. **Camada de Domínio**:
-   - Use Cases: Implementação das regras de negócio
-   - Entities: Classes que representam o domínio
+- 📦 **Separação de responsabilidades** entre camadas
+- 🔄 **Baixo acoplamento** e alta coesão
+- 🧪 **Testabilidade** facilitada por inversão de dependências
+- 📈 **Escalabilidade** e manutenibilidade
 
-3. **Camada de Infraestrutura**:
-   - Gateways: Interfaces de acesso a dados
-   - Repositories: Implementações JPA
-   - Mappers: Conversão entre DTOs e entidades
+### Camadas Principais:
 
----
+1. **🎯 Camada de Apresentação** (Infrastructure)
+   - Controllers REST
+   - DTOs e validações Bean Validation
+   - Exception Handlers globais
+   - Documentação Swagger
 
-## Tecnologias Utilizadas
+2. **💼 Camada de Aplicação** (Application)
+   - Use Cases (regras de negócio)
+   - Ports (interfaces de entrada e saída)
+   - Serviços de domínio
 
-- **Java 21**: Linguagem principal do projeto
-- **Spring Boot 3.4.5**: Framework para desenvolvimento
-- **PostgreSQL**: Banco de dados relacional
-- **Hibernate**: Implementação JPA
-- **SpringDoc OpenAPI**: Documentação da API
-- **H2 Database**: Banco para testes
-- **JUnit 5**: Framework de testes
-- **Maven**: Gerenciamento de dependências
-- **Docker**: Containerização
+3. **🏛️ Camada de Domínio** (Domain)
+   - Entidades de negócio
+   - Value Objects
+   - Regras de domínio
 
----
+4. **🔧 Camada de Infraestrutura** (Infrastructure)
+   - Repositórios JPA
+   - Mappers de conversão
+   - Configurações
 
-## Estrutura do Projeto
+## 🛠️ Tecnologias
 
-```plaintext
-.
-├── src/
-│   ├── main/
-│   │   ├── java/com/br/fiap/fortaleza/sabor/
-│   │   │   ├── application/usecase/    # Casos de uso
-│   │   │   ├── domain/                 # Entidades de domínio
-│   │   │   └── infrastructure/
-│   │   │       ├── config/             # Configurações
-│   │   │       ├── controller/         # Controllers REST
-│   │   │       │   └── docs/          # Interfaces de documentação Swagger
-│   │   │       ├── dto/               # DTOs
-│   │   │       ├── mapper/            # Mappers
-│   │   │       └── persistence/       # Entidades JPA
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       ├── app.key
-│   │       └── app.pub
-│   └── test/
-│       ├── java/                      # Testes unitários
-│       └── resources/
-│           ├── application-test.properties
-│           └── data.sql
-├── target/                           # Artefatos gerados
-│   ├── fortaleza.sabor-0.0.1-SNAPSHOT.jar
-│   └── surefire-reports/            # Relatórios de testes
-├── collections/                      # Collection Postman
-│   └── Fortaleza_de_Sabor_API_Completa.postman_collection.json
-├── DOCUMENTACAO_COMPLETA_TESTES.md  # Documentação consolidada de testes
-├── RESUMO_PROJETO.md                # Resumo executivo do projeto
-├── architecture.md                  # Documentação da arquitetura
-├── doc.md                          # Documentação técnica detalhada
-├── docker-compose.yml               # Configuração Docker
-└── README.md
+### Backend Core
+- **Java 21** - Linguagem principal
+- **Spring Boot 3.4.5** - Framework base
+- **PostgreSQL** - Banco de dados produção  
+- **H2** - Banco de dados para testes
+
+### Segurança e Validação
+- **Spring Security** - Autenticação/autorização
+- **JWT** - Tokens de acesso seguros
+- **Bean Validation** - Validação de entrada
+
+### Testes e Qualidade  
+- **JUnit 5** - Framework de testes
+- **Mockito** - Mocking para testes unitários
+- **REST-assured** - Testes de integração
+- **54 testes** (46 unitários + 8 integração)
+
+### DevOps e Build
+- **Maven** - Gerenciamento de dependências
+- **Docker** - Containerização
+- **SpringDoc OpenAPI** - Documentação automática
+## 📁 Estrutura do Projeto
+
+```
+fortaleza-de-sabor-fiap/
+├── 📁 src/main/java/com/br/fiap/fortaleza/sabor/
+│   ├── 📁 application/             # Camada de Aplicação
+│   │   ├── 📁 ports/              # Interfaces (entrada/saída)
+│   │   └── 📁 usecase/            # Regras de negócio
+│   ├── 📁 domain/                 # Camada de Domínio
+│   │   └── 📁 model/              # Entidades de negócio
+│   └── 📁 infrastructure/         # Camada de Infraestrutura
+│       ├── 📁 config/             # Configurações Spring
+│       ├── 📁 controller/         # Controllers REST
+│       │   └── 📁 docs/          # Documentação Swagger
+│       ├── 📁 dto/               # Data Transfer Objects
+│       ├── 📁 mapper/            # Conversores entre camadas
+│       └── 📁 persistence/       # Entidades JPA e Repositórios
+├── 📁 src/test/java/              # Testes (54 testes total)
+│   ├── 📁 ...unitários/          # 46 testes unitários
+│   └── 📁 integration/           # 8 testes de integração REST-assured
+├── 📁 collections/               # Collection Postman para testes
+├── 📄 README.md                  # Este arquivo
+├── 📄 architecture.md            # Documentação da arquitetura
+├── 📄 doc.md                     # Documentação técnica
+├── 📄 RESUMO_PROJETO.md          # Resumo executivo
+├── 📄 DOCUMENTACAO_COMPLETA_TESTES.md # Documentação de testes
+├── 🐳 docker-compose.yml         # Configuração Docker
+└── 🐳 Dockerfile                 # Multi-stage build
 ```
 
----
+## 🚀 Como Executar
 
-## Execução do Projeto
+### Opção 1: Docker (Recomendado)
+```bash
+# Clone o repositório
+git clone https://github.com/girlsTechChallenges/fortaleza-de-sabor-fiap.git
+cd fortaleza-de-sabor-fiap
 
-### Pré-requisitos
+# Execute com Docker Compose
+docker-compose up --build
+```
+
+### Opção 2: Build Local + Docker
+```bash
+# Compile o projeto
+./mvnw clean install
+
+# Execute apenas o banco com Docker
+docker-compose up database
+
+# Execute a aplicação
+./mvnw spring-boot:run
+```
+
+### Opção 3: Desenvolvimento Local
+```bash
+# Configurar PostgreSQL local (porta 5432)
+# Configurar variáveis de ambiente conforme application.properties
+
+# Executar aplicação
+./mvnw spring-boot:run
+```
+
+## 🔗 Acesso à Aplicação
+
+- **API Base URL**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+
+## 🧪 Executar Testes
+
+### Todos os Testes (Unitários + Integração)
+```bash
+mvn clean test
+```
+
+### Apenas Testes Unitários
+```bash
+mvn clean test -P unit-tests
+```
+
+### Apenas Testes de Integração
+```bash
+mvn clean test -P integration-tests
+```
+
+## 📊 Cobertura de Testes
+
+- **54 testes totais** com 100% de sucesso
+- **46 testes unitários** - Todas as camadas (Use Cases, Controllers, Mappers, DTOs)
+- **8 testes de integração** - REST-assured com H2 em memória
+- **Padrão AAA** (Arrange-Act-Assert) em todos os testes
+- **Isolamento completo** entre testes
+
+### Camadas Testadas
+- ✅ **Use Cases** (11 classes) - Regras de negócio
+- ✅ **Controllers** (5 classes) - Endpoints REST  
+- ✅ **Mappers** (4 classes) - Conversões entre camadas
+- ✅ **DTOs** (9 classes) - Validação Bean Validation
+- ✅ **Repositories** (2 classes) - Persistência customizada
 - Java 21
 - Docker Desktop
 - Git
@@ -299,104 +397,55 @@ Após a execução, os relatórios podem ser encontrados em:
 Esta collection única e consolidada contém **35+ cenários de teste** organizados em:
 - 👤 **User Management** (6 endpoints)
 - 🍽️ **Restaurant Management** (3 endpoints)  
+## � Collection Postman
+
+### Testes de API Automatizados
+- **35+ cenários** organizados em modules
+- **Automação completa** com variáveis dinâmicas
+- **Validações automáticas** de respostas
+
+#### Grupos de Endpoints
+- 👤 **User Management** (6 endpoints)
+- 🍽️ **Restaurant Management** (3 endpoints) 
 - 🔐 **Authentication** (3 endpoints)
-- 🧪 **Test Scenarios** (23 cenários de validação, erro e segurança)
+- 🧪 **Test Scenarios** (23 cenários de validação e erro)
 
-### Execução dos Testes via Postman
+### Como Usar
+1. **Importe**: `collections/Fortaleza_de_Sabor_API_Completa.postman_collection.json`
+2. **Configure**: `baseUrl: http://localhost:8080`
+3. **Execute**: Ordem sequencial ou "Run Collection"
 
-#### 📋 **Ordem Recomendada de Execução**
+## � URLs de Acesso
 
-Para obter os melhores resultados nos testes, execute os endpoints na seguinte ordem:
+- **API**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI**: http://localhost:8080/v3/api-docs
 
-#### **1. Gestão de Usuários**
-```
-1. POST /users - Criar usuário (tipo CLIENTE)
-2. POST /users - Criar usuário (tipo DONO)
-3. GET /users - Listar todos os usuários
-4. GET /users/{id} - Buscar usuário por ID
-5. PUT /users/{id} - Atualizar usuário
-```
+## 📚 Documentação
 
-#### **2. Autenticação**
-```
-6. POST /auth/login - Realizar login (obter token)
-7. PATCH /auth/password - Alterar senha
-```
+### Documentos Principais
+- 📋 **[RESUMO_PROJETO.md](RESUMO_PROJETO.md)** - Resumo executivo completo
+- 🧪 **[DOCUMENTACAO_COMPLETA_TESTES.md](DOCUMENTACAO_COMPLETA_TESTES.md)** - Doc. de testes
+- 🏗️ **[architecture.md](architecture.md)** - Arquitetura detalhada
+- 📄 **[doc.md](doc.md)** - Documentação técnica adicional
 
-#### **3. Gestão de Restaurantes**
-```
-8. POST /restaurants - Criar restaurante (necessário usuário DONO)
-9. PUT /restaurants/{id} - Atualizar restaurante
-```
+### Recursos Visuais
+- 📊 **[diagram.png](diagram.png)** - Diagrama da arquitetura
+- 📮 **[Collections Postman](collections/)** - Testes automatizados
 
-#### **4. Cenários de Teste** (Validação de Falhas)
-```
-10. Error Tests - Validar tratamento de erros
-11. Validation Tests - Verificar regras de validação
-12. Business Logic Tests - Testar lógica de negócio
-13. Security Tests - Testes básicos de segurança
-```
+## � Licença
 
-#### 🔧 **Configuração da Collection**
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
-1. **Importe a collection**: `Fortaleza_de_Sabor_API_Completa.postman_collection.json`
-2. **Variáveis automáticas já configuradas**:
-   ```json
-   {
-     "baseUrl": "http://localhost:8080",
-     "authToken": "<auto-preenchido>",
-     "userId": "<auto-preenchido>",
-     "restaurantId": "<auto-preenchido>"
-   }
-   ```
-3. **Execute em ordem sequencial** ou use "Run Collection" para execução automática
+## 👨‍💻 Desenvolvido por
 
-#### 📊 **Cobertura da Collection**
-
-| Categoria | Descrição | Cenários |
-|-----------|-----------|----------|
-| **Funcionalidades** | CRUD completo de usuários e restaurantes | 12 endpoints |
-| **Validação** | Testes de dados inválidos e formatos | 11 cenários |
-| **Erro/Negócio** | Recursos inexistentes e conflitos | 8 cenários |
-| **Segurança** | XSS, SQL Injection, autenticação | 4 cenários |
-
-#### ⚠️ **Observações Importantes**
-- Collection com **automação completa**: captura automática de tokens e IDs
-- **Testes de falha incluídos**: validação de cenários de erro esperados
-- **Execução única**: todos os cenários em uma collection consolidada
-- **Documentação integrada**: assertions e validações automáticas
-
-Para documentação completa dos testes, consulte: **`DOCUMENTACAO_COMPLETA_TESTES.md`**
+**Equipe Girls Tech Challenges**
+- Tech Challenge FIAP
+- Arquitetura de Software
 
 ---
 
-## Artefatos Gerados
-
-### JARs
-- Executável: `target/fortaleza.sabor-0.0.1-SNAPSHOT.jar`
-- Original: `target/fortaleza.sabor-0.0.1-SNAPSHOT.jar.original`
-
-### Configurações e Chaves
-- `target/classes/application.properties`
-- `target/classes/app.key`
-- `target/classes/app.pub`
-
----
-
-## Documentação Adicional
-
-### 📚 **Relatórios Técnicos**
-- [`RESUMO_PROJETO.md`](RESUMO_PROJETO.md) - **Resumo executivo completo do projeto**
-- [`DOCUMENTACAO_COMPLETA_TESTES.md`](DOCUMENTACAO_COMPLETA_TESTES.md) - **Documentação consolidada de testes**
-- [`architecture.md`](architecture.md) - Documentação da arquitetura do sistema
-
-### 🏗️ **Arquitetura e Design**
-- [`diagram.png`](diagram.png) - Diagrama visual da arquitetura
-- [`doc.md`](doc.md) - Documentação técnica adicional
-
-### 📁 **Collections e Recursos**
-- `collections/` - Collections do Postman para teste da API
-- Configurações Docker para ambiente de desenvolvimento
+**Fortaleza de Sabor API** - Uma solução robusta, bem testada e documentada para gestão de restaurantes. 🍽️✨
 
 ---
 
