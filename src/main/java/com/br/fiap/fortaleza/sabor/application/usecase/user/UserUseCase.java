@@ -54,6 +54,7 @@ public class UserUseCase implements UserUseCasePort {
 
     @Override
     public void updatePassword(String email, String password) {
+        usersRepositoryPort.updatePassword(email, password);
 
     }
 }
