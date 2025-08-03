@@ -9,25 +9,29 @@ import java.util.List;
 public class MenuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_cardapio;
+    private Long id;
 
     @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL)
     private List<MenuItemsEntity> menuItemsList;
 
     public MenuEntity() {}
 
-    public MenuEntity(Long id_cardapio, List<MenuItemsEntity> menuItemsList){
-        this.id_cardapio = id_cardapio;
+    public MenuEntity(Long id, List<MenuItemsEntity> menuItemsList){
+        this.id = id;
         this.menuItemsList = menuItemsList;
     }
 
-    public Long getId_cardapio() { return id_cardapio;}
-
-    public void setId_cardapio(Long id_cardapio) {
-        this.id_cardapio = id_cardapio;
+    public Long getId() {
+        return id;
     }
 
-    public List<MenuItemsEntity> getMenuItemsList(){ return menuItemsList; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<MenuItemsEntity> getMenuItemsList() {
+        return menuItemsList;
+    }
 
     public void setMenuItemsList(List<MenuItemsEntity> menuItemsList) {
         this.menuItemsList = menuItemsList;

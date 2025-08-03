@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.USER_NOT_FOUND;
+
 @Component
 public class UserMapper {
 
@@ -133,7 +135,7 @@ public class UserMapper {
 
     public UserResponseDto getUserByIdToUserResponseDto(Optional<User> optionalUser) {
 
-        User user = optionalUser.get();
+        User user = optionalUser.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
 
         List<AddressDto> addressDtos = user.getAddress().stream()
                 .map(address -> new AddressDto(

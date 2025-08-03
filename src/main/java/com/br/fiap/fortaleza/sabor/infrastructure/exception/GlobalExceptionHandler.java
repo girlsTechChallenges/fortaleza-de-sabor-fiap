@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.ERROR;
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.MESSAGE_ERROR;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -34,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiErrorMessage> handleUserNotFoundException(UserNotFoundException exception) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("message", List.of(exception.getMessage()));
+        errors.put(MESSAGE_ERROR, List.of(exception.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.NOT_FOUND, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -43,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorMessage> handleGenericException(Exception ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -52,8 +55,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ApiErrorMessage> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("Access Denied"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("Access Denied"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.FORBIDDEN, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -62,8 +65,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserCredentialsException.class)
     public ResponseEntity<ApiErrorMessage> handleUserCredentialsException(UserCredentialsException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("Invalid email or password"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("Invalid email or password"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.UNAUTHORIZED, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -72,8 +75,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorMessage> handleUserAlreadyRegisteredException(UserAlreadyRegisteredException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("User already registered"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("User already registered"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.CONFLICT, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -82,8 +85,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestaurantAlreadyExistsException.class)
     public ResponseEntity<ApiErrorMessage> handleRestaurantAlreadyExistsException(RestaurantAlreadyExistsException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("Restaurant already exists"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("Restaurant already exists"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.CONFLICT, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -92,8 +95,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ApiErrorMessage> handleRestaurantNotFoundException(RestaurantNotFoundException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("Restaurant not found"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("Restaurant not found"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.NOT_FOUND, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -102,8 +105,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserTypeMismatchException.class)
     public ResponseEntity<ApiErrorMessage> handleUserTypeMismatchException(UserTypeMismatchException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("User type mismatch"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("User type mismatch"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);
@@ -112,8 +115,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MenuAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorMessage> handleMenuAlreadyRegisteredException(MenuAlreadyRegisteredException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("error", List.of("Menu already registered"));
-        errors.put("message", List.of(ex.getMessage()));
+        errors.put(ERROR, List.of("Menu already registered"));
+        errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.CONFLICT, errors);
         return ResponseEntity.status(apiErrorMessage.getStatus()).body(apiErrorMessage);

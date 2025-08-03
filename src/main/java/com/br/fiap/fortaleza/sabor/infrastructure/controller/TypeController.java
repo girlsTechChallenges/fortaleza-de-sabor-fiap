@@ -69,7 +69,7 @@ public class TypeController implements TypeUserControllerDocs {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TypeUserResponse> getById(Long id) {
+    public ResponseEntity<TypeUserResponse> getById(@PathVariable @NotNull Long id) {
         log.info("Received request to get type user by ID: {}", id);
 
         var typeUser = typeUseCasePort.getById(id);
@@ -82,7 +82,7 @@ public class TypeController implements TypeUserControllerDocs {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @NotNull Long id) {
         log.info("Received request to delete type user with ID: {}", id);
 
         typeUseCasePort.deleteById(id);

@@ -202,7 +202,7 @@ class TypeUseCaseTest {
         // Act & Assert
         assertThatThrownBy(() -> typeUseCase.deleteById(invalidTypeUserId))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("Type user not found with id: 999");
+                .hasMessage(String.format("Type user not found with id: %d", invalidTypeUserId));
         verify(typeRepositoryPort, times(1)).deleteById(invalidTypeUserId);
     }
 

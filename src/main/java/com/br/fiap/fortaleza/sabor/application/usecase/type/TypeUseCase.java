@@ -36,7 +36,7 @@ public class TypeUseCase implements TypeUseCasePort {
     @Override
     public Optional<TypeUser> deleteById(Long id) {
         return Optional.ofNullable(typeRepositoryPort.deleteById(id)
-                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND + id)));
+                .orElseThrow(() -> new RuntimeException(TYPE_USER_NOT_FOUND_WITH_ID + id)));
     }
 
     @Override

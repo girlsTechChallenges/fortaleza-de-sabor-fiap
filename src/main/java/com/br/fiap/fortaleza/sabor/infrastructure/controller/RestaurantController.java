@@ -73,7 +73,7 @@ public class RestaurantController implements RestaurantControllerDocs {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantFullDto> getById(Long id) {
+    public ResponseEntity<RestaurantFullDto> getById(@PathVariable @NotNull Long id) {
         log.info("Received request to get restaurant by ID: {}", id);
 
         Optional<Restaurant> restaurantOptional = restaurantUseCasePort.getById(id);
@@ -83,7 +83,7 @@ public class RestaurantController implements RestaurantControllerDocs {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @NotNull Long id) {
         log.info("Received request to delete restaurant with ID: {}", id);
 
         restaurantUseCasePort.deleteById(id);
@@ -93,7 +93,7 @@ public class RestaurantController implements RestaurantControllerDocs {
     }
 
     @PatchMapping(value = "owner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RestaurantResponseDto> updateOwnerRestaurant(Long id, OwnerRequestDto ownerRequestDto) {
+    public ResponseEntity<RestaurantResponseDto> updateOwnerRestaurant(@PathVariable @NotNull Long id, @Valid @RequestBody OwnerRequestDto ownerRequestDto) {
         log.info("Received request to update owner - restaurant ID: {}", id);
 
         var updatedRestaurant =

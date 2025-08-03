@@ -318,7 +318,7 @@ class UserRepositoryPortJpaTest {
         // Act & Assert
         assertThatThrownBy(() -> userRepositoryPortJpa.updatePassword(invalidEmail, newPassword))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("Error updating user password");
+                .hasMessage(String.format("User %s not found", invalidEmail));
         
         verify(passwordEncoder, times(1)).encode(newPassword);
         verify(userRepositoryAdapter, times(1)).findByEmail(invalidEmail);
