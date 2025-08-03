@@ -22,7 +22,8 @@ import java.util.Optional;
 @Service
 public class UserRepositoryPortJpa implements UsersRepositoryPort {
 
-    private static final Logger log = LoggerFactory.getLogger(UserRepositoryPortJpa.class);
+    Logger log = LoggerFactory.getLogger(UserRepositoryPortJpa.class);
+
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepositoryAdapter userRepositoryAdapter;
     private final TypeUserRepositoryAdapter typeUserRepositoryAdapter;
@@ -85,7 +86,7 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
 
     @Override
     public Optional<User> deleteById(Long idUser) {
-        UserEntity findUser = userRepositoryAdapter.findById(idUser)
+        userRepositoryAdapter.findById(idUser)
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
         Optional<UserEntity> user = userRepositoryAdapter.findById(idUser);
@@ -106,7 +107,7 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
         var user = userRepositoryAdapter.findByEmail(email);
 
         try {
-            if(Objects.isNull(user)){
+            if(Objects.isNull(user) || user.isEmpty()) {
                 throw new UserNotFoundException(email);
             }
             user.get().setSenha(passEncoded);
@@ -114,10 +115,6 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
 
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(email);
-
-        } catch (Exception e) {
-            log.error("Error updating user password", e);
-            throw new RuntimeException("Error updating user password", e);
         }
     }
 

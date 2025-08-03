@@ -17,7 +17,8 @@ import java.util.Optional;
 @Service
 public class MenuItemRepositoryPortJpa implements MenuItemsRepositoryPort {
 
-    private static final Logger log = LoggerFactory.getLogger(MenuItemRepositoryPortJpa.class);
+    Logger log = LoggerFactory.getLogger(MenuItemRepositoryPortJpa.class);
+
     private final MenuItemRepositoryAdapter menuItemRepositoryAdapter;
     private final MenuMapper mapper;
 
@@ -64,15 +65,15 @@ public class MenuItemRepositoryPortJpa implements MenuItemsRepositoryPort {
     @Override
     public Optional<MenuItem> getById(Long idItemCardapio) {
         var findMenu = menuItemRepositoryAdapter.findById(idItemCardapio)
-                .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio.toString() + "was not found"));
+                .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio + "was not found"));
 
         return Optional.ofNullable(mapper.toMenuItemDomain(findMenu));
     }
 
     @Override
     public Optional<MenuItem> deleteById(Long idItemCardapio) {
-        MenuItemsEntity findMenu = menuItemRepositoryAdapter.findById(idItemCardapio)
-                .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio.toString() + "was not found"));
+        menuItemRepositoryAdapter.findById(idItemCardapio)
+                .orElseThrow(() -> new MenuNotFoundException("Menu" + idItemCardapio + "was not found"));
 
         Optional<MenuItemsEntity> menu = menuItemRepositoryAdapter.findById(idItemCardapio);
         menuItemRepositoryAdapter.deleteById(idItemCardapio);

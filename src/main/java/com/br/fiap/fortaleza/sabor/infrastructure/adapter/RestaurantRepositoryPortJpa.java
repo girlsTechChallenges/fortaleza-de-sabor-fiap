@@ -8,10 +8,10 @@ import com.br.fiap.fortaleza.sabor.infrastructure.exception.RestaurantNotFoundEx
 import com.br.fiap.fortaleza.sabor.infrastructure.exception.UserNotFoundException;
 import com.br.fiap.fortaleza.sabor.infrastructure.exception.UserTypeMismatchException;
 import com.br.fiap.fortaleza.sabor.infrastructure.mapper.RestaurantMapper;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantRepositoryAdapter;
-import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserRepositoryAdapter;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.AddressRestaurantEntity;
 import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantEntity;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.restaurant.RestaurantRepositoryAdapter;
+import com.br.fiap.fortaleza.sabor.infrastructure.persistence.user.UserRepositoryAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.RESTAURANT_NOT_FOUND;
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.USER_NOT_FOUND_WITH_EMAIL;
+
 @Service
 public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
 
-    private static final Logger log = LoggerFactory.getLogger(RestaurantRepositoryPortJpa.class);
+    Logger log = LoggerFactory.getLogger(RestaurantRepositoryPortJpa.class);
     private final RestaurantRepositoryAdapter restaurantRepositoryAdapter;
     private final UserRepositoryAdapter userRepositoryAdapter;
     private final RestaurantMapper mapper;
@@ -47,7 +50,7 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
         log.info("Creating restaurant with email: {}", email);
 
         var userEntity = userRepositoryAdapter.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_EMAIL + email));
 
         if("DONO".equals(userEntity.getEmail())) {
             throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
@@ -113,7 +116,7 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
                 .map(mapper::toRestaurantDomain)
                 .or(() -> {
                     log.error("Restaurant not found with id: {}", idRestaurant);
-                    throw new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant);
+                    throw new RestaurantNotFoundException(RESTAURANT_NOT_FOUND + idRestaurant);
                 });
     }
 
@@ -152,7 +155,7 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
 
         if (userEntity.getEmail().equals(email) && userEntity.getNome().equals(ownerName)) {
             restaurantEntity.setOwner(userEntity);
-            var updatedEntity = restaurantRepositoryAdapter.save(restaurantEntity);
+            restaurantRepositoryAdapter.save(restaurantEntity);
             return Optional.of(mapper.toRestaurantDomain(restaurantEntity));
         }
 
@@ -171,7 +174,7 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
                 })
                 .or(() -> {
                     log.error("Restaurant not found with id: {}", idRestaurant);
-                    throw new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant);
+                    throw new RestaurantNotFoundException(RESTAURANT_NOT_FOUND + idRestaurant);
                 });
     }
 

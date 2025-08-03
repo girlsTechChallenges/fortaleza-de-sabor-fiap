@@ -19,7 +19,8 @@ import java.util.Optional;
 @Service
 public class TypeRepositoryPortJpa implements TypeRepositoryPort {
 
-    private static final Logger log = LoggerFactory.getLogger(TypeRepositoryPortJpa.class);
+    Logger log = LoggerFactory.getLogger(TypeRepositoryPortJpa.class);
+
     private final TypeUserRepositoryAdapter typeUserRepositoryAdapter;
     private final UserRepositoryAdapter userRepositoryAdapter;
     private final TypeUserMapper typeMapper;

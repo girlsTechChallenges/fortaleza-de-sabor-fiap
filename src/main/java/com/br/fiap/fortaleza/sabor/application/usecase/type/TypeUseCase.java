@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.*;
+
 @Component
 public class TypeUseCase implements TypeUseCasePort {
 
@@ -20,7 +22,7 @@ public class TypeUseCase implements TypeUseCasePort {
     @Override
     public TypeUser create(TypeUser typeUser) {
         if (typeUser.getId() != null) {
-            throw new IllegalArgumentException("TypeUser ID must be null for creation");
+            throw new IllegalArgumentException(TYPE_USER_ID_NULL);
         }
         return typeRepositoryPort.create(typeUser);
     }
@@ -28,19 +30,19 @@ public class TypeUseCase implements TypeUseCasePort {
     @Override
     public Optional<TypeUser> update(Long id, TypeUser typeUser) {
         return Optional.ofNullable(typeRepositoryPort.update(id, typeUser)
-                .orElseThrow(() -> new IllegalArgumentException("User type not found.")));
+                .orElseThrow(() -> new IllegalArgumentException(TYPE_USER_NOT_FOUND)));
     }
 
     @Override
     public Optional<TypeUser> deleteById(Long id) {
         return Optional.ofNullable(typeRepositoryPort.deleteById(id)
-                .orElseThrow(() -> new RuntimeException("Type user not found with id: " + id)));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND + id)));
     }
 
     @Override
     public Optional<TypeUser> getById(Long id) {
         return Optional.ofNullable(typeRepositoryPort.getById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User type not found.")));
+                .orElseThrow(() -> new IllegalArgumentException(TYPE_USER_NOT_FOUND)));
     }
 
     @Override

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+import static com.br.fiap.fortaleza.sabor.infrastructure.common.MessageConstants.RESTAURANT_NOT_FOUND;
+
 @Component
 public class RestaurantUseCase implements RestaurantUseCasePort {
 
@@ -26,7 +28,7 @@ public class RestaurantUseCase implements RestaurantUseCasePort {
     @Override
     public Optional<Restaurant> update(Long idRestaurant, Restaurant restaurant) {
         return Optional.ofNullable(restaurantRepository.update(idRestaurant, restaurant)
-                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant)));
+                .orElseThrow(() -> new RestaurantNotFoundException(RESTAURANT_NOT_FOUND + idRestaurant)));
     }
 
     @Override
@@ -37,7 +39,7 @@ public class RestaurantUseCase implements RestaurantUseCasePort {
     @Override
     public Optional<Restaurant> deleteById(Long idRestaurant) {
         return Optional.ofNullable(restaurantRepository.deleteById(idRestaurant)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + idRestaurant)));
+                .orElseThrow(() -> new RuntimeException(RESTAURANT_NOT_FOUND + idRestaurant)));
     }
 
     @Override
@@ -48,6 +50,6 @@ public class RestaurantUseCase implements RestaurantUseCasePort {
     @Override
     public Optional<Restaurant> updateOwner(Long idRestaurant, String ownerName, String email) {
         return Optional.ofNullable(restaurantRepository.updateOwner(idRestaurant, ownerName, email)
-                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with id: " + idRestaurant)));
+                .orElseThrow(() -> new RestaurantNotFoundException(RESTAURANT_NOT_FOUND + idRestaurant)));
     }
 }
