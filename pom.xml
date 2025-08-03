@@ -148,10 +148,14 @@
 					<includes>
 						<include>**/*Test.java</include>
 						<include>**/*IntegrationTest.java</include>
+						<include>**/*E2ETest.java</include>
 					</includes>
 					<systemPropertyVariables>
 						<spring.profiles.active>test</spring.profiles.active>
 					</systemPropertyVariables>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
+					<parallel>false</parallel>
 				</configuration>
 			</plugin>
 
@@ -196,10 +200,14 @@
 							<includes>
 								<include>**/*Test.java</include>
 								<include>**/*IntegrationTest.java</include>
+								<include>**/*E2ETest.java</include>
 							</includes>
 							<systemPropertyVariables>
 								<spring.profiles.active>test</spring.profiles.active>
 							</systemPropertyVariables>
+							<forkCount>1</forkCount>
+							<reuseForks>true</reuseForks>
+							<parallel>false</parallel>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -220,7 +228,32 @@
 							</includes>
 							<excludes>
 								<exclude>**/*IntegrationTest.java</exclude>
+								<exclude>**/*E2ETest.java</exclude>
 							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Profile para executar apenas testes E2E -->
+		<profile>
+			<id>e2e-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*E2ETest.java</include>
+							</includes>
+							<systemPropertyVariables>
+								<spring.profiles.active>e2e</spring.profiles.active>
+							</systemPropertyVariables>
+							<forkCount>1</forkCount>
+							<reuseForks>true</reuseForks>
+							<parallel>false</parallel>
 						</configuration>
 					</plugin>
 				</plugins>
