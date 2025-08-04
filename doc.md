@@ -1,3 +1,44 @@
+### Objetivo do Projeto
+Desenvolver um **backend completo e robusto** utilizando **Spring Boot**.
+Consulte funcionalidades, arquitetura, tecnologias e cobertura de testes em:
+- [RESUMO_PROJETO.md](RESUMO_PROJETO.md)
+- [architecture.md](architecture.md)
+
+## 🏗️ 2. Arquitetura do Sistema
+
+Consulte detalhes completos sobre arquitetura, camadas, fluxos e diagramas em:
+- [architecture.md](architecture.md)
+
+## 3. Endpoints e Exemplos
+
+Consulte a lista completa de endpoints, exemplos de payloads e detalhes técnicos em:
+- [RESUMO_PROJETO.md](RESUMO_PROJETO.md)
+- [architecture.md](architecture.md)
+
+## 🛠️ Tecnologias Utilizadas
+
+Consulte a lista de tecnologias, dependências e detalhes de configuração em:
+- [architecture.md](architecture.md)
+
+## 🚀 4. Configuração e Execução
+
+Consulte instruções detalhadas de execução (Docker, build local, variáveis de ambiente) em:
+- [RESUMO_PROJETO.md](RESUMO_PROJETO.md)
+
+## 🏆 5. Qualidade e Testes
+
+Consulte cobertura, comandos, métricas e detalhes de execução em:
+- [DOCUMENTACAO_COMPLETA_TESTES.md](DOCUMENTACAO_COMPLETA_TESTES.md)
+
+### 📮 Collection Postman
+- Arquivo: `collections/Fortaleza_de_Sabor_API.postman_collection.json`
+
+### 7. Collections para Teste
+A collection para testes está disponível em:
+- Local: `/collections/Fortaleza_de_Sabor_API.postman_collection.json`
+
+> Arquivos como `Fortaleza_de_Sabor_API_Completa.postman_collection.json` não existem na raiz do projeto neste momento. Caso sejam criados, atualizar esta documentação.
+
 # Documentação Técnica - Fortaleza de Sabor API
 
 ## 👥 Equipe
@@ -75,19 +116,21 @@ Interfaces separadas para documentação OpenAPI
 AuthUseCase         - validateLogin(), updatePassword()
 UserUseCase         - save(), getAll(), getById(), update(), delete()
 RestaurantUseCase   - create(), update(), getAll(), getById()
-MenuItemsUseCase    - getAll(), getById()
-TypeUseCase         - create(), getAll()
+MenuItemsUseCase    - save(), getAll(), getById(), update(), delete()
+TypeUseCase         - create(), getAll(), getById(), update(), delete()
 
 // Ports (Interfaces)
-Input Ports  - Interfaces dos Use Cases
-Output Ports - Interfaces dos Repositories
+Input Ports  - Interfaces dos Use Cases (ex: AuthUseCasePort, UserUseCasePort, etc.)
+Output Ports - Interfaces dos Repositories (ex: AuthRepositoryPort, UserRepositoryPort, etc.)
 ```
 
 #### 🏛️ **Camada de Domínio**
 ```java
 // Entidades de Negócio
 User        - id, name, email, login, password, addresses, typeUser
-Restaurant  - id, name, kitchenType, email, ownerName, addresses, businessHours  
+Restaurant  - id, name, kitchenType, email, ownerName, addresses, businessHours
+MenuItem    - id, name, description, price, restaurantId
+TypeUser    - id, nameType
 Address     - street, neighborhood, complement, number, state, city, zipCode
 
 // Value Objects
@@ -123,31 +166,54 @@ DatabaseConfig  - PostgreSQL/H2
 6. 📤 Response → Cliente (JSON)
 ```
 
-![Diagrama de Arquitetura](diagram.png)
-2. Os Controllers convertem os dados usando DTOs e Mappers
-3. Os Use Cases implementam a lógica de negócio usando as Entidades
-4. Os Repositories realizam as operações no banco de dados
-5. O resultado volta pela mesma cadeia até o cliente
-
-Esta arquitetura garante:
-- Separação clara de responsabilidades
-- Baixo acoplamento entre os componentes
-- Facilidade de teste e manutenção
-- Escalabilidade e flexibilidade
 
 ---
 
 ## 3. Descrição dos Endpoints da API
-### Tabela de Endpoints
-| Endpoint               | Método  | Descrição                        |
-|------------------------|---------|----------------------------------|
-| `/users`               | POST    | Criar novo usuário               |
-| `/users/{id}`          | PUT     | Atualizar usuário                |
-| `/users/{id}`          | GET     | Buscar usuário por ID            |
-| `/users`               | GET     | Buscar todos os usuários         |
-| `/users/{id}`          | DELETE  | Remover usuário                  |
-| `/auth/login`          | POST    | Validar login                    |
----
+### Endpoints Disponíveis
+
+#### 👤 Gestão de Usuários (`/users`)
+| Método | Endpoint         | Descrição                |
+|--------|------------------|--------------------------|
+| POST   | /users           | Criar usuário            |
+| GET    | /users           | Listar todos os usuários |
+| GET    | /users/{id}      | Buscar usuário por ID    |
+| PUT    | /users/{id}      | Atualizar usuário        |
+| DELETE | /users/{id}      | Remover usuário          |
+
+#### 🍽️ Gestão de Restaurantes (`/restaurants`)
+| Método | Endpoint                   | Descrição                        |
+|--------|----------------------------|----------------------------------|
+| POST   | /restaurants               | Criar restaurante                |
+| GET    | /restaurants               | Listar restaurantes              |
+| GET    | /restaurants/{id}          | Buscar restaurante por ID        |
+| PUT    | /restaurants/{idRestaurant}| Atualizar restaurante            |
+| DELETE | /restaurants/{id}          | Remover restaurante              |
+| PATCH  | /restaurants/owner/{id}    | Atualizar proprietário           |
+
+#### 🍕 Gestão de Cardápio (`/cardapio`)
+| Método | Endpoint            | Descrição                |
+|--------|---------------------|--------------------------|
+| POST   | /cardapio           | Criar item de menu       |
+| GET    | /cardapio           | Listar itens do menu     |
+| GET    | /cardapio/{idMenu}  | Buscar item por ID       |
+| PUT    | /cardapio/{idMenu}  | Atualizar item           |
+| DELETE | /cardapio/{idMenu}  | Remover item             |
+
+#### ⚙️ Tipos de Usuários (`/type-users`)
+| Método | Endpoint            | Descrição                |
+|--------|---------------------|--------------------------|
+| POST   | /type-users         | Criar tipo de usuário    |
+| GET    | /type-users         | Listar tipos             |
+| GET    | /type-users/{id}    | Buscar tipo por ID       |
+| PUT    | /type-users/{id}    | Atualizar tipo           |
+| DELETE | /type-users/{id}    | Remover tipo             |
+
+#### 🔐 Autenticação (`/auth`)
+| Método | Endpoint         | Descrição                |
+|--------|------------------|--------------------------|
+| POST   | /auth/login      | Login                    |
+| PATCH  | /auth/password   | Alterar senha            |
 
 ## 🛠️ 3. Tecnologias Utilizadas
 
@@ -172,281 +238,6 @@ Esta arquitetura garante:
 - 📦 **Maven** - Gerenciamento de dependências
 - 🐳 **Docker** - Containerização
 - 📖 **SpringDoc OpenAPI** - Documentação automática
-
----
-
-## 🔗 4. Endpoints da API
-
-### 👥 Gestão de Usuários
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/users` | POST | Criar usuário (Cliente/Dono) |
-| `/users` | GET | Listar todos os usuários |
-| `/users/{id}` | GET | Buscar usuário por ID |
-| `/users/{id}` | PUT | Atualizar usuário |
-| `/users/{id}` | DELETE | Remover usuário |
-
-### 🍽️ Gestão de Restaurantes  
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/restaurants` | POST | Criar restaurante (requer DONO) |
-| `/restaurants` | GET | Listar restaurantes |
-| `/restaurants/{id}` | GET | Buscar restaurante por ID |
-| `/restaurants/{id}` | PUT | Atualizar restaurante |
-
-### 🔐 Autenticação
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/auth/login` | POST | Realizar login (JWT) |
-| `/auth/password` | PATCH | Alterar senha |
-
-### 🍕 Gestão de Cardápio
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/cardapio` | GET | Listar itens do menu |
-| `/cardapio/{id}` | GET | Buscar item por ID |
-
-### ⚙️ Tipos de Usuários
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/type-users` | POST | Criar tipo de usuário |
-| `/type-users` | GET | Listar tipos disponíveis |
-
-### 📋 Exemplos de Requisição e Resposta
-
-#### 👤 Criar Usuário
-**POST** `/users`
-
-Request:
-```json
-{
-  "nome": "João Silva",
-  "email": "joao@email.com", 
-  "login": "joaosilva",
-  "senha": "senha123",
-  "dataAlteracao": "2025-08-03",
-  "tipo": {
-    "id": 2,
-    "type": "DONO"
-  },
-  "address": [
-    {
-      "street": "Rua das Flores",
-      "neighborhood": "Centro", 
-      "complement": "Apto 101",
-      "number": 123,
-      "state": "SP",
-      "city": "São Paulo",
-      "zipCode": "12345678"
-    }
-  ]
-}
-```
-
-Response (201 Created):
-```json
-{
-  "id": 1,
-  "name": "João Silva",
-  "email": "joao@email.com",
-  "login": "joaosilva",
-  "typeUser": {
-    "id": 2,
-    "nameType": "DONO"
-  },
-  "addresses": [
-    {
-      "street": "Rua das Flores",
-      "neighborhood": "Centro",
-      "complement": "Apto 101", 
-      "number": 123,
-      "state": "SP",
-      "city": "São Paulo",
-      "zipCode": "12345678"
-    }
-  ],
-  "dataAlteracao": "2025-08-03"
-}
-```
-
-#### 🍽️ Criar Restaurante
-**POST** `/restaurants`
-
-Request:
-```json
-{
-  "name": "Fortaleza do Sabor",
-  "kitchenType": "Brasileira",
-  "email": "contato@fortaleza.com",
-  "ownerName": "João Silva",
-  "address": [
-    {
-      "street": "Rua do Restaurante",
-      "neighborhood": "Centro",
-      "complement": "Loja 1",
-      "number": 456,
-      "state": "SP", 
-      "city": "São Paulo",
-      "zipCode": "12345678"
-    }
-  ],
-  "businessHours": [
-    {
-      "dayOfWeek": "MONDAY",
-      "openingTime": "08:00",
-      "closingTime": "18:00",
-      "observations": "Horário comercial"
-    }
-  ]
-}
-```
-
-Response (201 Created):
-```json
-{
-  "id": 1,
-  "name": "Fortaleza do Sabor", 
-  "ownerName": "João Silva"
-}
-```
-
-#### 🔐 Login
-**POST** `/auth/login`
-
-Request:
-```json
-{
-  "email": "joao@email.com",
-  "password": "senha123"
-}
-```
-
-Response (200 OK):
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expiresIn": 7200
-}
-```
-**GET** `/users/{id}`
-
-Response (202 Accepted):
-```json
-{
-  "nome": "João Silva",
-  "login": "joaosilva",
-  "email": "joao@email.com",
-  "tipo": "DONO",
-  "address": [
-    {
-      "rua": "Rua Alves Paulista",
-      "bairro": "Paulista Nova",
-      "complemento": "casa",
-      "numero": 130,
-      "estado": "São Paulo",
-      "cidade": "São Paulo",
-      "cep": 85965000
-    }
-  ]
-}
-```
-
-#### Buscar Todos os Usuários
-**GET** `/users`
-
-Response (200 OK):
-```json
-[
-  {
-    "nome": "João Silva",
-    "login": "joaosilva",
-    "email": "joao@email.com",
-    "tipo": "DONO",
-    "address": [
-      {
-        "rua": "Rua Alves Paulista",
-        "bairro": "Paulista Nova",
-        "complemento": "casa",
-        "numero": 130,
-        "estado": "São Paulo",
-        "cidade": "São Paulo",
-        "cep": 85965000
-      }
-    ]
-  }
-]
-```
-
-#### Atualizar Usuário
-**PUT** `/users/{id}`
-
-Request:
-```json
-{
-  "nome": "João Silva Atualizado",
-  "email": "joao@email.com",
-  "login": "joaosilva",
-  "senha": "novaSenha123",
-  "dataAlteracao": "2025-06-01",
-  "tipo": "DONO",
-  "address": [
-    {
-      "rua": "Rua Nova",
-      "bairro": "Paulista Nova",
-      "complemento": "casa",
-      "numero": 130,
-      "estado": "São Paulo",
-      "cidade": "São Paulo",
-      "cep": 85965000
-    }
-  ]
-}
-```
-Response (202 Accepted):
-```json
-{
-  "nome": "João Silva Atualizado",
-  "login": "joaosilva",
-  "email": "joao@email.com",
-  "tipo": "DONO",
-  "address": [
-    {
-      "rua": "Rua Nova",
-      "bairro": "Paulista Nova",
-      "complemento": "casa",
-      "numero": 130,
-      "estado": "São Paulo",
-      "cidade": "São Paulo",
-      "cep": 85965000
-    }
-  ]
-}
-```
-
-#### Remover Usuário
-**DELETE** `/users/{id}`
-
-Response (204 No Content):
-
----
-
-#### Login
-**POST** `/auth/login`
-
-Request:
-```json
-{
-  "email": "joao@email.com",
-  "password": "senha1234"
-}
-```
-Response (200 OK):
-```json
-{
-  "token": "<jwt-token>",
-  "id": 5
-}
-```
 
 ---
 
@@ -526,65 +317,47 @@ docker-compose up database
 ./mvnw spring-boot:run
 ```
 
-### 🧪 Executar Testes
+
+### 🧪 Execução dos Testes Automatizados
+
+O projeto possui cobertura completa de testes unitários e de integração. Para executar os testes:
+
+**Todos os testes (unitários + integração):**
 ```bash
-# Todos os testes (unitários + integração)
 mvn clean test
-
-# Apenas testes unitários
-mvn clean test -P unit-tests
-
-# Apenas testes de integração
-mvn clean test -P integration-tests
 ```
+
+
+Relatórios de execução são gerados em `/target/surefire-reports/`.
+Consulte detalhes de cobertura, comandos e métricas em [`DOCUMENTACAO_COMPLETA_TESTES.md`](DOCUMENTACAO_COMPLETA_TESTES.md).
 
 ---
 
+
 ## 🏆 6. Qualidade e Testes
 
-### 📊 Métricas de Qualidade
-- ✅ **54 testes** (46 unitários + 8 integração)
-- ✅ **96.3% taxa de sucesso** nos testes
-- ✅ **100% cobertura** de controllers principais
-- ✅ **100% cobertura** de use cases
-- ✅ **Padrão AAA** em todos os testes
+### 📊 Métricas e Cobertura
+- **54 testes automatizados** (unitários e integração)
+- **Cobertura total dos principais fluxos de negócio e controllers**
+- **Taxa de sucesso**: 96,3% (última execução)
+- **Relatórios**: `/target/surefire-reports/`
 
 ### 🧪 Estratégia de Testes
+O projeto adota uma abordagem de testes em múltiplos níveis:
 
-#### Testes Unitários (46 testes)
-```java
-// Use Cases - Regras de negócio isoladas
-AuthUseCaseTest, UserUseCaseTest, RestaurantUseCaseTest
+- **Testes Unitários**: Cobrem regras de negócio (Use Cases), mapeamentos e validações.
+- **Testes de Integração**: Validam fluxos completos dos endpoints REST, integração com banco H2 e autenticação.
+- **Testes de Controladores**: Simulam requisições HTTP e validam respostas e tratamento de erros.
+- **Cobertura de DTOs e Mappers**: Garante integridade na conversão de dados entre camadas.
 
-// Controllers - Endpoints REST com MockMvc  
-AuthControllerTest, UserControllerTest, RestaurantControllerTest
+### 🎯 Boas Práticas
+- Clean Architecture e SOLID
+- Validação centralizada (Bean Validation)
+- Tratamento global de exceções
+- Segurança JWT e autenticação
+- Documentação automática (Swagger/OpenAPI)
 
-// Mappers - Conversões entre camadas
-UserMapperTest, RestaurantMapperTest, MenuMapperTest
-
-// DTOs - Validação Bean Validation
-UserRequestDtoTest, RestaurantRequestDtoTest, AddressDtoTest
-```
-
-#### Testes de Integração (8 testes)
-```java
-// REST-assured com H2 em memória
-AuthControllerIntegrationTest       - 6 testes
-UserControllerIntegrationTest       - 9 testes  
-RestaurantControllerIntegrationTest - 8 testes
-MenuItemsControllerIntegrationTest  - 13 testes
-TypeControllerIntegrationTest       - 9 testes
-WorkflowIntegrationTest             - 12 testes
-```
-
-### 🎯 Boas Práticas Aplicadas
-- ✅ **Clean Architecture** - Separação clara de responsabilidades
-- ✅ **SOLID Principles** - Princípios aplicados consistentemente  
-- ✅ **DRY** - Código reutilizável e modular
-- ✅ **Bean Validation** - Validação declarativa
-- ✅ **Exception Handling** - Tratamento centralizado
-- ✅ **Security** - JWT + Spring Security
-- ✅ **Documentation** - Swagger OpenAPI completo
+Consulte detalhes completos de cobertura, comandos e exemplos em [`DOCUMENTACAO_COMPLETA_TESTES.md`](DOCUMENTACAO_COMPLETA_TESTES.md).
 
 ---
 
@@ -601,6 +374,7 @@ WorkflowIntegrationTest             - 12 testes
 - **Automação completa** com variáveis dinâmicas  
 - **Testes de validação** automáticos
 - **Cenários de erro** incluídos
+- Arquivo: `collections/Fortaleza_de_Sabor_API.postman_collection.json`
 
 ### 🔗 URLs de Acesso
 - **API Base**: http://localhost:8080
@@ -716,10 +490,10 @@ src/main/java/com/br/fiap/fortaleza/sabor/infrastructure/controller/
 
 ---
 
-## 7. Collections para Teste
-### Collection Postman Unificada
+
+### 7. Collections para Teste
 A collection para testes está disponível em:
-- Local: `/collections/Fortaleza_de_Sabor_API_Completa.postman_collection.json`
+- Local: `/collections/Fortaleza_de_Sabor_API.postman_collection.json`
 
 ### Descrição dos Testes
 1. **Importar a collection** disponível no diretório `collections`
@@ -740,6 +514,7 @@ A collection para testes está disponível em:
 2. A collection possui **35+ cenários de teste** cobrindo casos de sucesso e falha
 3. Documentação completa em: `DOCUMENTACAO_COMPLETA_TESTES.md`
 
+
 ---
 
 ## 8. Repositório do Código
@@ -748,6 +523,4 @@ A collection para testes está disponível em:
 
 ---
 
-### Notas
-Fiquem à vontade para modificar e ajustar este modelo às necessidades do projeto.
-Não é necessário implementar a autenticação dos usuários mas fiquem à vontade para fazê-lo se assim desejarem.
+

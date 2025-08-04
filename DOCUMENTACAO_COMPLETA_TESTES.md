@@ -4,109 +4,119 @@
 
 Este documento consolida toda a documentação relacionada aos testes do projeto Fortaleza de Sabor, incluindo testes unitários, testes de API via Postman, padronização e cobertura de testes.
 
----
 
 ## 📊 **Resumo Executivo dos Testes**
 
 ### **Status Geral**
-- **Testes Unitários**: 23+ classes com 100% de sucesso
-- **Testes de API**: 35+ cenários via Postman Collection
-- **Cobertura**: Todas as camadas da arquitetura testadas (Use Cases, Mappers, DTOs, Repositories)
-- **Padrão de Qualidade**: AAA (Arrange-Act-Assert) em 100% dos testes
-- **Padronização**: Estrutura consistente aplicada com classes utilitárias
 
 ### **Objetivos Alcançados**
 1. ✅ **Cobertura Completa**: Todas as classes principais possuem testes + Mappers + DTOs
 2. ✅ **Padronização**: Estrutura consistente com TestConstants e TestDataBuilder
-3. ✅ **Qualidade**: Testes robustos com cenários reais e extremos
-4. ✅ **Manutenibilidade**: Código de teste organizado e bem documentado
-5. ✅ **Automação**: Collection Postman com validações automáticas
 6. ✅ **Integridade de Dados**: Validação completa de conversões entre camadas
 
----
 
 ## 🧪 **Testes Unitários**
 
-### **Classes de Teste Implementadas (34 total)**
-
-#### **🔧 Classes Utilitárias**
-1. **`TestConstants`** - Constantes padronizadas para todos os testes
-2. **`TestDataBuilder`** - Factory methods para criação de objetos de teste
-
 #### **Application Layer (Use Cases) - 11 classes**
-3. **`CreateUserUseCaseTest`** - Criação de usuários com encoding de senha
-4. **`DeleteUserUseCaseTest`** - Exclusão de usuários com verificações
-5. **`UpdateUserUseCaseTest`** - Atualização de usuários com validações
 6. **`GetUserUseCaseTest`** - Busca de usuários com tratamento de null
 7. **`AuthUserUseCaseTest`** - Autenticação de usuários
-8. **`CreateMenuItemUseCaseTest`** - Criação de itens de menu
-9. **`UpdateMenuItemUseCaseTest`** - Atualização com tratamento de null
-10. **`DeleteMenuItemUseCaseTest`** - Exclusão de itens de menu
 11. **`GetMenuItemUseCaseTest`** - Busca de itens de menu
 12. **`CreateRestaurantUseCaseTest`** - Criação de restaurantes (15 cenários)
 13. **`UpdateRestaurantUseCaseTest`** - Atualização de restaurantes
 
-#### **Infrastructure Layer (Controllers) - 5 classes**
-14. **`UserControllerTest`** - Endpoints REST de usuários
-15. **`AuthControllerTest`** - Endpoints de autenticação
 16. **`RestaurantControllerTest`** - Endpoints REST de restaurantes
 17. **`MenuItemsControllerTest`** - Endpoints REST de itens de menu
-18. **`TypeUserControllerTest`** - Endpoints REST de tipos de usuário
-
-#### **Infrastructure Layer (Repositories) - 2 classes**
-19. **`MenuItemRepositoryJpaStandardizedTest`** - Persistência JPA de itens de menu
-20. **`UserRepositoryJpaTest`** - Persistência JPA de usuários
-
 #### **Infrastructure Layer (Mappers) - 4 classes**
 21. **`UserMapperTest`** - Conversões UserRequestDto ↔ User ↔ UserEntity ↔ UserResponseDto
-22. **`TypeUserMapperTest`** - Conversões de tipos de usuário com integridade de dados
-23. **`RestaurantMapperTest`** - Conversões complexas (endereços, horários de funcionamento)
-24. **`MenuMapperTest`** - Conversões de itens de menu com validação de dados
-
-#### **Infrastructure Layer (DTOs - Bean Validation) - 9 classes**
 25. **`UserRequestDtoTest`** - Validações completas (nome, email, login, senha, objetos aninhados)
 26. **`MenuItemRequestDtoTest`** - Validações (nome, descrição, preço, disponibilidade, imagem)
-27. **`RestaurantRequestDtoTest`** - Validações (nome, cozinha, email, listas aninhadas)
-28. **`AddressDtoTest`** - Validações (rua, bairro, número, CEP, estado, cidade)
 29. **`BusinessHoursDtoTest`** - Validações (dia semana, horários, observações)
 30. **`UpdateMenuItemRequestDtoTest`** - Validações completas de atualização
-31. **`UserCredentialsDtoTest`** - Validações de credenciais (email, senha)
-32. **`UpdateRequestDtoTest`** - Validações de atualização de usuário
-33. **`TypeUserRequestDtoTest`** - Validações de tipo de usuário
-
-#### **Exception Handling - 1 classe**
 34. **`GlobalExceptionHandlerTest`** - Tratamento global de exceções
-
-### **Cobertura Expandida - CreateRestaurantUseCase**
 
 **Evolução**: De 2 cenários para **15 cenários abrangentes**
 
 #### **Cenários de Negócio Reais (4)**
 - ✅ Validação com email de proprietário específico
-- ✅ Nomes com caracteres especiais (acentos, símbolos)
-- ✅ Tipos de cozinha com descrições longas
-- ✅ Restaurantes com múltiplas unidades/endereços
 
 #### **Casos de Dados Variados (5)**
-- ✅ Lista de endereços vazia
-- ✅ Horários de funcionamento vazios
-- ✅ Horários completos da semana (7 dias)
 - ✅ Dados mínimos válidos
 - ✅ Campos nulos individuais
-
-#### **Cenários de Exceção (4)**
-- ✅ UserNotFoundException (usuário não existe)
 - ✅ RestaurantAlreadyExistsException (restaurante já existe)
 - ✅ RuntimeException (erros gerais de sistema)
-- ✅ Propagação correta de exceções
-
-### **Validações de Dados Complexos**
 - **Endereços Múltiplos**: Restaurantes com mais de um endereço
 - **Horários Completos**: Todos os dias da semana com horários específicos
-- **Caracteres Especiais**: Acentos, símbolos e caracteres UTF-8
-- **Limites de Campo**: Dados mínimos e máximos para campos de texto
 
----
+
+## 🧪 **Testes End-to-End (E2E)**
+
+### **Estatísticas dos Testes**
+
+| Categoria | Arquivos | Métodos de Teste | Cenários Cobertos |
+|-----------|----------|------------------|-------------------|
+| **Configuração Base** | 2 | N/A | Setup, Data Factory |
+| **Autenticação** | 1 | 3 | Login, Registro, Validações |
+| **Usuários** | 1 | 6 | CRUD, Validações, Tipos |
+| **Restaurantes** | 1 | 5 | CRUD, Proprietário, Endereços |
+| **Cardápio** | 1 | 5 | CRUD, Preços, Disponibilidade |
+| **Tipos de Usuário** | 1 | 5 | CRUD, Tipos Reservados |
+| **Fluxos Completos** | 1 | 5 | Workflows Integrados |
+| **TOTAL** | **8** | **29** | **40+** |
+
+### **Funcionalidades Testadas**
+
+- Autenticação: login, registro, validações
+- Usuários: ciclo CRUD, validações, tipos
+- Restaurantes: ciclo CRUD, proprietário, endereços
+- Cardápio: ciclo CRUD, preços, disponibilidade
+- Tipos de usuário: ciclo CRUD, tipos reservados
+- Fluxos completos: workflows integrados
+
+### **Execução dos Testes E2E**
+
+#### **Comandos Maven**
+```bash
+mvn test -Dtest="*E2ETest" -Dspring.profiles.active=e2e
+mvn test -Dtest="AuthenticationE2ETest" -Dspring.profiles.active=e2e
+mvn test-compile
+```
+
+#### **Cobertura de Endpoints**
+
+| Controller | Endpoint | GET | POST | PUT | PATCH | DELETE |
+|------------|----------|-----|------|-----|-------|---------|
+| **AuthController** | `/auth/login` | - | ✅ | - | - | - |
+| **AuthController** | `/auth/password` | - | - | - | ✅ | - |
+| **UserController** | `/users` | ✅ | ✅ | - | - | - |
+| **UserController** | `/users/{id}` | ✅ | - | ✅ | - | ✅ |
+| **RestaurantController** | `/restaurants` | ✅ | ✅ | - | - | - |
+| **RestaurantController** | `/restaurants/{id}` | ✅ | - | ✅ | - | ✅ |
+| **RestaurantController** | `/restaurants/owner/{id}` | - | - | - | ✅ | - |
+| **MenuItemsController** | `/cardapio` | ✅ | ✅ | - | - | - |
+| **MenuItemsController** | `/cardapio/{id}` | ✅ | - | ✅ | - | ✅ |
+| **MenuItemsController** | `/cardapio/restaurant/{id}` | ✅ | - | - | - | - |
+| **MenuItemsController** | `/cardapio/{id}/availability` | - | - | - | ✅ | - |
+| **TypeController** | `/type-users` | ✅ | ✅ | - | - | - |
+| **TypeController** | `/type-users/{id}` | ✅ | - | ✅ | - | ✅ |
+
+**Cobertura Total**: **13 endpoints** com **23 operações** testadas
+
+### **Validações Implementadas**
+
+- Códigos de resposta: 200, 201, 204, 400, 401, 404, 409, 500
+- Performance: tempo de resposta < 5s
+- Dados e integridade: geração de IDs únicos, validação de formatos, regras de negócio
+
+### **Boas Práticas e Manutenibilidade**
+
+- Scripts e documentação para execução simples
+- Estrutura organizada e extensível
+- Testes independentes e dados únicos
+- Tolerância a falhas e validações flexíveis
+
+### **Conclusão**
+
+Os testes E2E validam efetivamente o comportamento da API Fortaleza de Sabor em cenários reais de uso, garantindo qualidade, cobertura e facilidade de manutenção.
 
 ## 🚀 **Melhorias Implementadas - Fase 2**
 
@@ -285,7 +295,7 @@ assertTrue(result.isEmpty());
 ## 📮 **Testes de API - Collection Postman**
 
 ### **Collection Única Consolidada**
-- **Arquivo**: `Fortaleza_de_Sabor_API_Completa.postman_collection.json`
+- **Arquivo**: `Fortaleza_de_Sabor_API.postman_collection.json`
 - **Total**: 35+ cenários de teste
 - **Cobertura**: Funcionalidade, validação, falhas e segurança
 
@@ -451,7 +461,7 @@ mvn test -Dtest.verbose=true
 
 #### **Importação da Collection**
 1. Abrir Postman
-2. **Import** → **File** → Selecionar `Fortaleza_de_Sabor_API_Completa.postman_collection.json`
+2. **Import** → **File** → Selecionar `Fortaleza_de_Sabor_API.postman_collection.json`
 3. Configurar variável `baseUrl` se necessário
 
 #### **Ordem Recomendada**
@@ -525,6 +535,165 @@ mvn test -Dtest.verbose=true
 
 ## 🔧 **Troubleshooting**
 
+---
+
+# 🧪 Guia de Execução de Testes - Fortaleza de Sabor
+
+## 📋 Comandos de Teste Disponíveis
+
+### 🚀 **Comando Principal (Executa TODOS os testes)**
+```bash
+mvn clean test
+```
+**Executa**: Testes Unitários + Testes de Integração + Testes E2E
+
+---
+
+## 🎯 **Comandos por Categoria**
+
+### 1️⃣ **Apenas Testes Unitários**
+```bash
+mvn clean test -P unit-tests
+```
+**Executa**: Todos os arquivos `*Test.java` (excluindo `*IntegrationTest.java` e `*E2ETest.java`)
+
+### 2️⃣ **Apenas Testes de Integração**  
+```bash
+mvn clean test -P integration-tests
+```
+**Executa**: Todos os arquivos `*IntegrationTest.java`
+
+### 3️⃣ **Apenas Testes E2E**
+```bash
+mvn clean test -P e2e-tests
+```
+**Executa**: Todos os arquivos `*E2ETest.java`
+
+---
+
+## 🔍 **Comandos Específicos**
+
+### **Executar Teste Específico**
+```bash
+# Teste específico
+mvn test -Dtest=AuthenticationE2ETest
+
+# Múltiplos testes específicos
+mvn test -Dtest=AuthenticationE2ETest,UserManagementE2ETest
+
+# Padrão de testes
+mvn test -Dtest="*E2ETest"
+mvn test -Dtest="*IntegrationTest"
+```
+
+### **Executar por Pacote**
+```bash
+# Todos os testes de um pacote
+mvn test -Dtest="com.br.fiap.fortaleza.sabor.application.*Test"
+
+# Testes de controllers
+mvn test -Dtest="com.br.fiap.fortaleza.sabor.infrastructure.controller.*Test"
+```
+
+---
+
+## 📊 **Estrutura de Testes do Projeto**
+
+| Tipo de Teste | Padrão de Nome | Quantidade Aprox. | Descrição |
+|---------------|----------------|-------------------|-----------|
+| **Unitários** | `*Test.java` | ~90 | Testes de classes individuais |
+| **Integração** | `*IntegrationTest.java` | ~20 | Testes de integração entre componentes |
+| **E2E** | `*E2ETest.java` | 6 | Testes end-to-end da API REST |
+
+---
+
+## ⚙️ **Configurações Maven**
+
+### **Perfis Configurados no POM.xml:**
+
+- **`all-tests`** (padrão): Executa todos os tipos de teste
+- **`unit-tests`**: Apenas testes unitários  
+- **`integration-tests`**: Apenas testes de integração
+- **`e2e-tests`**: Apenas testes E2E
+
+### **Propriedades de Sistema:**
+- Testes unitários e integração: `spring.profiles.active=test`
+- Testes E2E: `spring.profiles.active=e2e`
+
+---
+
+## 🎯 **Exemplos de Uso Prático**
+
+### **Durante Desenvolvimento:**
+```bash
+# Execução rápida - apenas unitários
+mvn test -P unit-tests
+
+# Validação completa antes de commit
+mvn clean test
+```
+
+### **Para CI/CD:**
+```bash
+# Pipeline completo
+mvn clean test
+
+# Pipeline por etapas
+mvn test -P unit-tests      # Etapa 1: Testes rápidos
+mvn test -P integration-tests   # Etapa 2: Testes de integração  
+mvn test -P e2e-tests       # Etapa 3: Testes E2E
+```
+
+### **Para Debug:**
+```bash
+# Executar com logs detalhados
+mvn test -Dtest="*E2ETest" -X
+
+# Executar um teste específico com debug
+mvn test -Dtest=AuthenticationE2ETest -Dlogging.level.root=DEBUG
+```
+
+---
+
+## ✅ **Verificação de Sucesso**
+
+Após executar `mvn clean test`, você deve ver:
+
+```
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: XXX, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] BUILD SUCCESS
+```
+
+Onde `XXX` é o total de testes executados (~120+ testes).
+
+---
+
+## 🚨 **Solução de Problemas**
+
+### **Se alguns testes falharem:**
+1. Verifique se todas as dependências estão instaladas
+2. Confirme se o banco H2 está funcionando corretamente
+3. Execute cada categoria separadamente para identificar o problema
+
+### **Comandos de diagnóstico:**
+```bash
+# Verificar configuração
+mvn help:active-profiles
+
+# Listar todos os testes
+mvn test -Dtest=NonExistentTest -DfailIfNoTests=false
+
+# Executar com máximo de logs
+mvn test -X -Dtest="*E2ETest"
+```
+
+---
+
+**📋 Resumo**: Use `mvn clean test` para executar todos os testes do projeto (unitários, integração e E2E) em uma única execução!
+
 ### **Testes Unitários**
 1. **Falhas de Mock**: Verificar se `@Mock` e `@InjectMocks` estão corretos
 2. **Dependências não injetadas**: Confirmar uso de `@ExtendWith(MockitoExtension.class)`
@@ -568,7 +737,8 @@ mvn test -Dtest.verbose=true
 - 📖 **README.md** → Visão geral do projeto
 - 🏗️ **architecture.md** → Documentação da arquitetura
 - 📋 **RESUMO_PROJETO.md** → Resumo executivo
-- � **doc.md** → Documentação técnica detalhada
+- 📄 **doc.md** → Documentação técnica detalhada
+
 
 ---
 

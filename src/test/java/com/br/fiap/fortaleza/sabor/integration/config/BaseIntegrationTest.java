@@ -2,7 +2,6 @@ package com.br.fiap.fortaleza.sabor.integration.config;
 
 import io.restassured.RestAssured;
 import io.restassured.config.JsonConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.path.json.config.JsonPathConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;

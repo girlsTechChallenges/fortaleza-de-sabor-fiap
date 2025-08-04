@@ -1,0 +1,275 @@
+{
+  "info": {
+    "_postman_id": "fortaleza-de-sabor-api-collection",
+    "name": "Fortaleza de Sabor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@email.com\",\n  \"password\": \"senha\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Alterar Senha",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@email.com\",\n  \"password\": \"novasenha\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/password", "host": ["{{baseUrl}}"], "path": ["auth", "password"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "Criar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados do usuário\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "Listar Usuários",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "Buscar Usuário por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/:id", "host": ["{{baseUrl}}"], "path": ["users", ":id"] }
+          }
+        },
+        {
+          "name": "Atualizar Usuário",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados para atualizar\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/:id", "host": ["{{baseUrl}}"], "path": ["users", ":id"] }
+          }
+        },
+        {
+          "name": "Deletar Usuário",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/users/:id", "host": ["{{baseUrl}}"], "path": ["users", ":id"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurantes",
+      "item": [
+        {
+          "name": "Criar Restaurante",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados do restaurante\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/restaurants", "host": ["{{baseUrl}}"], "path": ["restaurants"] }
+          }
+        },
+        {
+          "name": "Listar Restaurantes",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/restaurants", "host": ["{{baseUrl}}"], "path": ["restaurants"] }
+          }
+        },
+        {
+          "name": "Buscar Restaurante por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/restaurants/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", ":id"] }
+          }
+        },
+        {
+          "name": "Atualizar Restaurante",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados para atualizar\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/restaurants/:idRestaurant", "host": ["{{baseUrl}}"], "path": ["restaurants", ":idRestaurant"] }
+          }
+        },
+        {
+          "name": "Deletar Restaurante",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/restaurants/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", ":id"] }
+          }
+        },
+        {
+          "name": "Atualizar Dono do Restaurante",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"owner\": \"nome\",\n  \"email\": \"email@exemplo.com\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/restaurants/owner/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", "owner", ":id"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cardápio",
+      "item": [
+        {
+          "name": "Criar Item de Cardápio",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados do item\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/cardapio", "host": ["{{baseUrl}}"], "path": ["cardapio"] }
+          }
+        },
+        {
+          "name": "Listar Itens de Cardápio",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/cardapio", "host": ["{{baseUrl}}"], "path": ["cardapio"] }
+          }
+        },
+        {
+          "name": "Buscar Item por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/cardapio/:idMenu", "host": ["{{baseUrl}}"], "path": ["cardapio", ":idMenu"] }
+          }
+        },
+        {
+          "name": "Atualizar Item de Cardápio",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados para atualizar\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/cardapio/:idMenu", "host": ["{{baseUrl}}"], "path": ["cardapio", ":idMenu"] }
+          }
+        },
+        {
+          "name": "Deletar Item de Cardápio",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/cardapio/:idMenu", "host": ["{{baseUrl}}"], "path": ["cardapio", ":idMenu"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tipos de Usuário",
+      "item": [
+        {
+          "name": "Criar Tipo de Usuário",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados do tipo\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/type-users", "host": ["{{baseUrl}}"], "path": ["type-users"] }
+          }
+        },
+        {
+          "name": "Listar Tipos de Usuário",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/type-users", "host": ["{{baseUrl}}"], "path": ["type-users"] }
+          }
+        },
+        {
+          "name": "Buscar Tipo por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/type-users/:id", "host": ["{{baseUrl}}"], "path": ["type-users", ":id"] }
+          }
+        },
+        {
+          "name": "Atualizar Tipo de Usuário",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // dados para atualizar\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/type-users/:id", "host": ["{{baseUrl}}"], "path": ["type-users", ":id"] }
+          }
+        },
+        {
+          "name": "Deletar Tipo de Usuário",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/type-users/:id", "host": ["{{baseUrl}}"], "path": ["type-users", ":id"] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" }
+  ]
+}

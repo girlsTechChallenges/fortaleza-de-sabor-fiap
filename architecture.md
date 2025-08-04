@@ -97,6 +97,7 @@ graph TD
     classDef apresentacao fill:#e1f5fe
     classDef aplicacao fill:#f3e5f5
     classDef dominio fill:#fff3e0
+    
 ## 🎯 Princípios Aplicados
 
 ### Clean Architecture
@@ -144,93 +145,154 @@ graph TD
 // Autenticação
 AuthUseCase - validateLogin(), updatePassword()
 
-// Usuários  
+// Usuários
 UserUseCase - save(), getAll(), getById(), update(), delete()
 
 // Restaurantes
-RestaurantUseCase - create(), update(), getAll(), getById()
+RestaurantUseCase - create(), update(), getAll(), getById(), delete(), updateOwner()
 
-// Itens do Menu
-MenuItemsUseCase - getAll(), getById()
+// Itens do Cardápio
+MenuItemsUseCase - save(), getAll(), getById(), update(), delete()
 
 // Tipos de Usuário
-TypeUseCase - create(), getAll()
+TypeUseCase - create(), getAll(), getById(), update(), delete()
 ```
 
+
 ### 🏛️ **Camada de Domínio** (`domain.model`)
-**Responsabilidade**: Núcleo da aplicação com regras de negócio puras
+**Responsabilidade**: Núcleo da aplicação com entidades, value objects e regras de negócio puras, sem dependências externas.
 
 #### Entidades Principais
 ```java
-// Entidade User
-- Long id
-- String name, email, login, password
-- List<Address> addresses
-- TypeUser typeUser
-- LocalDate dataAlteracao
+// Usuário
+User {
+  Long id;
+  String name;
+  String email;
+  String login;
+  String password;
+  List<Address> addresses;
+  TypeUser typeUser;
+}
 
-// Entidade Restaurant  
-- Long id
-- String name, kitchenType, email, ownerName
-- List<Address> addresses
-- List<BusinessHours> businessHours
+// Restaurante
+Restaurant {
+  Long id;
+  String name;
+  String kitchenType;
+  String email;
+  String ownerName;
+  List<Address> addresses;
+  List<BusinessHours> businessHours;
+}
 
-// Entidade Address
-- String street, neighborhood, complement
-- Integer number
-- String state, city, zipCode
+// Item de Cardápio
+MenuItem {
+  Long id;
+  String name;
+  String description;
+  BigDecimal price;
+  Long restaurantId;
+}
+
+// Tipo de Usuário
+TypeUser {
+  Long id;
+  String nameType;
+}
+
+// Endereço
+Address {
+  String street;
+  String neighborhood;
+  String complement;
+  Integer number;
+  String state;
+  String city;
+  String zipCode;
+}
 ```
 
 #### Value Objects
 ```java
-// BusinessHours
-- DayOfWeek dayOfWeek
-- LocalTime openingTime, closingTime
-- String observations
+// Horário de Funcionamento
+BusinessHours {
+  DayOfWeek dayOfWeek;
+  LocalTime openingTime;
+  LocalTime closingTime;
+  String observations;
+}
 
-// Token
-- String accessToken
-- Long expiresIn
+// Token JWT
+Token {
+  String accessToken;
+  Long expiresIn;
+}
 ```
+
 
 ### 🔧 **Camada de Infraestrutura** (`infrastructure`)
-**Responsabilidade**: Implementações técnicas
+**Responsabilidade**: Implementações técnicas, integração com frameworks, persistência e configurações externas.
 
-#### Adapters de Repositório
-- **UserRepositoryJpa** - Implementa UserRepositoryPort
-- **RestaurantRepositoryJpa** - Implementa RestaurantRepositoryPort
-- **MenuRepositoryJpa** - Implementa MenuItemsRepositoryPort
+#### Adapters e Repositórios
+- **UserRepositoryJpa**: Implementa UserRepositoryPort
+- **RestaurantRepositoryJpa**: Implementa RestaurantRepositoryPort
+- **MenuRepositoryJpa**: Implementa MenuItemsRepositoryPort
+- **TypeUserRepositoryJpa**: Implementa TypeRepositoryPort
+- **AuthRepositoryJpa**: Implementa AuthRepositoryPort
 
-#### Mapeamento de Dados
+#### Mappers e Conversão de Dados
 ```java
-// Mappers de Conversão
-UserMapper - UserDto ↔ User ↔ UserEntity ↔ UserResponse
-RestaurantMapper - RestaurantDto ↔ Restaurant ↔ RestaurantEntity
-MenuMapper - MenuDto ↔ MenuItem ↔ MenuEntity
-
-// Entidades JPA (Persistence)
-UserEntity, RestaurantEntity, AddressEntity
-MenuItemEntity, TypeUserEntity
+// Conversores entre camadas
+UserMapper: UserRequestDto ↔ User ↔ UserEntity ↔ UserResponseDto
+RestaurantMapper: RestaurantRequestDto ↔ Restaurant ↔ RestaurantEntity ↔ RestaurantResponseDto
+MenuMapper: MenuItemRequestDto ↔ MenuItem ↔ MenuItemEntity ↔ MenuItemResponseDto
+TypeUserMapper: TypeUserRequestDto ↔ TypeUser ↔ TypeUserEntity ↔ TypeUserResponseDto
+AddressMapper: AddressRequestDto ↔ Address ↔ AddressEntity ↔ AddressResponseDto
+// Conversão bidirecional entre DTOs, entidades de domínio e entidades JPA
 ```
 
-#### Configurações
-- **SecurityConfig**: JWT, autorização, CORS
-- **OpenAPIConfig**: Documentação Swagger
-- **DatabaseConfig**: Configuração PostgreSQL/H2
+#### Entidades JPA (Persistence)
+```java
+UserEntity, RestaurantEntity, AddressEntity, MenuItemEntity, TypeUserEntity
+```
+
+#### Configurações e Integrações
+- **SecurityConfig**: Configuração de autenticação JWT, autorização, CORS
+- **OpenAPIConfig**: Configuração centralizada da documentação Swagger
+- **DatabaseConfig**: Configuração de datasources PostgreSQL/H2
+- **ExceptionHandler**: Tratamento global de exceções
+
+#### Outras Responsabilidades
+- Integração com frameworks Spring Boot, Spring Data JPA, Bean Validation
+- Implementação de serviços externos e utilitários
+
 
 ## 🧪 **Estratégia de Testes**
 
-### Testes Unitários (46 testes)
-- **Use Cases**: Regras de negócio isoladas
-- **Controllers**: Endpoints REST com MockMvc
-- **Mappers**: Conversões entre camadas
-- **DTOs**: Validação Bean Validation
+O projeto adota uma abordagem de testes automatizados em múltiplos níveis para garantir robustez, qualidade e segurança:
 
-### Testes de Integração (8 testes)
-- **REST-assured**: Testes de endpoints reais
-- **H2 em memória**: Isolamento completo
-- **SpringBootTest**: Contexto completo da aplicação
-- **Cenários end-to-end**: Fluxos completos de usuário
+### Testes Unitários
+- Cobrem regras de negócio dos Use Cases, validação de DTOs, conversão de mapeamentos e lógica isolada.
+- Utilizam JUnit 5 e Mockito para simulação de dependências.
+- Padrão AAA (Arrange, Act, Assert) aplicado em todos os testes.
+
+### Testes de Integração
+- Validam fluxos completos dos endpoints REST, integração com banco H2 em memória e autenticação JWT.
+- Utilizam REST-assured, SpringBootTest e contexto real da aplicação.
+- Cobrem cenários de sucesso, erro, autenticação e edge cases.
+
+### Cobertura e Relatórios
+- 54 testes automatizados (46 unitários + 8 integração)
+- Cobertura total dos principais fluxos de negócio, controllers e mapeamentos
+- Relatórios gerados em `/target/surefire-reports/`
+
+### Boas Práticas
+- Nomenclatura unificada: `shouldXWhenY` em todos os testes
+- Testes independentes e reprodutíveis
+- Validação de Bean Validation, conversão de dados e tratamento de exceções
+
+Consulte detalhes completos de cenários, comandos e exemplos em [`DOCUMENTACAO_COMPLETA_TESTES.md`](DOCUMENTACAO_COMPLETA_TESTES.md).
 
 ## ✅ **Benefícios da Arquitetura**
 
@@ -242,11 +304,6 @@ MenuItemEntity, TypeUserEntity
 
 ### 🧪 **Testabilidade Avançada**
 - **54 testes** (46 unitários + 8 integração) com 100% sucesso
-- Inversão de dependências facilita mocking
-- Testes isolados para cada camada
-- Cobertura completa de cenários de negócio
-
-### 🔧 **Manutenibilidade**
 - Mudanças em uma camada não impactam outras
 - Código organizado e fácil de navegar
 - Documentação clara da estrutura
@@ -318,12 +375,12 @@ src/main/java/com/br/fiap/fortaleza/sabor/
     ├── 📁 adapter/             # Adapters (Repository implementations)
     ├── 📁 config/              # Configurações Spring
     ├── 📁 controller/          # Controllers REST
-    │   ├── � docs/           # Interfaces Swagger
+    │   ├── docs/             # Interfaces Swagger
     │   └── 📁 dto/            # DTOs Request/Response
     ├── 📁 mapper/              # Conversores entre camadas
-    └── 📁 persistence/         # Entidades JPA
-        ├── 📁 entity/         # JPA Entities
-        └── 📁 repository/     # JPA Repositories
+    ├── 📁 persistence/         # Entidades JPA
+    │   ├── entity/            # JPA Entities
+    │   └── repository/        # JPA Repositories
 ```
 
 ## 📊 **Métricas de Qualidade**
@@ -431,4 +488,7 @@ src/main/java/com/br/fiap/fortaleza/sabor/
     class UseCases,Entities domain
     class Gateways,Repositories,Mappers infrastructure
     class PostgreSQL database
+
+---
+
 ```
