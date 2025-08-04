@@ -39,15 +39,16 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String nome, String email, String login, String senha, LocalDate dataAlteracao, TypeEntity tipo, List<AddressEntity> enderecos) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.login = login;
-        this.senha = senha;
-        this.dataAlteracao = dataAlteracao;
-        this.tipo = tipo;
-        this.enderecos = enderecos;
+    private UserEntity(Builder builder) {
+        this.id = builder.id;
+        this.nome = builder.nome;
+        this.email = builder.email;
+        this.login = builder.login;
+        this.senha = builder.senha;
+        this.dataAlteracao = builder.dataAlteracao;
+        this.tipo = builder.tipo;
+        this.enderecos = builder.enderecos;
+        this.restaurante = builder.restaurante;
     }
 
     public Long getId() {
@@ -114,5 +115,66 @@ public class UserEntity {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public static class Builder {
+        private Long id;
+        private String nome;
+        private String email;
+        private String login;
+        private String senha;
+        private LocalDate dataAlteracao;
+        private TypeEntity tipo;
+        private List<AddressEntity> enderecos;
+        private RestaurantEntity restaurante;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder login(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder senha(String senha) {
+            this.senha = senha;
+            return this;
+        }
+
+        public Builder dataAlteracao(LocalDate dataAlteracao) {
+            this.dataAlteracao = dataAlteracao;
+            return this;
+        }
+
+        public Builder tipo(TypeEntity tipo) {
+            this.tipo = tipo;
+            return this;
+        }
+
+        public Builder enderecos(List<AddressEntity> enderecos) {
+            this.enderecos = enderecos;
+            return this;
+        }
+
+        public Builder restaurante(RestaurantEntity restaurante) {
+            this.restaurante = restaurante;
+            return this;
+        }
+
+        public UserEntity build() {
+            return new UserEntity(this);
+        }
     }
 }

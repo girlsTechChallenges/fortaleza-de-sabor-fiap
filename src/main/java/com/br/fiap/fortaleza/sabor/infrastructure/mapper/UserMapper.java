@@ -72,26 +72,27 @@ public class UserMapper {
     }
 
     public UserEntity toUserEntity(User user) {
-
         List<AddressEntity> addressEntities = user.getAddress()
-                .stream().map(address -> new AddressEntity(
+                .stream()
+                .map(address -> new AddressEntity(
                         address.getRua(),
                         address.getBairro(),
                         address.getComplemento(),
                         address.getNumero(),
                         address.getEstado(),
-                        address.getCidade(), address.getCep())).toList();
+                        address.getCidade(),
+                        address.getCep()))
+                .toList();
 
-        return new UserEntity(
-                null,
-                user.getNome(),
-                user.getEmail(),
-                user.getLogin(),
-                user.getSenha(),
-                user.getDataAlteracao(),
-                typeUserMapper.toTypeEntity(new TypeUser(null, user.getTipo())),
-                addressEntities
-                );
+        return new UserEntity.Builder()
+                .nome(user.getNome())
+                .email(user.getEmail())
+                .login(user.getLogin())
+                .senha(user.getSenha())
+                .dataAlteracao(user.getDataAlteracao())
+                .tipo(typeUserMapper.toTypeEntity(new TypeUser(null, user.getTipo())))
+                .enderecos(addressEntities)
+                .build();
     }
 
     public User toUserDomain(UserEntity userEntity) {
