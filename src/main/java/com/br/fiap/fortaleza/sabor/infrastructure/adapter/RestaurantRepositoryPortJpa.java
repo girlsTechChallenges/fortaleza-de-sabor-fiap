@@ -52,8 +52,8 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
         var userEntity = userRepositoryAdapter.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_EMAIL + email));
 
-        if("DONO".equals(userEntity.getTipo().getNameType())) {
-            throw new UserNotFoundException("User with email " + email + " is not a restaurant owner");
+        if(!"DONO".equals(userEntity.getTipo().getNameType())) {
+            throw new UserNotFoundException(email + " is not a restaurant owner - ");
         }
 
         if (restaurantRepositoryAdapter.findByName(restaurant.getName()).isPresent()) {
