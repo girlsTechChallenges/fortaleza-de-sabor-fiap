@@ -2,7 +2,7 @@
 
 ## 🏗️ Visão Geral
 
-O **Fortaleza de Sabor** implementa **Clean Architecture** com **Domain-Driven Design (DDD)**, garantindo:
+O **Fortaleza de Sabor** implementa  **Clean Architecture** com **Domain-Driven Design (DDD)**, garantindo:
 
 - 📦 **Separação clara de responsabilidades** entre camadas
 - 🔄 **Baixo acoplamento** e alta coesão

@@ -2,7 +2,7 @@
 
 ## 👥 Equipe
 **Equipe Girls Tech Challenges**  
-Tech Challenge FIAP - Arquitetura de Software
+Tech Challenge FIAP - Arquitetura de Software 
 
 ---
 
