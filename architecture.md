@@ -10,93 +10,61 @@ O **Fortaleza de Sabor** implementa **Clean Architecture** com **Domain-Driven D
 - 📈 **Escalabilidade** e manutenibilidade do código
 - 🛡️ **Isolamento de regras de negócio** das tecnologias
 
-## 📊 Diagrama de Arquitetura
+## 📊 Tecnologias Implementadas
 
-![Diagrama de Arquitetura](diagram.png)
+### Backend Core
+- ☕ **Java 21** - Linguagem principal
+- 🍃 **Spring Boot 3.4.5** - Framework base  
+- 🗄️ **PostgreSQL** - Banco de dados produção
+- 💾 **H2** - Banco de dados para testes
 
-```mermaid
-graph TD
-    %% Camadas da Aplicação
-    subgraph API[🎯 Camada de Apresentação - Infrastructure]
-        Controllers[Controllers REST<br/>• AuthController<br/>• UserController<br/>• RestaurantController<br/>• MenuItemsController<br/>• TypeController]
-        DTOs[DTOs & Validation<br/>• Request/Response<br/>• Bean Validation<br/>• Global Exception Handler]
-        Docs[Swagger Documentation<br/>• OpenAPI Interfaces<br/>• API Documentation]
-    end
+### Segurança e Validação
+- 🔒 **Spring Security** - Autenticação/autorização
+- 🎫 **Spring OAuth2 Resource Server** - JWT tokens
+- ✅ **Bean Validation** - Validação de entrada
 
-    subgraph APP[💼 Camada de Aplicação - Application]
-        Ports[Ports (Interfaces)<br/>• Input Ports (Use Cases)<br/>• Output Ports (Repositories)]
-        UseCases[Use Cases<br/>• AuthUseCase<br/>• UserUseCase<br/>• RestaurantUseCase<br/>• MenuItemsUseCase<br/>• TypeUseCase]
-    end
+### Testes e Qualidade
+- 🧪 **JUnit 5** - Framework de testes
+- 🎭 **Mockito** - Mocking para testes unitários
+- 🌐 **REST-assured** - Testes de integração
+- 🥒 **Cucumber** - Testes BDD
+- 📊 **70 testes** implementados
 
-    subgraph DOMAIN[🏛️ Camada de Domínio - Domain]
-        Entities[Entidades de Negócio<br/>• User<br/>• Restaurant<br/>• Address<br/>• MenuItem<br/>• Token]
-        ValueObjects[Value Objects<br/>• BusinessHours<br/>• TypeEnum<br/>• DayOfWeek]
-    end
+### DevOps e Build
+- 📦 **Maven** - Gerenciamento de dependências
+- 🐳 **Docker** - Containerização
+- 📖 **SpringDoc OpenAPI** - Documentação automática
 
-    subgraph INFRA[🔧 Camada de Infraestrutura - Infrastructure]
-        Adapters[Adapters<br/>• Repository Adapters<br/>• External Services]
-        Persistence[Persistence Layer<br/>• JPA Entities<br/>• JPA Repositories<br/>• Database Mappers]
-        Config[Configurações<br/>• Security Config<br/>• OpenAPI Config<br/>• Database Config]
-    end
+## � Controllers Implementados
 
-    subgraph DB[🗄️ Banco de Dados]
-        Prod[(PostgreSQL<br/>Produção)]
-        Test[(H2 Database<br/>Testes)]
-    end
+### 🎯 **UserController** (`/users`)
+- **CRUD Completo**: Create, Read, Update, Delete
+- **Endpoints**: POST, GET, GET/{id}, PUT/{id}, DELETE/{id}
+- **Validações**: Bean Validation em DTOs
+- **Documentação**: Swagger separada em `UserControllerDocs`
 
-    subgraph TESTING[🧪 Camada de Testes]
-        Unit[46 Testes Unitários<br/>• Use Cases<br/>• Controllers<br/>• Mappers<br/>• DTOs]
-        Integration[8 Testes Integração<br/>• REST-assured<br/>• H2 em memória<br/>• End-to-end]
-    end
+### 🔐 **AuthController** (`/auth`)
+- **Login**: POST `/auth/login` - Autenticação com email/senha
+- **Update Password**: PATCH `/auth/password` - Alteração de senha
+- **JWT**: Retorna tokens de acesso
+- **Validações**: Credenciais e formatos
 
-    %% Fluxo de Dependências (Clean Architecture)
-    Controllers --> UseCases
-    DTOs --> Controllers
-    Docs --> Controllers
-    UseCases --> Ports
-    UseCases --> Entities
-    Entities --> ValueObjects
-    Adapters --> Ports
-    Persistence --> Adapters
-    Config --> INFRA
-    
-    %% Conexões com Banco
-    Persistence --> Prod
-    Integration --> Test
-    
-    %% Testes
-    Unit --> APP
-    Unit --> DOMAIN
-    Unit --> API
-    Integration --> API
-```
-    A --> UseCases
-    UseCases --> Gateways
-    UseCases --> Entities
-    Gateways -.implemented by.-> RepositoriesJPA
-    RepositoriesJPA --> Persistence
-    Persistence --> PostgreSQL
-    Mappers --> DTOs
-    Mappers --> Entities
-    ExceptionHandlers --> DTOs
-    
-    %% Relacionamentos de Teste
-    UnitTests -.tests.-> A
-    UnitTests -.tests.-> UseCases
-    UnitTests -.tests.-> RepositoriesJPA
-    UnitTests -.tests.-> Mappers
-    UnitTests --> H2
-    TestUtils --> UnitTests
+### 🍽️ **RestaurantController** (`/restaurants`)
+- **CRUD Completo**: Gestão completa de restaurantes
+- **Owner Management**: PATCH `/restaurants/owner/{id}` - Gestão de proprietários
+- **Múltiplos Endereços**: Suporte a endereços múltiplos
+- **Horários**: Gestão de horários de funcionamento
 
-    %% Configurações
-    Config --> A
-    Config --> UseCases
-    Docker --> PostgreSQL
-    Docker --> Config
+### 🍕 **MenuItemsController** (`/cardapio`)
+- **CRUD Completo**: Gestão de itens do cardápio
+- **Controle de Preços**: Validação de valores
+- **Disponibilidade**: Controle de status dos itens
+- **Validações**: Dados obrigatórios e formatos
 
-    classDef apresentacao fill:#e1f5fe
-    classDef aplicacao fill:#f3e5f5
-    classDef dominio fill:#fff3e0
+### ⚙️ **TypeController** (`/type-users`)
+- **CRUD Completo**: Gestão de tipos de usuários
+- **Validações**: Tipos permitidos e formatos
+- **Integração**: Vinculação com usuários
     
 ## 🎯 Princípios Aplicados
 
@@ -133,100 +101,163 @@ graph TD
 - **Swagger Interfaces**: Documentação OpenAPI separada dos controllers
 - **OpenAPI Configuration**: Configuração centralizada da documentação
 
-### 💼 **Camada de Aplicação** (`application`)
-**Responsabilidade**: Orquestração das regras de negócio
+## 💼 **Camada de Aplicação** (`application`)
 
-#### Ports (Interfaces)
-- **Input Ports**: Interfaces dos Use Cases
-- **Output Ports**: Interfaces dos Repositórios
+**Responsabilidade**: Orquestração das regras de negócio através de Use Cases e Ports.
 
-#### Use Cases Implementados
+### Use Cases Implementados
+
+#### **UserUseCasePort**
 ```java
-// Autenticação
-AuthUseCase - validateLogin(), updatePassword()
-
-// Usuários
-UserUseCase - save(), getAll(), getById(), update(), delete()
-
-// Restaurantes
-RestaurantUseCase - create(), update(), getAll(), getById(), delete(), updateOwner()
-
-// Itens do Cardápio
-MenuItemsUseCase - save(), getAll(), getById(), update(), delete()
-
-// Tipos de Usuário
-TypeUseCase - create(), getAll(), getById(), update(), delete()
+public interface UserUseCasePort {
+    List<User> getAll();                    // Listar todos
+    User save(User user);                   // Criar usuário
+    Optional<User> update(Long id, User user); // Atualizar
+    Optional<User> getById(Long id);        // Buscar por ID
+    Optional<User> deleteById(Long id);     // Deletar
+    Optional<User> findByEmail(String email); // Buscar por email
+    void updatePassword(String email, String password); // Atualizar senha
+}
 ```
 
+#### **AuthUseCasePort**
+```java
+public interface AuthUseCasePort {
+    Token validateLogin(String email, String password); // Login
+    void updatePassword(String email, String password); // Alterar senha
+}
+```
 
-### 🏛️ **Camada de Domínio** (`domain.model`)
+#### **RestaurantUseCasePort**
+```java
+public interface RestaurantUseCasePort {
+    Restaurant create(Restaurant restaurant);           // Criar
+    Optional<Restaurant> update(Long id, Restaurant restaurant); // Atualizar
+    List<Restaurant> getAll();                         // Listar todos
+    Optional<Restaurant> getById(Long id);            // Buscar por ID
+    void deleteById(Long id);                         // Deletar
+    Restaurant updateOwner(Long id, String owner, String email); // Atualizar proprietário
+}
+```
+
+#### **MenuItemsUseCasePort**
+```java
+public interface MenuItemsUseCasePort {
+    MenuItem save(MenuItem menuItem);               // Criar item
+    List<MenuItem> getAll();                       // Listar todos
+    Optional<MenuItem> getById(Long id);          // Buscar por ID
+    Optional<MenuItem> update(Long id, MenuItem menuItem); // Atualizar
+    void deleteById(Long id);                     // Deletar
+}
+```
+
+#### **TypeUseCasePort**
+```java
+public interface TypeUseCasePort {
+    TypeUser create(TypeUser typeUser);           // Criar tipo
+    Optional<TypeUser> update(Long id, TypeUser typeUser); // Atualizar
+    Optional<TypeUser> deleteById(Long id);       // Deletar
+    Optional<TypeUser> getById(Long id);         // Buscar por ID
+    List<TypeUser> getAll();                     // Listar todos
+}
+```
+
+### Ports (Interfaces)
+
+#### **Input Ports** - Interfaces dos Use Cases
+- Definem os contratos de entrada para a aplicação
+- Implementados pelos Use Cases
+- Chamados pelos Controllers
+
+#### **Output Ports** - Interfaces dos Repositórios  
+- Definem os contratos de saída para persistência
+- Implementados pelos Repository Adapters
+- Utilizados pelos Use Cases
+
+
+## 🏛️ **Camada de Domínio** (`domain.model`)
+
 **Responsabilidade**: Núcleo da aplicação com entidades, value objects e regras de negócio puras, sem dependências externas.
 
-#### Entidades Principais
+### Entidades Implementadas
+
+#### **User** (Usuário)
 ```java
-// Usuário
-User {
-  Long id;
-  String name;
-  String email;
-  String login;
-  String password;
-  List<Address> addresses;
-  TypeUser typeUser;
-}
-
-// Restaurante
-Restaurant {
-  Long id;
-  String name;
-  String kitchenType;
-  String email;
-  String ownerName;
-  List<Address> addresses;
-  List<BusinessHours> businessHours;
-}
-
-// Item de Cardápio
-MenuItem {
-  Long id;
-  String name;
-  String description;
-  BigDecimal price;
-  Long restaurantId;
-}
-
-// Tipo de Usuário
-TypeUser {
-  Long id;
-  String nameType;
-}
-
-// Endereço
-Address {
-  String street;
-  String neighborhood;
-  String complement;
-  Integer number;
-  String state;
-  String city;
-  String zipCode;
+public class User {
+    private String nome;          // Nome do usuário
+    private String email;         // Email único
+    private String login;         // Login único  
+    private String senha;         // Senha (criptografada)
+    private LocalDate dataAlteracao; // Data de modificação
+    private String tipo;          // Tipo do usuário
+    private List<Address> address; // Endereços múltiplos
 }
 ```
 
-#### Value Objects
+#### **Restaurant** (Restaurante)
 ```java
-// Horário de Funcionamento
-BusinessHours {
-  DayOfWeek dayOfWeek;
-  LocalTime openingTime;
-  LocalTime closingTime;
-  String observations;
+public class Restaurant {
+    private Long id;
+    private String name;          // Nome do restaurante
+    private String kitchenType;   // Tipo de cozinha
+    private String email;         // Email do restaurante
+    private String owner;         // Proprietário
+    private List<Address> address; // Endereços múltiplos
+    private List<BusinessHours> businessHours; // Horários
 }
+```
 
-// Token JWT
-Token {
-  String accessToken;
-  Long expiresIn;
+#### **MenuItem** (Item do Cardápio)
+```java
+public class MenuItem {
+    private Long id;
+    private String name;          // Nome do item
+    private String description;   // Descrição
+    private BigDecimal price;     // Preço
+    private Boolean available;    // Disponibilidade
+    private String image;         // URL da imagem
+    private Long restaurantId;    // ID do restaurante
+}
+```
+
+#### **Address** (Endereço)
+```java
+public class Address {
+    private String street;        // Logradouro
+    private String neighborhood;  // Bairro
+    private String complement;    // Complemento
+    private Integer number;       // Número
+    private String state;         // Estado (UF)
+    private String city;          // Cidade
+    private String zipCode;       // CEP
+}
+```
+
+#### **TypeUser** (Tipo de Usuário)
+```java
+public class TypeUser {
+    private Long id;
+    private String nameType;      // Nome do tipo (CUSTOMER, OWNER)
+}
+```
+
+### Value Objects
+
+#### **BusinessHours** (Horário de Funcionamento)
+```java
+public class BusinessHours {
+    private DayOfWeek dayOfWeek;     // Dia da semana
+    private LocalTime openingTime;   // Horário de abertura
+    private LocalTime closingTime;   // Horário de fechamento
+    private String observations;     // Observações
+}
+```
+
+#### **Token** (Token de Autenticação)
+```java
+public class Token {
+    private String accessToken;     // Token JWT
+    private Long expiresIn;         // Tempo de expiração
 }
 ```
 
@@ -268,59 +299,148 @@ UserEntity, RestaurantEntity, AddressEntity, MenuItemEntity, TypeUserEntity
 - Implementação de serviços externos e utilitários
 
 
-## 🧪 **Estratégia de Testes**
+## 🧪 **Estratégia de Testes Implementada**
 
-O projeto adota uma abordagem de testes automatizados em múltiplos níveis para garantir robustez, qualidade e segurança:
+O projeto possui **70 testes automatizados** organizados em múltiplos níveis:
 
-### Testes Unitários
-- Cobrem regras de negócio dos Use Cases, validação de DTOs, conversão de mapeamentos e lógica isolada.
-- Utilizam JUnit 5 e Mockito para simulação de dependências.
-- Padrão AAA (Arrange, Act, Assert) aplicado em todos os testes.
+### **Testes Unitários** (~46 testes)
 
-### Testes de Integração
-- Validam fluxos completos dos endpoints REST, integração com banco H2 em memória e autenticação JWT.
-- Utilizam REST-assured, SpringBootTest e contexto real da aplicação.
-- Cobrem cenários de sucesso, erro, autenticação e edge cases.
+#### **Controllers Testados**
+- **UserControllerTest** - Endpoints REST de usuários
+- **AuthControllerTest** - Endpoints de autenticação  
+- **RestaurantControllerTest** - Endpoints REST de restaurantes
+- **MenuItemsControllerTest** - Endpoints de cardápio
+- **TypeControllerTest** - Endpoints de tipos de usuário
 
-### Cobertura e Relatórios
-- 54 testes automatizados (46 unitários + 8 integração)
-- Cobertura total dos principais fluxos de negócio, controllers e mapeamentos
-- Relatórios gerados em `/target/surefire-reports/`
+#### **Use Cases Testados**
+- **UserUseCaseTest** - Lógica de negócio de usuários
+- **AuthUseCaseTest** - Lógica de autenticação
+- **RestaurantUseCaseTest** - Lógica de restaurantes
+- **MenuItemUseCaseTest** - Lógica de cardápio
+- **TypeUseCaseTest** - Lógica de tipos
 
-### Boas Práticas
-- Nomenclatura unificada: `shouldXWhenY` em todos os testes
-- Testes independentes e reprodutíveis
-- Validação de Bean Validation, conversão de dados e tratamento de exceções
+#### **Mappers Testados**
+- **UserMapperTest** - Conversões de usuário
+- **RestaurantMapperTest** - Conversões de restaurante
+- **MenuMapperTest** - Conversões de cardápio
+- **TypeUserMapperTest** - Conversões de tipos
 
-Consulte detalhes completos de cenários, comandos e exemplos em [`DOCUMENTACAO_COMPLETA_TESTES.md`](DOCUMENTACAO_COMPLETA_TESTES.md).
+#### **DTOs com Bean Validation**
+- **13 DTOs testados** com validações completas
+- **Request DTOs**: Validação de entrada
+- **Response DTOs**: Estrutura de saída
+- **Cenários**: Válidos, inválidos e extremos
 
-## ✅ **Benefícios da Arquitetura**
+#### **Repository Adapters**
+- **UserRepositoryPortJpaTest** - Persistência de usuários
+- **RestaurantRepositoryPortJpaTest** - Persistência de restaurantes
+- **MenuItemRepositoryPortJpaTest** - Persistência de cardápio
+- **TypeRepositoryPortJpaTest** - Persistência de tipos
+
+### **Testes de Integração** (~8 testes)
+
+#### **Configuração**
+- **Spring Boot Test** - Contexto completo da aplicação
+- **REST-assured** - Chamadas HTTP reais
+- **H2 Database** - Banco em memória para testes
+- **TestContainers** - Ambiente isolado
+
+#### **Controllers Integrados**
+- **UserControllerIntegrationTest** - CRUD completo de usuários
+- **AuthControllerIntegrationTest** - Fluxo de autenticação
+- **RestaurantControllerIntegrationTest** - CRUD de restaurantes
+- **MenuItemsControllerIntegrationTest** - Gestão de cardápio
+
+### **Testes E2E** (~16 testes)
+
+#### **Cenários Completos**
+- **UserManagementE2ETest** - Workflow completo de usuários
+- **AuthenticationE2ETest** - Fluxo de login e autenticação
+- **RestaurantManagementE2ETest** - Gestão completa de restaurantes
+- **MenuItemManagementE2ETest** - Gestão de cardápio
+- **TypeUserManagementE2ETest** - Gestão de tipos
+- **CompleteWorkflowE2ETest** - Fluxo completo da aplicação
+
+### **Testes BDD com Cucumber**
+
+#### **Features em Português**
+- **user_management.feature** - Gestão de usuários
+- **authentication.feature** - Autenticação
+- **restaurant_management.feature** - Gestão de restaurantes
+- **menu_management.feature** - Gestão de cardápio
+
+#### **Step Definitions**
+- **BaseSteps** - Configuração e setup
+- **UserManagementSteps** - Steps de usuários
+- **AuthenticationSteps** - Steps de autenticação
+- **RestaurantManagementSteps** - Steps de restaurantes
+- **MenuManagementSteps** - Steps de cardápio
+
+### **Perfis Maven de Teste**
+
+```bash
+# Todos os testes
+mvn clean test
+
+# Apenas unitários  
+mvn test -Punit-tests
+
+# Apenas integração
+mvn test -Pintegration-tests
+
+# Apenas E2E
+mvn test -Pe2e-tests
+
+# E2E com Cucumber
+mvn test -Pe2e-cucumber
+```
+
+### **Cobertura e Relatórios**
+
+#### **Relatórios Gerados**
+- **Surefire Reports** - `target/surefire-reports/`
+- **Cucumber Reports** - `target/cucumber-html-reports/`
+- **JSON Reports** - `target/cucumber-json-reports/`
+
+#### **Métricas de Qualidade**
+- ✅ **Use Cases**: 100% dos casos cobertos
+- ✅ **Controllers**: 100% dos endpoints testados
+- ✅ **Mappers**: 100% das conversões testadas
+- ✅ **DTOs**: Validação Bean Validation completa
+- ✅ **Integration**: Fluxos end-to-end validados
+
+## ✅ **Benefícios da Arquitetura Implementada**
 
 ### 🎯 **Separação de Responsabilidades**
-- Cada camada tem uma responsabilidade bem definida
-- Baixo acoplamento entre camadas
-- Alta coesão dentro de cada camada
-- Facilita compreensão e manutenção do código
+- **5 Controllers** com responsabilidades bem definidas
+- **70 testes** organizados por camada
+- **Clean Code** com padrões consistentes aplicados
+- **Documentação Swagger** separada dos controllers
 
 ### 🧪 **Testabilidade Avançada**
-- **54 testes** (46 unitários + 8 integração) com 100% sucesso
-- Mudanças em uma camada não impactam outras
-- Código organizado e fácil de navegar
-- Documentação clara da estrutura
-- Padrões consistentes aplicados
+- **70 testes implementados** (unitários + integração + E2E)
+- **Múltiplos níveis** de validação
+- **Cucumber BDD** para testes de aceitação
+- **Postman Collection** com 35+ cenários
 
 ### 🚀 **Escalabilidade e Flexibilidade**
-- Fácil adição de novas funcionalidades
-- Troca simples de implementações (ex: banco de dados)
-- Adaptabilidade a diferentes ambientes
-- Suporte a diferentes interfaces (REST, GraphQL, etc.)
+- **Ports & Adapters** implementados
+- **Use Cases** isolados e testáveis
+- **Domain Model** rico e expressivo
+- **Bean Validation** robusta
 
-## 🔄 **Fluxo de Dados**
+### 🔒 **Segurança Empresarial**
+- **Spring Security** configurado
+- **JWT Tokens** para autenticação
+- **Validation** em todas as camadas
+- **Exception Handling** global
+
+## 🔄 **Fluxo de Dados Implementado**
 
 ### 📥 **Request Flow (Entrada)**
 ```
-1. Cliente HTTP → Controller (REST endpoint)
-2. Controller → DTO Request (validação Bean Validation)  
+1. Cliente HTTP → Controller REST endpoint
+2. Controller → DTO Request com Bean Validation  
 3. Controller → Use Case (regras de negócio)
 4. Use Case → Repository Port (interface)
 5. Repository Adapter → Database (PostgreSQL/H2)
@@ -331,164 +451,82 @@ Consulte detalhes completos de cenários, comandos e exemplos em [`DOCUMENTACAO_
 1. Database → Repository Adapter
 2. Repository Adapter → Use Case  
 3. Use Case → Controller
-4. Controller → DTO Response (serialização)
-5. Controller → Cliente HTTP (JSON)
+4. Controller → DTO Response (JSON)
+5. Controller → Cliente HTTP
 ```
 
 ### 🔄 **Exemplo Prático: Criar Usuário**
 ```java
 // 1. Controller recebe requisição
 @PostMapping("/users")
-public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
-
-// 2. Controller chama Use Case
-User user = userMapper.toUserDomain(request);
-User savedUser = userUseCasePort.save(user);
-
-// 3. Use Case executa regras de negócio
-public User save(User user) {
-    // Validações de negócio
-    // Criptografia de senha
-    return userRepositoryPort.save(user);
+public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto request) {
+    // 2. Mapper converte DTO para Domain
+    User user = userMapper.toUserDomain(request);
+    
+    // 3. Use Case executa regras de negócio
+    User savedUser = userUseCasePort.save(user);
+    
+    // 4. Mapper converte Domain para Response
+    UserResponseDto response = userMapper.toUserResponseDto(savedUser);
+    
+    // 5. Retorna resposta HTTP 201
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
-
-// 4. Repository persiste no banco
-UserEntity entity = userMapper.toUserEntity(user);
-UserEntity saved = userJpaRepository.save(entity);
-
-// 5. Resposta retorna pela stack
-return ResponseEntity.created().body(userResponseDto);
 ```
 
-## 🏗️ **Estrutura de Pastas**
+## 🏗️ **Estrutura de Pastas Implementada**
 
 ```
 src/main/java/com/br/fiap/fortaleza/sabor/
-├── 📁 application/              # Camada de Aplicação
+├── 📁 application/                    # Camada de Aplicação
 │   ├── 📁 ports/
-│   │   ├── 📁 in/              # Input Ports (Use Cases)
-│   │   └── 📁 out/             # Output Ports (Repositories)
-│   └── 📁 usecase/             # Implementação dos Use Cases
-├── 📁 domain/                  # Camada de Domínio
-│   └── 📁 model/               # Entidades e Value Objects
-└── 📁 infrastructure/          # Camada de Infraestrutura
-    ├── 📁 adapter/             # Adapters (Repository implementations)
-    ├── 📁 config/              # Configurações Spring
-    ├── 📁 controller/          # Controllers REST
-    │   ├── docs/             # Interfaces Swagger
-    │   └── 📁 dto/            # DTOs Request/Response
-    ├── 📁 mapper/              # Conversores entre camadas
-    ├── 📁 persistence/         # Entidades JPA
-    │   ├── entity/            # JPA Entities
-    │   └── repository/        # JPA Repositories
+│   │   ├── 📁 in/                    # Input Ports (Use Cases)
+│   │   │   ├── UserUseCasePort.java
+│   │   │   ├── AuthUseCasePort.java
+│   │   │   ├── RestaurantUseCasePort.java
+│   │   │   ├── MenuItemsUseCasePort.java
+│   │   │   └── TypeUseCasePort.java
+│   │   └── 📁 out/                   # Output Ports (Repositories)
+│   └── 📁 usecase/                   # Implementação dos Use Cases
+├── 📁 domain/                        # Camada de Domínio
+│   └── 📁 model/                     # Entidades e Value Objects
+│       ├── 📁 user/                  # User, TypeUser
+│       ├── 📁 restaurant/            # Restaurant, BusinessHours
+│       ├── 📁 menu/                  # MenuItem
+│       ├── 📁 address/               # Address
+│       └── 📁 token/                 # Token
+└── 📁 infrastructure/                # Camada de Infraestrutura
+    ├── 📁 adapter/                   # Repository Adapters
+    ├── 📁 config/                    # Configurações Spring
+    ├── 📁 controller/                # Controllers REST
+    │   ├── 📁 docs/                  # Interfaces Swagger
+    │   └── 📁 dto/                   # DTOs Request/Response
+    ├── 📁 exception/                 # Exception Handlers
+    ├── 📁 mapper/                    # Conversores entre camadas
+    └── 📁 persistence/               # JPA Entities e Repositories
 ```
 
-## 📊 **Métricas de Qualidade**
+## 📊 **Métricas de Qualidade Alcançadas**
 
-### Cobertura de Testes
-- ✅ **Use Cases**: 11/11 classes (100%)
+### Cobertura de Testes Implementada
 - ✅ **Controllers**: 5/5 classes (100%)
+- ✅ **Use Cases**: 5/5 interfaces (100%)
 - ✅ **Mappers**: 4/4 classes (100%)
-- ✅ **DTOs**: 9/9 classes principais (100%)
-- ✅ **Repositories**: 2/2 classes customizadas (100%)
+- ✅ **DTOs**: 13/13 classes principais (100%)
+- ✅ **Repository Adapters**: 4/4 classes (100%)
 
-### Padrões Arquiteturais
+### Padrões Arquiteturais Aplicados
 - ✅ **Clean Architecture**: Implementação completa
-- ✅ **DDD**: Entidades e Value Objects bem definidos
+- ✅ **DDD**: Entidades e Value Objects implementados
 - ✅ **SOLID**: Princípios aplicados consistentemente
 - ✅ **Ports & Adapters**: Inversão de dependências
 
-### Qualidade do Código
-- ✅ **Nomenclatura**: Padrões consistentes
+### Qualidade do Código Implementada
+- ✅ **Nomenclatura**: Padrões consistentes aplicados
 - ✅ **Separação**: Responsabilidades bem definidas
-- ✅ **Testabilidade**: 100% das classes testáveis
+- ✅ **Testabilidade**: 70 testes implementados
 - ✅ **Documentação**: Swagger completo + documentação técnica
 
 ---
 
-**Esta arquitetura garante um sistema robusto, testável e mantível, seguindo as melhores práticas de desenvolvimento de software empresarial.** 🏗️✨
-3. **Use Case** → Gateway Interface (Camada de Aplicação)
-4. **Gateway** → Repository JPA (Camada de Infraestrutura)
-5. **Repository** → Database (Recursos Externos)
-
-### 📤 **Response Flow**
-1. **Database** → Repository JPA
-2. **Repository** → Use Case (através do Gateway)
-3. **Use Case** → Controller
-4. **Controller** → Cliente (via DTO)
-
-### 🔄 **Transformações de Dados**
-- **Request**: ClienteDTO → Mapper → DomainEntity
-- **Processing**: DomainEntity → Use Case → Business Logic
-- **Persistence**: DomainEntity → Mapper → JPAEntity → Database
-- **Response**: Database → JPAEntity → Mapper → DomainEntity → DTO → Cliente
-
-## Padrões Arquiteturais Utilizados
-
-### 🏛️ **Clean Architecture**
-- Dependências apontam para o centro (domínio)
-- Camadas externas dependem das internas
-- Domínio independente de frameworks
-
-### 🎯 **Domain-Driven Design (DDD)**
-- Entidades refletem o negócio de restaurantes
-- Linguagem ubíqua entre código e negócio
-- Bounded contexts bem definidos
-
-### 🔀 **Dependency Inversion**
-- Use Cases dependem de abstrações (Gateways)
-- Implementações concretas na camada de infraestrutura
-- Facilita testes e troca de implementações
-
-### 📋 **Repository Pattern**
-- Abstração para acesso a dados
-- Centraliza lógica de persistência
-- Facilita testes com mocks
-
-### 🗺️ **Mapper Pattern**
-- Separação entre DTOs e entidades de domínio
-- Transformações centralizadas
-- Facilita evolução independente das APIs
-
-## Tecnologias por Camada
-
-### **Apresentação**
-- Spring MVC, SpringDoc OpenAPI, Bean Validation
-
-### **Aplicação**
-- Spring Core, Injeção de Dependência
-
-### **Domínio**
-- Java puro, sem dependências externas
-
-### **Infraestrutura**
-- Spring Data JPA, Hibernate, PostgreSQL, H2, Docker
-
-### **Testes**
-- JUnit 5, Mockito, Spring Test
-    DTOs --> Mappers
-    A --> UseCases
-    ExceptionHandlers --> A
-    UseCases --> Entities
-    UseCases --> Gateways
-    Gateways --> Repositories
-    Repositories --> PostgreSQL
-    Mappers --> Entities
-    Mappers --> DTOs
-
-    %% Estilização
-    classDef presentation fill:#aef,stroke:#333,stroke-width:2px
-    classDef domain fill:#fda,stroke:#333,stroke-width:2px
-    classDef infrastructure fill:#dfa,stroke:#333,stroke-width:2px
-    classDef database fill:#fad,stroke:#333,stroke-width:2px
-    classDef documentation fill:#e6f3ff,stroke:#0066cc,stroke-width:2px
-
-    class A,DTOs,ExceptionHandlers presentation
-    class ControllerDocs documentation
-    class UseCases,Entities domain
-    class Gateways,Repositories,Mappers infrastructure
-    class PostgreSQL database
-
----
-
-```
+**Esta arquitetura implementa um sistema robusto, testável e mantível, seguindo as melhores práticas de desenvolvimento de software empresarial com Clean Architecture e DDD.** 🏗️✨

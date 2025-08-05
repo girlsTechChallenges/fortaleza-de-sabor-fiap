@@ -29,7 +29,26 @@
 	<properties>
 		<java.version>21</java.version>
 		<sonar.exclusions>**/*.properties, **/*.yml, **/*.xml</sonar.exclusions>
+		<cucumber.version>7.14.0</cucumber.version>
+		<allure.version>2.24.0</allure.version>
 	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- Force compatible versions to avoid conflicts -->
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>messages</artifactId>
+				<version>22.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>gherkin</artifactId>
+				<version>26.2.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -128,6 +147,41 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Cucumber Dependencies - Versões compatíveis -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- JUnit Platform Suite for Cucumber Runner -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- JSON Processing -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20231013</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -285,6 +339,44 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Profile para executar testes E2E com Cucumber -->
+		<profile>
+			<id>e2e-cucumber</id>
+			<properties>
+				<maven.test.skip>false</maven.test.skip>
+				<skipTests>false</skipTests>
+				<test.profile>e2e</test.profile>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.1.2</version>
+						<configuration>
+							<includes>
+								<include>**/*CucumberRunner.java</include>
+							</includes>
+							<systemPropertyVariables>
+								<spring.profiles.active>e2e</spring.profiles.active>
+							</systemPropertyVariables>
+							<forkCount>1</forkCount>
+							<reuseForks>true</reuseForks>
+							<parallel>false</parallel>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>io.qameta.allure</groupId>
+						<artifactId>allure-maven</artifactId>
+						<version>2.12.0</version>
+						<configuration>
+							<reportVersion>2.24.0</reportVersion>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
