@@ -149,6 +149,9 @@ mvn test -Pe2e-tests
 
 # E2E com Cucumber
 mvn test -Pe2e-cucumber
+
+# Análise SonarQube
+mvn sonar:sonar
 ```
 
 ## 📝 Endpoints da API
@@ -219,6 +222,7 @@ O projeto disponibiliza uma collection Postman completa para automação dos tes
 - 📖 **[ARCHITECTURE.md](ARCHITECTURE.md)** - Arquitetura detalhada e diagramas
 - 📄 **[DOC.md](DOC.md)** - Documentação técnica e exemplos
 - 🧪 **[DOCUMENTACAO_COMPLETA_TESTES.md](DOCUMENTACAO_COMPLETA_TESTES.md)** - Estratégia de testes
+- 🔍 **sonar-project.properties** - Configuração SonarQube para análise de código
 
 ## 🛠️ Configuração de Desenvolvimento
 
@@ -255,6 +259,7 @@ mvn spring-boot:run
 - ✅ **Exception Handling** - Tratamento global de erros
 - ✅ **Swagger Documentation** - API documentada
 - ✅ **Test Coverage** - Testes em múltiplas camadas
+- ✅ **SonarQube Integration** - Análise estática de código
 
 ### Padrões Aplicados:
 - **Repository Pattern** - Abstração de dados
