@@ -28,7 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-		<sonar.exclusions>**/*.properties, **/*.yml, **/*.xml</sonar.exclusions>
+		<sonar.exclusions>src/test/java/**/*.java</sonar.exclusions>
+		<sonar.coverage.exclusions>src/test/java/**/*.java</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -182,6 +183,11 @@
 					</execution>
 				</executions>
 			</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.9.1.2184</version>
+				</plugin>
 		</plugins>
 	</build>
 
