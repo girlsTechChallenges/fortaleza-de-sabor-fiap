@@ -18,7 +18,7 @@ class MenuDtoTest {
     void setUp() {
         // Create a valid MenuItem for testing
         validMenuItem = new MenuItem();
-        validMenuItem.setNome("Pizza Margherita");
+        validMenuItem.setName("Pizza Margherita");
         validMenuItem.setItemDescription("Pizza com molho de tomate e mussarela");
         validMenuItem.setItemPrice("25.90");
         validMenuItem.setAvailability(true);
@@ -62,7 +62,7 @@ class MenuDtoTest {
     void shouldCreateMenuDtoWithMultipleValidMenuItems() {
         // Arrange
         MenuItem secondItem = new MenuItem();
-        secondItem.setNome("Hambúrguer");
+        secondItem.setName("Hambúrguer");
         secondItem.setItemDescription("Hambúrguer artesanal");
         secondItem.setItemPrice("18.50");
         secondItem.setAvailability(true);
@@ -101,7 +101,7 @@ class MenuDtoTest {
     void shouldHandleListModificationCorrectly() {
         // Arrange
         MenuItem anotherItem = new MenuItem();
-        anotherItem.setNome("Salada Caesar");
+        anotherItem.setName("Salada Caesar");
         anotherItem.setItemDescription("Salada com frango grelhado");
         anotherItem.setItemPrice("15.90");
         anotherItem.setAvailability(true);

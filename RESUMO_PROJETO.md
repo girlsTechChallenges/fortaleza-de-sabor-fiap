@@ -47,7 +47,7 @@ Consulte cobertura, comandos, métricas e detalhes de execução em:
 
 ## Observações
 
-- Todas as informações refletem o estado atual do projeto (agosto/2025)
+- Todas as informações refletem o state atual do projeto (agosto/2025)
 - Para detalhes completos, consulte os arquivos de documentação centralizada.
 
 

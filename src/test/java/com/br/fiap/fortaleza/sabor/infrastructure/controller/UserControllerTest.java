@@ -58,12 +58,12 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        Address address = new Address("Rua Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
+        Address address = new Address("Street Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
         user = new User("João Silva", "joao@email.com", "password123", "ADMIN", Arrays.asList(address));
         user.setLogin("joao123");
-        user.setDataAlteracao(LocalDate.now());
+        user.setChangeDate(LocalDate.now());
 
-        AddressDto addressDto = new AddressDto("Rua Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
+        AddressDto addressDto = new AddressDto("Street Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345678");
         userRequestDto = new UserRequestDto("João Silva", "joao@email.com", "joao123", "password123", 
                                           LocalDate.now(), "ADMIN", Arrays.asList(addressDto));
 

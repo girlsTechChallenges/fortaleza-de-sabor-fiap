@@ -153,7 +153,7 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
             throw new UserTypeMismatchException("User with email " + email + " is not a restaurant owner");
         }
 
-        if (userEntity.getEmail().equals(email) && userEntity.getNome().equals(ownerName)) {
+        if (userEntity.getEmail().equals(email) && userEntity.getName().equals(ownerName)) {
             restaurantEntity.setOwner(userEntity);
             restaurantRepositoryAdapter.save(restaurantEntity);
             return Optional.of(mapper.toRestaurantDomain(restaurantEntity));
@@ -182,13 +182,13 @@ public class RestaurantRepositoryPortJpa implements RestaurantsRepositoryPort {
         return addresses.stream()
                 .map(address -> {
                     AddressRestaurantEntity newAddress = new AddressRestaurantEntity();
-                    newAddress.setRua(address.getRua());
-                    newAddress.setBairro(address.getBairro());
-                    newAddress.setComplemento(address.getComplemento());
-                    newAddress.setNumero(address.getNumero());
-                    newAddress.setEstado(address.getEstado());
-                    newAddress.setCidade(address.getCidade());
-                    newAddress.setCep(address.getCep());
+                    newAddress.setStreet(address.getStreet());
+                    newAddress.setDistrict(address.getDistrict());
+                    newAddress.setComplement(address.getComplement());
+                    newAddress.setNumber(address.getNumber());
+                    newAddress.setState(address.getState());
+                    newAddress.setCity(address.getCity());
+                    newAddress.setPostCode(address.getPostCode());
                     newAddress.setRestaurante(restaurantEntity);
                     return newAddress;
                 })

@@ -28,7 +28,7 @@ class RestaurantUpdateDtoTest {
         validator = factory.getValidator();
         
         validAddress = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
         
         validBusinessHours = List.of(
@@ -41,7 +41,7 @@ class RestaurantUpdateDtoTest {
     void shouldPassValidationWithValidRestaurantUpdate() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Atualizado",
+            "Restaurant Atualizado",
             "Italiana",
             validAddress,
             validBusinessHours
@@ -116,7 +116,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenKitchenTypeIsNull() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             null,
             validAddress,
             validBusinessHours
@@ -135,7 +135,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenKitchenTypeIsTooShort() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             "It",
             validAddress,
             validBusinessHours
@@ -154,7 +154,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenAddressListIsNull() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             "Italiana",
             null,
             validBusinessHours
@@ -173,7 +173,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenAddressListIsEmpty() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             "Italiana",
             List.of(),
             validBusinessHours
@@ -192,7 +192,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenBusinessHoursListIsNull() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             "Italiana",
             validAddress,
             null
@@ -211,7 +211,7 @@ class RestaurantUpdateDtoTest {
     void shouldFailValidationWhenBusinessHoursListIsEmpty() {
         // Arrange
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Restaurante Teste",
+            "Restaurant Teste",
             "Italiana",
             validAddress,
             List.of()
@@ -230,28 +230,28 @@ class RestaurantUpdateDtoTest {
     void shouldValidateRecordPropertiesCorrectly() {
         // Arrange
         RestaurantUpdateDto update1 = new RestaurantUpdateDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Mexicana",
             validAddress,
             validBusinessHours
         );
         
         RestaurantUpdateDto update2 = new RestaurantUpdateDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Mexicana",
             validAddress,
             validBusinessHours
         );
 
         // Act & Assert
-        assertThat(update1.name()).isEqualTo("Restaurante Exemplo");
+        assertThat(update1.name()).isEqualTo("Restaurant Exemplo");
         assertThat(update1.kitchenType()).isEqualTo("Mexicana");
         assertThat(update1.address()).isEqualTo(validAddress);
         assertThat(update1.businessHours()).isEqualTo(validBusinessHours);
         
         assertThat(update1).isEqualTo(update2);
         assertThat(update1.hashCode()).isEqualTo(update2.hashCode());
-        assertThat(update1.toString()).contains("Restaurante Exemplo");
+        assertThat(update1.toString()).contains("Restaurant Exemplo");
     }
 
     @Test
@@ -259,8 +259,8 @@ class RestaurantUpdateDtoTest {
     void shouldPassValidationWithMultipleAddressesAndBusinessHours() {
         // Arrange
         List<AddressDto> multipleAddresses = List.of(
-            new AddressDto("Rua A", "Centro", "Apt 1", 100, "SP", "São Paulo", "01234567"),
-            new AddressDto("Rua B", "Vila", "Casa 2", 200, "RJ", "Rio de Janeiro", "20000000")
+            new AddressDto("Street A", "Centro", "Apt 1", 100, "SP", "São Paulo", "01234567"),
+            new AddressDto("Street B", "Vila", "Casa 2", 200, "RJ", "Rio de Janeiro", "20000000")
         );
         
         List<BusinessHoursDto> multipleHours = List.of(
@@ -269,7 +269,7 @@ class RestaurantUpdateDtoTest {
         );
 
         RestaurantUpdateDto updateDto = new RestaurantUpdateDto(
-            "Multi Restaurante",
+            "Multi Restaurant",
             "Fusion",
             multipleAddresses,
             multipleHours

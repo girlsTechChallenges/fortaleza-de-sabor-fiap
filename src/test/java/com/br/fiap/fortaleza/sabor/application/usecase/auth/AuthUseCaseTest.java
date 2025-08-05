@@ -54,12 +54,12 @@ class AuthUseCaseTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setNome("João Silva");
+        user.setName("João Silva");
         user.setEmail(email);
         user.setLogin("joao123");
-        user.setSenha(encodedPassword);
-        user.setDataAlteracao(LocalDate.now());
-        user.setTipo("CLIENTE");
+        user.setPassword(encodedPassword);
+        user.setChangeDate(LocalDate.now());
+        user.setType("CLIENTE");
     }
 
     @Test
@@ -138,12 +138,12 @@ class AuthUseCaseTest {
     void shouldGenerateTokenWithCorrectClaimsWhenValidateLoginIsCalledWithAdminUser() {
         // Arrange
         User adminUser = new User();
-        adminUser.setNome("Admin User");
+        adminUser.setName("Admin User");
         adminUser.setEmail(email);
         adminUser.setLogin("admin123");
-        adminUser.setSenha(encodedPassword);
-        adminUser.setDataAlteracao(LocalDate.now());
-        adminUser.setTipo("ADMIN");
+        adminUser.setPassword(encodedPassword);
+        adminUser.setChangeDate(LocalDate.now());
+        adminUser.setType("ADMIN");
 
         when(usersRepositoryPort.findByEmail(email)).thenReturn(Optional.of(adminUser));
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);

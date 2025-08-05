@@ -14,13 +14,13 @@ class RestaurantResponseDtoTest {
         // Arrange & Act
         RestaurantResponseDto restaurantDto = new RestaurantResponseDto(
             1L,
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "João Silva"
         );
 
         // Assert
         assertThat(restaurantDto.id()).isEqualTo(1L);
-        assertThat(restaurantDto.name()).isEqualTo("Restaurante Exemplo");
+        assertThat(restaurantDto.name()).isEqualTo("Restaurant Exemplo");
         assertThat(restaurantDto.owner()).isEqualTo("João Silva");
     }
 
@@ -40,9 +40,9 @@ class RestaurantResponseDtoTest {
     @DisplayName("Should validate record equality")
     void shouldValidateRecordEquality() {
         // Arrange
-        RestaurantResponseDto restaurant1 = new RestaurantResponseDto(1L, "Restaurante A", "João");
-        RestaurantResponseDto restaurant2 = new RestaurantResponseDto(1L, "Restaurante A", "João");
-        RestaurantResponseDto restaurant3 = new RestaurantResponseDto(2L, "Restaurante B", "Maria");
+        RestaurantResponseDto restaurant1 = new RestaurantResponseDto(1L, "Restaurant A", "João");
+        RestaurantResponseDto restaurant2 = new RestaurantResponseDto(1L, "Restaurant A", "João");
+        RestaurantResponseDto restaurant3 = new RestaurantResponseDto(2L, "Restaurant B", "Maria");
 
         // Act & Assert
         assertThat(restaurant1).isEqualTo(restaurant2);
@@ -84,12 +84,12 @@ class RestaurantResponseDtoTest {
     void shouldHandleNegativeId() {
         // Arrange & Act
         RestaurantResponseDto restaurantDto = new RestaurantResponseDto(
-            -1L, "Restaurante Teste", "Proprietário Teste"
+            -1L, "Restaurant Teste", "Proprietário Teste"
         );
 
         // Assert
         assertThat(restaurantDto.id()).isEqualTo(-1L);
-        assertThat(restaurantDto.name()).isEqualTo("Restaurante Teste");
+        assertThat(restaurantDto.name()).isEqualTo("Restaurant Teste");
         assertThat(restaurantDto.owner()).isEqualTo("Proprietário Teste");
     }
 
@@ -98,12 +98,12 @@ class RestaurantResponseDtoTest {
     void shouldHandleVeryLargeId() {
         // Arrange & Act
         RestaurantResponseDto restaurantDto = new RestaurantResponseDto(
-            Long.MAX_VALUE, "Restaurante Grande", "Proprietário"
+            Long.MAX_VALUE, "Restaurant Grande", "Proprietário"
         );
 
         // Assert
         assertThat(restaurantDto.id()).isEqualTo(Long.MAX_VALUE);
-        assertThat(restaurantDto.name()).isEqualTo("Restaurante Grande");
+        assertThat(restaurantDto.name()).isEqualTo("Restaurant Grande");
         assertThat(restaurantDto.owner()).isEqualTo("Proprietário");
     }
 }

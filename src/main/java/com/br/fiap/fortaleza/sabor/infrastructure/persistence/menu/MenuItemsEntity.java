@@ -14,7 +14,7 @@ public class MenuItemsEntity {
     @JoinColumn(name = "id_cardapio")
     private MenuEntity cardapio;
 
-    private String nome;
+    private String name;
 
     private String itemDescription;
 
@@ -26,8 +26,8 @@ public class MenuItemsEntity {
 
     public MenuItemsEntity() {}
 
-    public MenuItemsEntity(String nome, String itemDescription, String itemPrice, Boolean availability, String itemImage) {
-        this.nome = nome;
+    public MenuItemsEntity(String name, String itemDescription, String itemPrice, Boolean availability, String itemImage) {
+        this.name = name;
         this.itemDescription = itemDescription;
         this.itemPrice = itemPrice;
         this.availability = availability;
@@ -50,12 +50,12 @@ public class MenuItemsEntity {
         this.cardapio = cardapio;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String name) {
+        this.name = name;
     }
 
     public String getItemDescription() {

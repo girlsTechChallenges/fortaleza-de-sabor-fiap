@@ -175,7 +175,7 @@ User {
   TypeUser typeUser;
 }
 
-// Restaurante
+// Restaurant
 Restaurant {
   Long id;
   String name;
@@ -195,7 +195,7 @@ MenuItem {
   Long restaurantId;
 }
 
-// Tipo de Usuário
+// Type de Usuário
 TypeUser {
   Long id;
   String nameType;
@@ -348,7 +348,7 @@ User savedUser = userUseCasePort.save(user);
 // 3. Use Case executa regras de negócio
 public User save(User user) {
     // Validações de negócio
-    // Criptografia de senha
+    // Criptografia de password
     return userRepositoryPort.save(user);
 }
 

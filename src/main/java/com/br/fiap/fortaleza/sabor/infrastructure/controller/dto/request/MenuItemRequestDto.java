@@ -10,7 +10,7 @@ public record MenuItemRequestDto(
         @NotBlank
         @Size(min = 2, max = 50)
         @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ ]+$", message = "The name must contain only letters")
-        String nome,
+        String name,
 
         @NotNull
         @NotBlank

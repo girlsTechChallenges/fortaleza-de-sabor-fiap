@@ -55,12 +55,12 @@ class UserRepositoryPortJpaTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setNome("João Silva");
+        user.setName("João Silva");
         user.setEmail(email);
         user.setLogin("joao123");
-        user.setSenha("password123");
-        user.setDataAlteracao(LocalDate.now());
-        user.setTipo("CLIENTE");
+        user.setPassword("password123");
+        user.setChangeDate(LocalDate.now());
+        user.setType("CLIENTE");
 
         userEntity = new UserEntity();
         userEntity.setId(1L);
@@ -137,7 +137,7 @@ class UserRepositoryPortJpaTest {
     @DisplayName("Should create new type when save is called with non-existing type")
     void shouldCreateNewTypeWhenSaveIsCalledWithNonExistingType() {
         // Arrange
-        user.setTipo("NOVO_TIPO");
+        user.setType("NOVO_TIPO");
         TypeEntity savedTypeEntity = new TypeEntity(2L, "NOVO_TIPO");
 
         when(typeUserRepositoryAdapter.findByNameType("NOVO_TIPO")).thenReturn(Optional.empty());
@@ -165,10 +165,10 @@ class UserRepositoryPortJpaTest {
         // Arrange
         Long userId = 1L;
         User updatedUser = new User();
-        updatedUser.setNome("João Silva Updated");
+        updatedUser.setName("João Silva Updated");
         updatedUser.setEmail("joao.updated@test.com");
-        updatedUser.setSenha("newpassword");
-        updatedUser.setTipo("ADMIN");
+        updatedUser.setPassword("newpassword");
+        updatedUser.setType("ADMIN");
 
         when(userRepositoryAdapter.findById(userId)).thenReturn(Optional.of(userEntity));
         when(typeUserRepositoryAdapter.findByNameType("ADMIN")).thenReturn(Optional.of(typeEntity));
@@ -329,7 +329,7 @@ class UserRepositoryPortJpaTest {
     @DisplayName("Should handle type case insensitivity correctly")
     void shouldHandleTypeCaseInsensitivityCorrectly() {
         // Arrange
-        user.setTipo("cliente"); // lowercase
+        user.setType("cliente"); // lowercase
         when(typeUserRepositoryAdapter.findByNameType("CLIENTE")).thenReturn(Optional.of(typeEntity));
         when(userRepositoryAdapter.findByEmail(email)).thenReturn(Optional.empty());
         when(mapper.toUserEntity(user)).thenReturn(userEntity);

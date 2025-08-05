@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class Restaurant {
-
     private Long id;
     private String name;
     private String kitchenType;
@@ -19,5 +18,4 @@ public class Restaurant {
     private String owner;
     private List<Address> address;
     private List<BusinessHours> businessHours;
-
 }

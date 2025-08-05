@@ -26,7 +26,7 @@ class UserRequestDtoTest {
         validator = factory.getValidator();
         
         validAddress = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -58,7 +58,7 @@ class UserRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is null")
+    @DisplayName("Should fail validation when name is null")
     void shouldFailValidationWhenNomeIsNull() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -76,11 +76,11 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is blank")
+    @DisplayName("Should fail validation when name is blank")
     void shouldFailValidationWhenNomeIsBlank() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -98,11 +98,11 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).hasSize(1);
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too short")
+    @DisplayName("Should fail validation when name is too short")
     void shouldFailValidationWhenNomeIsTooShort() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -120,11 +120,11 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too long")
+    @DisplayName("Should fail validation when name is too long")
     void shouldFailValidationWhenNomeIsTooLong() {
         // Arrange
         String longName = "A".repeat(51);
@@ -143,11 +143,11 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome contains numbers")
+    @DisplayName("Should fail validation when name contains numbers")
     void shouldFailValidationWhenNomeContainsNumbers() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -165,7 +165,7 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
         assertThat(violations).anyMatch(v -> v.getMessage().contains("The name must contain only letters"));
     }
 
@@ -237,7 +237,7 @@ class UserRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when senha is too short")
+    @DisplayName("Should fail validation when password is too short")
     void shouldFailValidationWhenSenhaIsTooShort() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -255,11 +255,11 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("senha"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("password"));
     }
 
     @Test
-    @DisplayName("Should fail validation when tipo is null")
+    @DisplayName("Should fail validation when type is null")
     void shouldFailValidationWhenTipoIsNull() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(
@@ -277,7 +277,7 @@ class UserRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("tipo"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("type"));
     }
 
     @Test
@@ -324,7 +324,7 @@ class UserRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should accept null dataAlteracao as it is optional")
+    @DisplayName("Should accept null changeDate as it is optional")
     void shouldAcceptNullDataAlteracaoAsItIsOptional() {
         // Arrange
         UserRequestDto userDto = new UserRequestDto(

@@ -34,7 +34,7 @@ public class MenuItemRepositoryPortJpa implements MenuItemsRepositoryPort {
 
     @Override
     public MenuItem save(MenuItem menuItem) {
-        menuItemRepositoryAdapter.findByNome(menuItem.getNome())
+        menuItemRepositoryAdapter.findByName(menuItem.getName())
                 .ifPresent(existingMenuItem -> {
                     throw new MenuAlreadyRegisteredException(
                             "This item already exists."
@@ -51,7 +51,7 @@ public class MenuItemRepositoryPortJpa implements MenuItemsRepositoryPort {
                 .orElseThrow(() -> new MenuNotFoundException("Menu " + idItemCardapio + " was not found"));
 
         if (menu != null) {
-            findMenu.setNome(menu.getNome());
+            findMenu.setNome(menu.getName());
             findMenu.setItemDescription(menu.getItemDescription());
             findMenu.setAvailability(menu.getAvailability());
             findMenu.setItemPrice(menu.getItemPrice());

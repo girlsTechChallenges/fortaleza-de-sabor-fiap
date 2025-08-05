@@ -43,7 +43,7 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
 
     @Override
     public User save(User user) {
-        String typeFormat = user.getTipo().trim().toUpperCase();
+        String typeFormat = user.getType().trim().toUpperCase();
         TypeEntity typeEntity = findOrCreateType(typeFormat);
 
         validateEmailUniqueness(user.getEmail());
@@ -60,12 +60,12 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
         if (user != null) {
-            findUser.setNome(user.getNome());
+            findUser.setNome(user.getName());
             findUser.setEmail(user.getEmail());
-            findUser.setSenha(user.getSenha());
+            findUser.setSenha(user.getPassword());
 
-            TypeEntity tipo = findOrCreateType(user.getTipo());
-            findUser.setTipo(tipo);
+            TypeEntity type = findOrCreateType(user.getType());
+            findUser.setTipo(type);
 
             if (user.getAddress() != null && !user.getAddress().isEmpty()) {
                 findUser.setEnderecos(new ArrayList<>(mapper.toAddressEntityList(user.getAddress())));

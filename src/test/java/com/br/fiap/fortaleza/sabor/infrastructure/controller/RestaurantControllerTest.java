@@ -51,13 +51,13 @@ class RestaurantControllerTest {
 
     @BeforeEach
     void setUp() {
-        Address address = new Address("Rua do Restaurante", "Centro", "Loja 1", 123, "SP", "São Paulo", "12345678");
+        Address address = new Address("Street do Restaurant", "Centro", "Loja 1", 123, "SP", "São Paulo", "12345678");
         restaurant = new Restaurant(1L, "Fortaleza do Sabor", "Brasileira", "contato@fortaleza.com", "João Silva", Arrays.asList(address), Arrays.asList());
 
         // DTOs reais para os testes
         restaurantResponseDto = new RestaurantResponseDto(1L, "Fortaleza do Sabor", "João Silva");
         
-        AddressDto addressDto = new AddressDto("Rua do Restaurante", "Centro", "Loja 1", 123, "SP", "São Paulo", "12345678");
+        AddressDto addressDto = new AddressDto("Street do Restaurant", "Centro", "Loja 1", 123, "SP", "São Paulo", "12345678");
         BusinessHoursDto businessHoursDto = new BusinessHoursDto(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(18, 0), null);
         restaurantFullDto = new RestaurantFullDto(1L, "Fortaleza do Sabor", "Brasileira", "contato@fortaleza.com", "João Silva", Arrays.asList(addressDto), Arrays.asList(businessHoursDto));
     }
@@ -77,7 +77,7 @@ class RestaurantControllerTest {
                 "email": "contato@fortaleza.com",
                 "address": [
                     {
-                        "street": "Rua do Restaurante",
+                        "street": "Street do Restaurant",
                         "neighborhood": "Centro",
                         "complement": "Loja 1",
                         "number": 123,
@@ -181,7 +181,7 @@ class RestaurantControllerTest {
     @DisplayName("Should return internal server error when updating restaurant (validation failure)")
     void shouldReturnInternalServerErrorWhenUpdatingRestaurant() throws Exception {
         // Arrange
-        Restaurant updatedRestaurant = new Restaurant(1L, "Fortaleza Premium", "Gourmet", "premium@fortaleza.com", "João Silva", Arrays.asList(new Address("Rua Premium", "Centro", "Loja Premium", 456, "SP", "São Paulo", "12345678")), Arrays.asList());
+        Restaurant updatedRestaurant = new Restaurant(1L, "Fortaleza Premium", "Gourmet", "premium@fortaleza.com", "João Silva", Arrays.asList(new Address("Street Premium", "Centro", "Loja Premium", 456, "SP", "São Paulo", "12345678")), Arrays.asList());
 
         when(restaurantMapper.toRestaurantDomain(any(RestaurantRequestDto.class))).thenReturn(updatedRestaurant);
         when(restaurantUseCasePort.update(eq(1L), any(Restaurant.class))).thenReturn(Optional.of(updatedRestaurant));
@@ -194,7 +194,7 @@ class RestaurantControllerTest {
                 "email": "premium@fortaleza.com",
                 "address": [
                     {
-                        "street": "Rua Premium",
+                        "street": "Street Premium",
                         "neighborhood": "Centro",
                         "complement": "Loja Premium",
                         "number": 456,
@@ -226,7 +226,7 @@ class RestaurantControllerTest {
     @DisplayName("Should return internal server error when updating non-existent restaurant")
     void shouldReturnInternalServerErrorWhenUpdatingNonExistentRestaurant() throws Exception {
         // Arrange
-        Restaurant updateRestaurant = new Restaurant(999L, "Fortaleza Premium", "Gourmet", "premium@fortaleza.com", "João Silva", Arrays.asList(new Address("Rua Premium", "Centro", "Loja Premium", 456, "SP", "São Paulo", "12345678")), Arrays.asList());
+        Restaurant updateRestaurant = new Restaurant(999L, "Fortaleza Premium", "Gourmet", "premium@fortaleza.com", "João Silva", Arrays.asList(new Address("Street Premium", "Centro", "Loja Premium", 456, "SP", "São Paulo", "12345678")), Arrays.asList());
         
         when(restaurantMapper.toRestaurantDomain(any(RestaurantRequestDto.class))).thenReturn(updateRestaurant);
         when(restaurantUseCasePort.update(eq(999L), any(Restaurant.class))).thenReturn(Optional.empty());
@@ -238,7 +238,7 @@ class RestaurantControllerTest {
                 "email": "premium@fortaleza.com",
                 "address": [
                     {
-                        "street": "Rua Premium",
+                        "street": "Street Premium",
                         "neighborhood": "Centro",
                         "complement": "Loja Premium",
                         "number": 456,

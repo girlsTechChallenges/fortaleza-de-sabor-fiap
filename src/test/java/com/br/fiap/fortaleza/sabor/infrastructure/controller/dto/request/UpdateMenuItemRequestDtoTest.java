@@ -43,7 +43,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is null")
+    @DisplayName("Should fail validation when name is null")
     void shouldFailValidationWhenNomeIsNull() {
         // Arrange
         UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
@@ -63,7 +63,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is empty")
+    @DisplayName("Should fail validation when name is empty")
     void shouldFailValidationWhenNomeIsEmpty() {
         // Arrange
         UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
@@ -82,7 +82,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too short")
+    @DisplayName("Should fail validation when name is too short")
     void shouldFailValidationWhenNomeIsTooShort() {
         // Arrange
         UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
@@ -102,7 +102,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too long")
+    @DisplayName("Should fail validation when name is too long")
     void shouldFailValidationWhenNomeIsTooLong() {
         // Arrange
         String longName = "P".repeat(51);
@@ -123,7 +123,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome contains invalid characters")
+    @DisplayName("Should fail validation when name contains invalid characters")
     void shouldFailValidationWhenNomeContainsInvalidCharacters() {
         // Arrange
         UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
@@ -143,7 +143,7 @@ class UpdateMenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should pass validation with accented characters in nome")
+    @DisplayName("Should pass validation with accented characters in name")
     void shouldPassValidationWithAccentedCharactersInNome() {
         // Arrange
         UpdateMenuItemRequestDto dto = new UpdateMenuItemRequestDto(
@@ -348,7 +348,7 @@ class UpdateMenuItemRequestDtoTest {
         UpdateMenuItemRequestDto dto3 = new UpdateMenuItemRequestDto("Pasta", "Description", "25.90", true, "image.jpg");
 
         // Act & Assert
-        assertThat(dto1.nome()).isEqualTo("Pizza");
+        assertThat(dto1.name()).isEqualTo("Pizza");
         assertThat(dto1.itemDescription()).isEqualTo("Description");
         assertThat(dto1.itemPrice()).isEqualTo("25.90");
         assertThat(dto1.availability()).isTrue();

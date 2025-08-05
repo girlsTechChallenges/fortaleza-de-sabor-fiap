@@ -19,7 +19,7 @@ class RestaurantFullDtoTest {
     void shouldCreateRestaurantFullDtoWithAllFields() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
         
         List<BusinessHoursDto> businessHours = List.of(
@@ -29,9 +29,9 @@ class RestaurantFullDtoTest {
         // Act
         RestaurantFullDto restaurantDto = new RestaurantFullDto(
             1L,
-            "Restaurante Completo",
+            "Restaurant Completo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             "João Silva",
             addresses,
             businessHours
@@ -39,9 +39,9 @@ class RestaurantFullDtoTest {
 
         // Assert
         assertThat(restaurantDto.id()).isEqualTo(1L);
-        assertThat(restaurantDto.name()).isEqualTo("Restaurante Completo");
+        assertThat(restaurantDto.name()).isEqualTo("Restaurant Completo");
         assertThat(restaurantDto.kitchenType()).isEqualTo("Italiana");
-        assertThat(restaurantDto.email()).isEqualTo("restaurante@email.com");
+        assertThat(restaurantDto.email()).isEqualTo("restaurant@email.com");
         assertThat(restaurantDto.owner()).isEqualTo("João Silva");
         assertThat(restaurantDto.address()).isEqualTo(addresses);
         assertThat(restaurantDto.businessHours()).isEqualTo(businessHours);
@@ -71,7 +71,7 @@ class RestaurantFullDtoTest {
         // Arrange & Act
         RestaurantFullDto restaurantDto = new RestaurantFullDto(
             2L,
-            "Restaurante Vazio",
+            "Restaurant Vazio",
             "Japonesa",
             "vazio@email.com",
             "Maria Santos",
@@ -82,7 +82,7 @@ class RestaurantFullDtoTest {
         // Assert
         assertThat(restaurantDto.address()).isEmpty();
         assertThat(restaurantDto.businessHours()).isEmpty();
-        assertThat(restaurantDto.name()).isEqualTo("Restaurante Vazio");
+        assertThat(restaurantDto.name()).isEqualTo("Restaurant Vazio");
     }
 
     @Test
@@ -90,7 +90,7 @@ class RestaurantFullDtoTest {
     void shouldValidateRecordEquality() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua A", "Centro", "Apt 1", 100, "SP", "São Paulo", "01234567")
+            new AddressDto("Street A", "Centro", "Apt 1", 100, "SP", "São Paulo", "01234567")
         );
         
         List<BusinessHoursDto> businessHours = List.of(
@@ -98,15 +98,15 @@ class RestaurantFullDtoTest {
         );
 
         RestaurantFullDto restaurant1 = new RestaurantFullDto(
-            1L, "Restaurante A", "Brasileira", "a@email.com", "Proprietário A", addresses, businessHours
+            1L, "Restaurant A", "Brasileira", "a@email.com", "Proprietário A", addresses, businessHours
         );
         
         RestaurantFullDto restaurant2 = new RestaurantFullDto(
-            1L, "Restaurante A", "Brasileira", "a@email.com", "Proprietário A", addresses, businessHours
+            1L, "Restaurant A", "Brasileira", "a@email.com", "Proprietário A", addresses, businessHours
         );
         
         RestaurantFullDto restaurant3 = new RestaurantFullDto(
-            2L, "Restaurante B", "Chinesa", "b@email.com", "Proprietário B", addresses, businessHours
+            2L, "Restaurant B", "Chinesa", "b@email.com", "Proprietário B", addresses, businessHours
         );
 
         // Act & Assert
@@ -120,7 +120,7 @@ class RestaurantFullDtoTest {
     void shouldGenerateProperToString() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua Principal", "Centro", null, 500, "RJ", "Rio de Janeiro", "20000000")
+            new AddressDto("Street Principal", "Centro", null, 500, "RJ", "Rio de Janeiro", "20000000")
         );
         
         List<BusinessHoursDto> businessHours = List.of(
@@ -147,9 +147,9 @@ class RestaurantFullDtoTest {
     void shouldHandleMultipleAddressesAndBusinessHours() {
         // Arrange
         List<AddressDto> multipleAddresses = List.of(
-            new AddressDto("Rua A", "Centro", "Loja 1", 100, "SP", "São Paulo", "01000000"),
-            new AddressDto("Rua B", "Vila", "Loja 2", 200, "SP", "São Paulo", "02000000"),
-            new AddressDto("Rua C", "Jardim", "Loja 3", 300, "RJ", "Rio de Janeiro", "20000000")
+            new AddressDto("Street A", "Centro", "Loja 1", 100, "SP", "São Paulo", "01000000"),
+            new AddressDto("Street B", "Vila", "Loja 2", 200, "SP", "São Paulo", "02000000"),
+            new AddressDto("Street C", "Jardim", "Loja 3", 300, "RJ", "Rio de Janeiro", "20000000")
         );
         
         List<BusinessHoursDto> multipleHours = List.of(

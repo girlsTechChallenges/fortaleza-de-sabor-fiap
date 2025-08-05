@@ -34,16 +34,16 @@ class UsersRepositoryPortTest {
 
     @BeforeEach
     void setUp() {
-        Address address1 = new Address("Rua Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345-678");
-        Address address2 = new Address("Rua Nova", "Jardins", "Casa", 456, "SP", "São Paulo", "54321-876");
+        Address address1 = new Address("Street Teste", "Centro", "Apto 123", 123, "SP", "São Paulo", "12345-678");
+        Address address2 = new Address("Street Nova", "Jardins", "Casa", 456, "SP", "São Paulo", "54321-876");
         
         user = new User("João Silva", "joao@email.com", "password123", "ADMIN", Arrays.asList(address1));
         user.setLogin("joao123");
-        user.setDataAlteracao(LocalDate.of(1990, 1, 1));
+        user.setChangeDate(LocalDate.of(1990, 1, 1));
         
         user2 = new User("Maria Silva", "maria@email.com", "password456", "USER", Arrays.asList(address2));
         user2.setLogin("maria123");
-        user2.setDataAlteracao(LocalDate.of(1995, 5, 15));
+        user2.setChangeDate(LocalDate.of(1995, 5, 15));
     }
 
     @Test
@@ -74,7 +74,7 @@ class UsersRepositoryPortTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("João Silva");
+        assertThat(result.getName()).isEqualTo("João Silva");
         assertThat(result.getEmail()).isEqualTo("joao@email.com");
         verify(usersRepositoryPort).save(user);
     }
@@ -90,7 +90,7 @@ class UsersRepositoryPortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("João Silva");
+        assertThat(result.get().getName()).isEqualTo("João Silva");
         verify(usersRepositoryPort).update(1L, user);
     }
 
@@ -119,7 +119,7 @@ class UsersRepositoryPortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("João Silva");
+        assertThat(result.get().getName()).isEqualTo("João Silva");
         verify(usersRepositoryPort).getById(1L);
     }
 
@@ -148,7 +148,7 @@ class UsersRepositoryPortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("João Silva");
+        assertThat(result.get().getName()).isEqualTo("João Silva");
         verify(usersRepositoryPort).deleteById(1L);
     }
 

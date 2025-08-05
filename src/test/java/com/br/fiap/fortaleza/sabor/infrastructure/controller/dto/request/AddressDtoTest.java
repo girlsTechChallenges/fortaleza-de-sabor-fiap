@@ -28,7 +28,7 @@ class AddressDtoTest {
     void shouldPassValidationWithValidAddressDto() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -45,8 +45,8 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when rua is null")
-    void shouldFailValidationWhenRuaIsNull() {
+    @DisplayName("Should fail validation when street is null")
+    void shouldFailValidationWhenStreetIsNull() {
         // Arrange
         AddressDto addressDto = new AddressDto(
                 null,
@@ -67,8 +67,8 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when rua is empty")
-    void shouldFailValidationWhenRuaIsEmpty() {
+    @DisplayName("Should fail validation when street is empty")
+    void shouldFailValidationWhenStreetIsEmpty() {
         // Arrange
         AddressDto addressDto = new AddressDto(
                 "",
@@ -88,8 +88,8 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when rua is too short")
-    void shouldFailValidationWhenRuaIsTooShort() {
+    @DisplayName("Should fail validation when street is too short")
+    void shouldFailValidationWhenStreetIsTooShort() {
         // Arrange
         AddressDto addressDto = new AddressDto(
                 "R",
@@ -110,8 +110,8 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when rua is too long")
-    void shouldFailValidationWhenRuaIsTooLong() {
+    @DisplayName("Should fail validation when street is too long")
+    void shouldFailValidationWhenStreetIsTooLong() {
         // Arrange
         String longRua = "R".repeat(101);
         AddressDto addressDto = new AddressDto(
@@ -133,11 +133,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when bairro is blank")
+    @DisplayName("Should fail validation when district is blank")
     void shouldFailValidationWhenBairroIsBlank() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "",
                 "Apt 45",
                 123,
@@ -154,11 +154,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should pass validation when complemento is null")
+    @DisplayName("Should pass validation when complement is null")
     void shouldPassValidationWhenComplementoIsNull() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 null,
                 123,
@@ -175,11 +175,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should pass validation when complemento is empty")
+    @DisplayName("Should pass validation when complement is empty")
     void shouldPassValidationWhenComplementoIsEmpty() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "",
                 123,
@@ -196,12 +196,12 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when complemento is too long")
+    @DisplayName("Should fail validation when complement is too long")
     void shouldFailValidationWhenComplementoIsTooLong() {
         // Arrange
         String longComplemento = "C".repeat(101);
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 longComplemento,
                 123,
@@ -219,11 +219,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when numero is null")
+    @DisplayName("Should fail validation when number is null")
     void shouldFailValidationWhenNumeroIsNull() {
         // Arrange - Can't test with null int in record constructor, so we'll test with 0
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 0,
@@ -241,11 +241,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when numero is negative")
+    @DisplayName("Should fail validation when number is negative")
     void shouldFailValidationWhenNumeroIsNegative() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 -1,
@@ -263,11 +263,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when estado is blank")
+    @DisplayName("Should fail validation when state is blank")
     void shouldFailValidationWhenEstadoIsBlank() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -284,11 +284,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when cidade is blank")
+    @DisplayName("Should fail validation when city is blank")
     void shouldFailValidationWhenCidadeIsBlank() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -305,11 +305,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when cep is null")
+    @DisplayName("Should fail validation when postCode is null")
     void shouldFailValidationWhenCepIsNull() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -327,11 +327,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when cep has invalid format")
+    @DisplayName("Should fail validation when postCode has invalid format")
     void shouldFailValidationWhenCepHasInvalidFormat() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -349,11 +349,11 @@ class AddressDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when cep contains letters")
+    @DisplayName("Should fail validation when postCode contains letters")
     void shouldFailValidationWhenCepContainsLetters() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -375,12 +375,12 @@ class AddressDtoTest {
     void shouldPassValidationWithMaximumFieldLengths() {
         // Arrange
         AddressDto addressDto = new AddressDto(
-                "R".repeat(100), // Max length for rua
-                "B".repeat(100), // Max length for bairro
-                "C".repeat(100), // Max length for complemento
+                "R".repeat(100), // Max length for street
+                "B".repeat(100), // Max length for district
+                "C".repeat(100), // Max length for complement
                 999999,
-                "E".repeat(50), // Max length for estado
-                "C".repeat(50), // Max length for cidade
+                "E".repeat(50), // Max length for state
+                "C".repeat(50), // Max length for city
                 "12345678"
         );
 
@@ -395,22 +395,22 @@ class AddressDtoTest {
     @DisplayName("Should validate record properties correctly")
     void shouldValidateRecordPropertiesCorrectly() {
         // Arrange
-        AddressDto address1 = new AddressDto("Rua A", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
-        AddressDto address2 = new AddressDto("Rua A", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
-        AddressDto address3 = new AddressDto("Rua B", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
+        AddressDto address1 = new AddressDto("Street A", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
+        AddressDto address2 = new AddressDto("Street A", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
+        AddressDto address3 = new AddressDto("Street B", "Centro", "Apt 1", 123, "SP", "São Paulo", "12345678");
 
         // Act & Assert
-        assertThat(address1.rua()).isEqualTo("Rua A");
-        assertThat(address1.bairro()).isEqualTo("Centro");
-        assertThat(address1.complemento()).isEqualTo("Apt 1");
-        assertThat(address1.numero()).isEqualTo(123);
-        assertThat(address1.estado()).isEqualTo("SP");
-        assertThat(address1.cidade()).isEqualTo("São Paulo");
-        assertThat(address1.cep()).isEqualTo("12345678");
+        assertThat(address1.street()).isEqualTo("Street A");
+        assertThat(address1.district()).isEqualTo("Centro");
+        assertThat(address1.complement()).isEqualTo("Apt 1");
+        assertThat(address1.number()).isEqualTo(123);
+        assertThat(address1.state()).isEqualTo("SP");
+        assertThat(address1.city()).isEqualTo("São Paulo");
+        assertThat(address1.postCode()).isEqualTo("12345678");
         
         assertThat(address1).isEqualTo(address2);
         assertThat(address1).isNotEqualTo(address3);
         assertThat(address1.hashCode()).isEqualTo(address2.hashCode());
-        assertThat(address1.toString()).contains("Rua A");
+        assertThat(address1.toString()).contains("Street A");
     }
 }

@@ -55,7 +55,7 @@ class TypeControllerTest {
     }
 
     @Test
-    @DisplayName("Deve criar tipo de usuário com sucesso")
+    @DisplayName("Deve criar type de usuário com sucesso")
     void shouldCreateTypeUserSuccessfully() throws Exception {
         // Given
         String validTypeUserJson = "{\"type\":\"ADMIN\"}";

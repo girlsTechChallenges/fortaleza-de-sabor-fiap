@@ -74,7 +74,7 @@ class MenuItemsControllerTest {
                         .content(requestJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nome").value("Pizza Margherita"))
+                .andExpect(jsonPath("$.name").value("Pizza Margherita"))
                 .andExpect(jsonPath("$.itemDescription").value("Delicious pizza with tomato and mozzarella"))
                 .andExpect(jsonPath("$.itemPrice").value("25.90"))
                 .andExpect(jsonPath("$.availability").value(true))
@@ -89,7 +89,7 @@ class MenuItemsControllerTest {
     @DisplayName("Should return validation error when creating menu item with invalid data")
     void shouldReturnValidationErrorWhenCreatingMenuItemWithInvalidData() throws Exception {
         // Arrange - JSON with empty required field
-        String invalidJson = "{\"nome\":\"\",\"itemDescription\":\"Description\",\"itemPrice\":\"25.90\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
+        String invalidJson = "{\"name\":\"\",\"itemDescription\":\"Description\",\"itemPrice\":\"25.90\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
 
         // Act & Assert
         mockMvc.perform(post("/cardapio")
@@ -102,7 +102,7 @@ class MenuItemsControllerTest {
     @DisplayName("Should return validation error when creating menu item with invalid price format")
     void shouldReturnValidationErrorWhenCreatingMenuItemWithInvalidPriceFormat() throws Exception {
         // Arrange - JSON with invalid price format
-        String invalidPriceJson = "{\"nome\":\"Pizza\",\"itemDescription\":\"Description\",\"itemPrice\":\"invalid-price\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
+        String invalidPriceJson = "{\"name\":\"Pizza\",\"itemDescription\":\"Description\",\"itemPrice\":\"invalid-price\",\"availability\":true,\"itemImage\":\"image.jpg\"}";
 
         // Act & Assert
         mockMvc.perform(post("/cardapio")
@@ -165,9 +165,9 @@ class MenuItemsControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nome").value("Pizza Margherita"))
+                .andExpect(jsonPath("$[0].name").value("Pizza Margherita"))
                 .andExpect(jsonPath("$[0].itemPrice").value("25.90"))
-                .andExpect(jsonPath("$[1].nome").value("Pizza Pepperoni"))
+                .andExpect(jsonPath("$[1].name").value("Pizza Pepperoni"))
                 .andExpect(jsonPath("$[1].itemPrice").value("28.90"));
 
         verify(menuItemsUseCasePort).getAll();
@@ -282,7 +282,7 @@ class MenuItemsControllerTest {
                         .content(requestJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nome").value("Pizza Especial"))
+                .andExpect(jsonPath("$.name").value("Pizza Especial"))
                 .andExpect(jsonPath("$.availability").value(false));
 
         verify(menuMapper).toMenuDomain(any(MenuItemRequestDto.class));

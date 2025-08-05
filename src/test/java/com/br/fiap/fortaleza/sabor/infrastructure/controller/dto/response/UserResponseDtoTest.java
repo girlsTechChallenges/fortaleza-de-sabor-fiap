@@ -16,7 +16,7 @@ class UserResponseDtoTest {
     void shouldCreateUserResponseDtoWithAllFields() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
 
         // Act
@@ -72,7 +72,7 @@ class UserResponseDtoTest {
     void shouldValidateRecordEquality() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
 
         UserResponseDto user1 = new UserResponseDto(
@@ -98,7 +98,7 @@ class UserResponseDtoTest {
     void shouldGenerateProperToString() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
 
         UserResponseDto userDto = new UserResponseDto(
@@ -134,7 +134,7 @@ class UserResponseDtoTest {
     void shouldHandleMultipleAddresses() {
         // Arrange
         List<AddressDto> addresses = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567"),
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567"),
             new AddressDto("Av. Paulista", "Bela Vista", "Sala 45", 1000, "SP", "São Paulo", "01310100")
         );
 

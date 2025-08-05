@@ -54,7 +54,7 @@ public class TestDataFactory {
     // Address Test Data
     public static AddressDto createValidAddressDto() {
         return new AddressDto(
-                "Rua dos Testes",
+                "Street dos Testes",
                 "Centro",
                 "Apto 45",
                 123,
@@ -67,7 +67,7 @@ public class TestDataFactory {
     // Restaurant Test Data
     public static RestaurantRequestDto createValidRestaurantRequest() {
         return new RestaurantRequestDto(
-                "Restaurante Teste",
+                "Restaurant Teste",
                 "ITALIANA",
                 "maria.owner@test.com",
                 List.of(createValidAddressDto()),

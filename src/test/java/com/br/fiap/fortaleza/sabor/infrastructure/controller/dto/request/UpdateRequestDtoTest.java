@@ -25,7 +25,7 @@ class UpdateRequestDtoTest {
         validator = factory.getValidator();
         
         validAddress = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
     }
 
@@ -49,7 +49,7 @@ class UpdateRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is null")
+    @DisplayName("Should fail validation when name is null")
     void shouldFailValidationWhenNomeIsNull() {
         // Arrange
         UpdateRequestDto updateDto = new UpdateRequestDto(
@@ -69,7 +69,7 @@ class UpdateRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is blank")
+    @DisplayName("Should fail validation when name is blank")
     void shouldFailValidationWhenNomeIsBlank() {
         // Arrange
         UpdateRequestDto updateDto = new UpdateRequestDto(
@@ -89,7 +89,7 @@ class UpdateRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too short")
+    @DisplayName("Should fail validation when name is too short")
     void shouldFailValidationWhenNomeIsTooShort() {
         // Arrange
         UpdateRequestDto updateDto = new UpdateRequestDto(
@@ -149,7 +149,7 @@ class UpdateRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when senha is too short")
+    @DisplayName("Should fail validation when password is too short")
     void shouldFailValidationWhenSenhaIsTooShort() {
         // Arrange
         UpdateRequestDto updateDto = new UpdateRequestDto(
@@ -169,7 +169,7 @@ class UpdateRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when tipo is null")
+    @DisplayName("Should fail validation when type is null")
     void shouldFailValidationWhenTipoIsNull() {
         // Arrange
         UpdateRequestDto updateDto = new UpdateRequestDto(
@@ -249,10 +249,10 @@ class UpdateRequestDtoTest {
         );
 
         // Act & Assert
-        assertThat(update1.nome()).isEqualTo("João Silva");
+        assertThat(update1.name()).isEqualTo("João Silva");
         assertThat(update1.email()).isEqualTo("joao@email.com");
-        assertThat(update1.senha()).isEqualTo("password123");
-        assertThat(update1.tipo()).isEqualTo("ADMIN");
+        assertThat(update1.password()).isEqualTo("password123");
+        assertThat(update1.type()).isEqualTo("ADMIN");
         assertThat(update1.address()).isEqualTo(validAddress);
         
         assertThat(update1).isEqualTo(update2);

@@ -28,8 +28,8 @@ Este documento consolida toda a documentação relacionada aos testes do projeto
 17. **`MenuItemsControllerTest`** - Endpoints REST de itens de menu
 #### **Infrastructure Layer (Mappers) - 4 classes**
 21. **`UserMapperTest`** - Conversões UserRequestDto ↔ User ↔ UserEntity ↔ UserResponseDto
-25. **`UserRequestDtoTest`** - Validações completas (nome, email, login, senha, objetos aninhados)
-26. **`MenuItemRequestDtoTest`** - Validações (nome, descrição, preço, disponibilidade, imagem)
+25. **`UserRequestDtoTest`** - Validações completas (name, email, login, password, objetos aninhados)
+26. **`MenuItemRequestDtoTest`** - Validações (name, descrição, preço, disponibilidade, imagem)
 29. **`BusinessHoursDtoTest`** - Validações (dia semana, horários, observações)
 30. **`UpdateMenuItemRequestDtoTest`** - Validações completas de atualização
 34. **`GlobalExceptionHandlerTest`** - Tratamento global de exceções
@@ -42,7 +42,7 @@ Este documento consolida toda a documentação relacionada aos testes do projeto
 #### **Casos de Dados Variados (5)**
 - ✅ Dados mínimos válidos
 - ✅ Campos nulos individuais
-- ✅ RestaurantAlreadyExistsException (restaurante já existe)
+- ✅ RestaurantAlreadyExistsException (restaurant já existe)
 - ✅ RuntimeException (erros gerais de sistema)
 - **Endereços Múltiplos**: Restaurantes com mais de um endereço
 - **Horários Completos**: Todos os dias da semana com horários específicos
@@ -136,7 +136,7 @@ public class TestConstants {
     public static final String VALID_PASSWORD = VALID_USER_PASSWORD;
     
     // Address Constants
-    public static final String VALID_STREET = "Rua Teste";
+    public static final String VALID_STREET = "Street Teste";
     public static final String VALID_NEIGHBORHOOD = "Centro";
     // ... mais constantes padronizadas
 }
@@ -194,15 +194,15 @@ void shouldPreserveDataIntegrityAcrossConversions() {
 #### **Request DTOs Implementados (9 classes - 134 cenários)**
 
 ##### **1. UserRequestDto - 11 Cenários de Validação**
-- ✅ Validação de nome (null, blank, size, pattern)
+- ✅ Validação de name (null, blank, size, pattern)
 - ✅ Validação de email (null, formato inválido)
 - ✅ Validação de login (null, size mínima)
-- ✅ Validação de senha (null, size mínima)
+- ✅ Validação de password (null, size mínima)
 - ✅ Validação de objetos aninhados (TypeUser, Address)
 - ✅ Caracteres especiais válidos (acentos, espaços)
 
 ##### **2. MenuItemRequestDto - 10 Cenários de Validação**
-- ✅ Validação de nome (null, blank, size, pattern)
+- ✅ Validação de name (null, blank, size, pattern)
 - ✅ Validação de descrição (null, blank, size)
 - ✅ Validação de preço (null, formato regex complexo)
 - ✅ Validação de disponibilidade (null)
@@ -210,19 +210,19 @@ void shouldPreserveDataIntegrityAcrossConversions() {
 - ✅ Formatos de preço válidos/inválidos
 
 ##### **3. RestaurantRequestDto - 13 Cenários de Validação**
-- ✅ Validação de nome (null, blank, size)
-- ✅ Validação de tipo de cozinha (null, blank, size)
+- ✅ Validação de name (null, blank, size)
+- ✅ Validação de type de cozinha (null, blank, size)
 - ✅ Validação de email (null, formato)
 - ✅ Validação de listas vazias/nulas (endereços, horários)
 - ✅ Validação de objetos aninhados com @Valid
 
 ##### **4. AddressDto - 17 Cenários de Validação**
-- ✅ Validação de rua (null, blank, size)
-- ✅ Validação de bairro (null, blank, size)
+- ✅ Validação de street (null, blank, size)
+- ✅ Validação de district (null, blank, size)
 - ✅ Validação de número (@Positive, valores negativos/zero)
 - ✅ Validação de CEP (pattern 8 dígitos)
-- ✅ Estado e cidade (null, size)
-- ✅ Complemento opcional (null permitido)
+- ✅ State e city (null, size)
+- ✅ Complement opcional (null permitido)
 
 ##### **5. BusinessHoursDto - 12 Cenários de Validação**
 - ✅ Validação de dia da semana (null, todos os DayOfWeek)
@@ -231,14 +231,14 @@ void shouldPreserveDataIntegrityAcrossConversions() {
 - ✅ Cenários extremos (24h, meia-noite, finais de semana)
 
 ##### **6. UpdateMenuItemRequestDto - 19 Cenários de Validação**
-- ✅ Validação completa de nome (null, blank, size, pattern, acentos)
+- ✅ Validação completa de name (null, blank, size, pattern, acentos)
 - ✅ Validação de descrição (null, blank, size)
 - ✅ Validação de preço (formatos válidos/inválidos)
 - ✅ Validação de disponibilidade (Boolean true/false)
 - ✅ Validação de imagem (null, string vazia)
 
 ##### **7. UserCredentialsDto - 12 Cenários de Validação**
-- ✅ Validação básica (email/senha null)
+- ✅ Validação básica (email/password null)
 - ✅ Formatos diversos de email válidos
 - ✅ Senhas com caracteres especiais, unicode
 - ✅ Valores longos e casos extremos
@@ -246,12 +246,12 @@ void shouldPreserveDataIntegrityAcrossConversions() {
 
 ##### **8. UpdateRequestDto - 17 Cenários de Validação**
 - ✅ Validação completa de campos obrigatórios
-- ✅ Validação de senha (size 8-100)
+- ✅ Validação de password (size 8-100)
 - ✅ Validação de objetos aninhados (TypeUser, Address)
 - ✅ Validação de listas (@NotEmpty, @Valid)
 
 ##### **9. TypeUserRequestDto - 14 Cenários de Validação**
-- ✅ Validação de tipo (null, empty)
+- ✅ Validação de type (null, empty)
 - ✅ Diferentes formatos (maiúscula, minúscula, misto)
 - ✅ Caracteres especiais, números, unicode
 - ✅ Whitespace, valores extremos
@@ -303,7 +303,7 @@ assertTrue(result.isEmpty());
 
 #### **👤 User Management (6 endpoints)**
 - ✅ Create User (Cliente)
-- ✅ Create User (Dono Restaurante)
+- ✅ Create User (Dono Restaurant)
 - ✅ Get All Users
 - ✅ Get User by ID
 - ✅ Update User
@@ -512,7 +512,7 @@ mvn test -Dtest.verbose=true
 
 ### **Regras de Negócio**
 - [x] Apenas DONOs podem criar restaurantes
-- [x] Múltiplos endereços por restaurante
+- [x] Múltiplos endereços por restaurant
 - [x] Horários de funcionamento complexos
 - [x] Validação de email único
 - [x] Gestão de senhas
@@ -599,7 +599,7 @@ mvn test -Dtest="com.br.fiap.fortaleza.sabor.infrastructure.controller.*Test"
 
 ## 📊 **Estrutura de Testes do Projeto**
 
-| Tipo de Teste | Padrão de Nome | Quantidade Aprox. | Descrição |
+| Type de Teste | Padrão de Name | Quantidade Aprox. | Descrição |
 |---------------|----------------|-------------------|-----------|
 | **Unitários** | `*Test.java` | ~90 | Testes de classes individuais |
 | **Integração** | `*IntegrationTest.java` | ~20 | Testes de integração entre componentes |

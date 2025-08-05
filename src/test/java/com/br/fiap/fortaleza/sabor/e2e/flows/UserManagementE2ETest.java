@@ -176,12 +176,12 @@ public class UserManagementE2ETest extends E2ETestConfiguration {
         
         // Test user with invalid type
         var invalidType = new com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto(
-                "Usuário Tipo Inválido " + uniqueId,
+                "Usuário Type Inválido " + uniqueId,
                 createUniqueEmail(),
                 "logintest" + uniqueId,
                 "senha123456",
                 java.time.LocalDate.now(),
-                "INVALID_TYPE", // Tipo inválido
+                "INVALID_TYPE", // Type inválido
                 java.util.List.of(E2ETestDataFactory.createValidAddressDto())
         );
         
@@ -202,10 +202,10 @@ public class UserManagementE2ETest extends E2ETestConfiguration {
         
         // Test user with weak password
         var weakPassword = new com.br.fiap.fortaleza.sabor.infrastructure.controller.dto.request.UserRequestDto(
-                "Usuário Senha Fraca " + uniqueId,
+                "Usuário Password Fraca " + uniqueId,
                 createUniqueEmail(),
                 "loginweak" + uniqueId,
-                "123", // Senha muito fraca
+                "123", // Password muito fraca
                 java.time.LocalDate.now(),
                 "CUSTOMER",
                 java.util.List.of(E2ETestDataFactory.createValidAddressDto())

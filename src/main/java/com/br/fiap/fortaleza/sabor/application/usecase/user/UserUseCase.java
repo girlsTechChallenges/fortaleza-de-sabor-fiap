@@ -27,13 +27,13 @@ public class UserUseCase implements UserUseCasePort {
 
     @Override
     public User save(User user) {
-        user.setSenha(passwordEncoder.encode(user.getSenha()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepositoryPort.save(user);
     }
 
     @Override
     public Optional<User> update(Long idUser, User user) {
-        user.setSenha(passwordEncoder.encode(user.getSenha()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepositoryPort.update(idUser, user);
     }
 

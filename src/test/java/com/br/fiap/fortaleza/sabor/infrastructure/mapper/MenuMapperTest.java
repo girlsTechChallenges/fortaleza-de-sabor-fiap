@@ -59,7 +59,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.getName()).isEqualTo("Pizza Margherita");
         assertThat(result.getItemDescription()).isEqualTo("Traditional Italian pizza with tomato, mozzarella and basil");
         assertThat(result.getItemPrice()).isEqualTo("29.90");
         assertThat(result.getAvailability()).isTrue();
@@ -74,7 +74,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Pizza Margherita Updated");
+        assertThat(result.getName()).isEqualTo("Pizza Margherita Updated");
         assertThat(result.getItemDescription()).isEqualTo("Updated description for traditional Italian pizza");
         assertThat(result.getItemPrice()).isEqualTo("32.90");
         assertThat(result.getAvailability()).isFalse();
@@ -98,7 +98,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Lasagna");
+        assertThat(result.getName()).isEqualTo("Lasagna");
         assertThat(result.getItemDescription()).isEqualTo("Homemade lasagna with meat sauce and cheese");
         assertThat(result.getItemPrice()).isEqualTo("35.90");
         assertThat(result.getAvailability()).isTrue();
@@ -113,7 +113,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Pasta Carbonara");
+        assertThat(result.getName()).isEqualTo("Pasta Carbonara");
         assertThat(result.getItemDescription()).isEqualTo("Classic pasta with eggs, cheese, pancetta and pepper");
         assertThat(result.getItemPrice()).isEqualTo("24.50");
         assertThat(result.getAvailability()).isTrue();
@@ -138,7 +138,7 @@ class MenuMapperTest {
         // Assert
         assertThat(result).isNotNull();
         assertThat(result.getAvailability()).isNull();
-        assertThat(result.getNome()).isEqualTo("Test Item");
+        assertThat(result.getName()).isEqualTo("Test Item");
     }
 
     @Test
@@ -158,7 +158,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEmpty();
+        assertThat(result.getName()).isEmpty();
         assertThat(result.getItemDescription()).isEmpty();
         assertThat(result.getItemPrice()).isEqualTo("0.00");
         assertThat(result.getAvailability()).isFalse();
@@ -182,7 +182,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Açaí Bowl");
+        assertThat(result.getName()).isEqualTo("Açaí Bowl");
         assertThat(result.getItemDescription()).isEqualTo("Delicious açaí with granola & fresh fruits - 100% natural!");
         assertThat(result.getItemPrice()).isEqualTo("18.75");
         assertThat(result.getAvailability()).isTrue();
@@ -206,7 +206,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Seasonal Dish");
+        assertThat(result.getName()).isEqualTo("Seasonal Dish");
         assertThat(result.getItemDescription()).isEqualTo("Available only during specific seasons");
         assertThat(result.getItemPrice()).isEqualTo("45.00");
         assertThat(result.getAvailability()).isFalse();
@@ -231,7 +231,7 @@ class MenuMapperTest {
 
         // Assert
         assertThat(convertedBack).isNotNull();
-        assertThat(convertedBack.getNome()).isEqualTo(originalMenuItem.getNome());
+        assertThat(convertedBack.getName()).isEqualTo(originalMenuItem.getName());
         assertThat(convertedBack.getItemDescription()).isEqualTo(originalMenuItem.getItemDescription());
         assertThat(convertedBack.getItemPrice()).isEqualTo(originalMenuItem.getItemPrice());
         assertThat(convertedBack.getAvailability()).isEqualTo(originalMenuItem.getAvailability());

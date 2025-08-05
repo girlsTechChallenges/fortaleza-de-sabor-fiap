@@ -12,25 +12,24 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
-    private String nome;
+    private String name;
     private String email;
     private String login;
-    private String senha;
-    private LocalDate dataAlteracao;
-    private String tipo;
+    private String password;
+    private LocalDate changeDate;
+    private String type;
     private List<Address> address;
 
     public User(
-            String nome,
+            String name,
             String email,
-            String senha,
-            String tipo,
+            String password,
+            String type,
             List<Address> address) {
-        this.nome = nome;
+        this.name = name;
         this.email = email;
-        this.senha = senha;
-        this.tipo = tipo;
+        this.password = password;
+        this.type = type;
         this.address = address;
     }
 }

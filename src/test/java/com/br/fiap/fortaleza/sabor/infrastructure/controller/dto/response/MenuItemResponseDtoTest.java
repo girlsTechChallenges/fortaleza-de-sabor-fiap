@@ -21,7 +21,7 @@ class MenuItemResponseDtoTest {
         );
 
         // Assert
-        assertThat(menuItemDto.nome()).isEqualTo("Pizza Margherita");
+        assertThat(menuItemDto.name()).isEqualTo("Pizza Margherita");
         assertThat(menuItemDto.itemDescription()).isEqualTo("Pizza com molho de tomate, mussarela e manjericão");
         assertThat(menuItemDto.itemPrice()).isEqualTo("25.90");
         assertThat(menuItemDto.availability()).isTrue();
@@ -41,7 +41,7 @@ class MenuItemResponseDtoTest {
         );
 
         // Assert
-        assertThat(menuItemDto.nome()).isNull();
+        assertThat(menuItemDto.name()).isNull();
         assertThat(menuItemDto.itemDescription()).isNull();
         assertThat(menuItemDto.itemPrice()).isNull();
         assertThat(menuItemDto.availability()).isNull();
@@ -134,7 +134,7 @@ class MenuItemResponseDtoTest {
         );
 
         // Assert
-        assertThat(menuItemDto.nome()).isEmpty();
+        assertThat(menuItemDto.name()).isEmpty();
         assertThat(menuItemDto.itemDescription()).isEmpty();
         assertThat(menuItemDto.itemPrice()).isEmpty();
         assertThat(menuItemDto.availability()).isFalse();

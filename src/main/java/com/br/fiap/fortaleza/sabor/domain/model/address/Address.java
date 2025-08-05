@@ -7,11 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
-    private String rua;
-    private String bairro;
-    private String complemento;
-    private int numero;
-    private String estado;
-    private String cidade;
-    private String cep;
+    private String street;
+    private String district;
+    private String complement;
+    private int number;
+    private String state;
+    private String city;
+    private String postCode;
 }

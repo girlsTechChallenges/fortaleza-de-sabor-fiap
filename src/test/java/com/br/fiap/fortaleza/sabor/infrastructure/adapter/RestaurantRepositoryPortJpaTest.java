@@ -51,10 +51,10 @@ class RestaurantRepositoryPortJpaTest {
 
     @BeforeEach
     void setUp() {
-        Address address = new Address("Rua das Flores", "Centro", "Loja 1", 100, "SP", "São Paulo", "01234-567");
+        Address address = new Address("Street das Flores", "Centro", "Loja 1", 100, "SP", "São Paulo", "01234-567");
         BusinessHours hours = new BusinessHours(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(18, 0), "Funcionamento normal");
         
-        restaurant = new Restaurant(1L, "Restaurante Sabor", "Italiana", "owner@email.com", "João Silva", 
+        restaurant = new Restaurant(1L, "Restaurant Sabor", "Italiana", "owner@email.com", "João Silva", 
                                   Arrays.asList(address), Arrays.asList(hours));
 
         userEntity = new UserEntity();
@@ -64,7 +64,7 @@ class RestaurantRepositoryPortJpaTest {
 
         restaurantEntity = new RestaurantEntity();
         restaurantEntity.setId(1L);
-        restaurantEntity.setName("Restaurante Sabor");
+        restaurantEntity.setName("Restaurant Sabor");
         restaurantEntity.setTypeKitchen("Italiana");
         restaurantEntity.setOwner(userEntity);
     }
@@ -83,7 +83,7 @@ class RestaurantRepositoryPortJpaTest {
         // Assert
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get(0).getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantRepositoryAdapter).findAll();
         verify(mapper).toRestaurantDomain(restaurantEntity);
     }
@@ -116,7 +116,7 @@ class RestaurantRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantRepositoryAdapter).findById(1L);
         verify(mapper).toRestaurantDomain(restaurantEntity);
     }
@@ -148,7 +148,7 @@ class RestaurantRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantRepositoryAdapter).findById(1L);
         verify(restaurantRepositoryAdapter).delete(restaurantEntity);
         verify(mapper).toRestaurantDomain(restaurantEntity);

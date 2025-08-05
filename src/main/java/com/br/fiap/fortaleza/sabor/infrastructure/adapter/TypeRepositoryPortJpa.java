@@ -65,7 +65,7 @@ public class TypeRepositoryPortJpa implements TypeRepositoryPort {
     @Override
     public Optional<TypeUser> deleteById(Long id) {
         log.info("Received request to delete TypeUser with id: {}", id);
-        boolean isTypeLinked = userRepositoryAdapter.existsByTipoId(id);
+        boolean isTypeLinked = userRepositoryAdapter.existsByTypeId(id);
 
         if (isTypeLinked) {
             log.error("Cannot delete TypeUser with id {}. It is linked to existing users.", id);

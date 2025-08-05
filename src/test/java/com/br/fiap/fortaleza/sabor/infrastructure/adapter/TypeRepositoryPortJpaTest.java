@@ -164,7 +164,7 @@ class TypeRepositoryPortJpaTest {
     @DisplayName("Should delete type user successfully when no users are linked")
     void shouldDeleteTypeUserSuccessfully() {
         // Arrange
-        when(userRepositoryAdapter.existsByTipoId(anyLong())).thenReturn(false);
+        when(userRepositoryAdapter.existsByTypeId(anyLong())).thenReturn(false);
         when(typeUserRepositoryAdapter.findById(anyLong())).thenReturn(Optional.of(typeEntity));
         when(typeMapper.toTypeUserEntity(any(TypeEntity.class))).thenReturn(typeUser);
 
@@ -174,7 +174,7 @@ class TypeRepositoryPortJpaTest {
         // Assert
         assertThat(result).isPresent();
         assertThat(result.get().getType()).isEqualTo("ADMIN");
-        verify(userRepositoryAdapter).existsByTipoId(1L);
+        verify(userRepositoryAdapter).existsByTypeId(1L);
         verify(typeUserRepositoryAdapter).findById(1L);
         verify(typeUserRepositoryAdapter).delete(typeEntity);
         verify(typeMapper).toTypeUserEntity(typeEntity);
@@ -184,14 +184,14 @@ class TypeRepositoryPortJpaTest {
     @DisplayName("Should throw UserTypeMismatchException when trying to delete type with linked users")
     void shouldThrowExceptionWhenDeletingTypeWithLinkedUsers() {
         // Arrange
-        when(userRepositoryAdapter.existsByTipoId(anyLong())).thenReturn(true);
+        when(userRepositoryAdapter.existsByTypeId(anyLong())).thenReturn(true);
 
         // Act & Assert
         assertThatThrownBy(() -> typeRepositoryPortJpa.deleteById(1L))
                 .isInstanceOf(UserTypeMismatchException.class)
                 .hasMessage("It is not possible to delete the type. There are users linked to it.");
 
-        verify(userRepositoryAdapter).existsByTipoId(1L);
+        verify(userRepositoryAdapter).existsByTypeId(1L);
         verify(typeUserRepositoryAdapter, never()).findById(any());
         verify(typeUserRepositoryAdapter, never()).delete(any());
     }
@@ -200,7 +200,7 @@ class TypeRepositoryPortJpaTest {
     @DisplayName("Should return empty when trying to delete non-existent type")
     void shouldReturnEmptyWhenDeletingNonExistentType() {
         // Arrange
-        when(userRepositoryAdapter.existsByTipoId(anyLong())).thenReturn(false);
+        when(userRepositoryAdapter.existsByTypeId(anyLong())).thenReturn(false);
         when(typeUserRepositoryAdapter.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act
@@ -208,7 +208,7 @@ class TypeRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isEmpty();
-        verify(userRepositoryAdapter).existsByTipoId(999L);
+        verify(userRepositoryAdapter).existsByTypeId(999L);
         verify(typeUserRepositoryAdapter).findById(999L);
         verify(typeUserRepositoryAdapter, never()).delete(any());
     }

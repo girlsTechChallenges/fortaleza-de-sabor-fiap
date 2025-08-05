@@ -35,7 +35,7 @@ class RestaurantUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        restaurant = new Restaurant(1L, "Restaurante do João", "Brasileira", "joao@test.com", "João Silva", null, null);
+        restaurant = new Restaurant(1L, "Restaurant do João", "Brasileira", "joao@test.com", "João Silva", null, null);
         anotherRestaurant = new Restaurant(2L, "Pizzaria da Maria", "Italiana", "maria@test.com", "Maria Santos", null, null);
     }
 
@@ -50,7 +50,7 @@ class RestaurantUseCaseTest {
 
         // Assert
         assertThat(createdRestaurant).isNotNull();
-        assertThat(createdRestaurant.getName()).isEqualTo("Restaurante do João");
+        assertThat(createdRestaurant.getName()).isEqualTo("Restaurant do João");
         assertThat(createdRestaurant.getKitchenType()).isEqualTo("Brasileira");
         assertThat(createdRestaurant.getEmail()).isEqualTo("joao@test.com");
         assertThat(createdRestaurant.getOwner()).isEqualTo("João Silva");
@@ -192,7 +192,7 @@ class RestaurantUseCaseTest {
         Long restaurantId = 1L;
         String ownerName = "New Owner";
         String email = "newowner@test.com";
-        Restaurant updatedRestaurant = new Restaurant(1L, "Restaurante do João", "Brasileira", "joao@test.com", "New Owner", null, null);
+        Restaurant updatedRestaurant = new Restaurant(1L, "Restaurant do João", "Brasileira", "joao@test.com", "New Owner", null, null);
 
         when(restaurantRepository.updateOwner(restaurantId, ownerName, email))
                 .thenReturn(Optional.of(updatedRestaurant));

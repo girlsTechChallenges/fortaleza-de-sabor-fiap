@@ -26,13 +26,13 @@ public class RestaurantMapper {
     public Restaurant toRestaurantDomain(RestaurantRequestDto dto) {
         List<Address> addresses = dto.address().stream()
                 .map(addressDto -> new Address(
-                        addressDto.rua(),
-                        addressDto.bairro(),
-                        addressDto.complemento(),
-                        addressDto.numero(),
-                        addressDto.estado(),
-                        addressDto.cidade(),
-                        addressDto.cep()))
+                        addressDto.street(),
+                        addressDto.district(),
+                        addressDto.complement(),
+                        addressDto.number(),
+                        addressDto.state(),
+                        addressDto.city(),
+                        addressDto.postCode()))
                 .toList();
 
         List<BusinessHours> businessHours = dto.businessHours().stream()
@@ -56,13 +56,13 @@ public class RestaurantMapper {
     public Restaurant toRestaurantDomain(RestaurantUpdateDto dto) {
         List<Address> addresses = dto.address().stream()
                 .map(addressDto -> new Address(
-                        addressDto.rua(),
-                        addressDto.bairro(),
-                        addressDto.complemento(),
-                        addressDto.numero(),
-                        addressDto.estado(),
-                        addressDto.cidade(),
-                        addressDto.cep()))
+                        addressDto.street(),
+                        addressDto.district(),
+                        addressDto.complement(),
+                        addressDto.number(),
+                        addressDto.state(),
+                        addressDto.city(),
+                        addressDto.postCode()))
                 .toList();
 
         List<BusinessHours> businessHours = dto.businessHours().stream()
@@ -95,13 +95,13 @@ public class RestaurantMapper {
         List<AddressRestaurantEntity> addressEntities = restaurant.getAddress().stream()
                 .map(address -> {
                     AddressRestaurantEntity ae = new AddressRestaurantEntity(
-                            address.getRua(),
-                            address.getBairro(),
-                            address.getComplemento(),
-                            address.getNumero(),
-                            address.getEstado(),
-                            address.getCidade(),
-                            address.getCep()
+                            address.getStreet(),
+                            address.getDistrict(),
+                            address.getComplement(),
+                            address.getNumber(),
+                            address.getState(),
+                            address.getCity(),
+                            address.getPostCode()
                     );
                     ae.setRestaurante(entity);
                     return ae;
@@ -138,13 +138,13 @@ public class RestaurantMapper {
     public Restaurant toRestaurantDomain(RestaurantEntity entity) {
         List<Address> addresses = entity.getAddress().stream()
                 .map(ae -> new Address(
-                        ae.getRua(),
-                        ae.getBairro(),
-                        ae.getComplemento(),
+                        ae.getStreet(),
+                        ae.getDistrict(),
+                        ae.getComplement(),
                         ae.getNumero(),
-                        ae.getEstado(),
-                        ae.getCidade(),
-                        ae.getCep()))
+                        ae.getState(),
+                        ae.getCity(),
+                        ae.getPostCode()))
                 .toList();
 
         List<BusinessHours> businessHours = entity.getBusinessHours().stream()
@@ -160,7 +160,7 @@ public class RestaurantMapper {
                 entity.getName(),
                 entity.getTypeKitchen(),
                 entity.getOwner().getEmail(),
-                entity.getOwner().getNome(),
+                entity.getOwner().getName(),
                 addresses,
                 businessHours);
     }
@@ -197,13 +197,13 @@ public class RestaurantMapper {
     private List<AddressDto> convertAddresses(List<Address> addresses) {
         return addresses.stream()
                 .map(address -> new AddressDto(
-                        address.getRua(),
-                        address.getBairro(),
-                        address.getComplemento(),
-                        address.getNumero(),
-                        address.getEstado(),
-                        address.getCidade(),
-                        address.getCep()))
+                        address.getStreet(),
+                        address.getDistrict(),
+                        address.getComplement(),
+                        address.getNumber(),
+                        address.getState(),
+                        address.getCity(),
+                        address.getPostCode()))
                 .toList();
     }
 

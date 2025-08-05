@@ -17,7 +17,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Fortaleza de Sabor API")
                         .version("1.0.0")
-                        .description("API para gerenciamento do restaurante Fortaleza de Sabor")
+                        .description("API para gerenciamento do restaurant Fortaleza de Sabor")
                         .contact(new Contact()
                                 .name("Equipe Fortaleza de Sabor")
                                 .email("contato@fortalezadesabor.com")

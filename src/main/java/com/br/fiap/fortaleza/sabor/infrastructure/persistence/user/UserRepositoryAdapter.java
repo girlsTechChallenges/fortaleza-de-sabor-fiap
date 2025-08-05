@@ -10,5 +10,5 @@ public interface UserRepositoryAdapter extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
 
-    boolean existsByTipoId(Long id);
+    boolean existsByTypeId(Long id);
 }

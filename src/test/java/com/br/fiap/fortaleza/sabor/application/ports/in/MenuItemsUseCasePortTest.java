@@ -62,7 +62,7 @@ class MenuItemsUseCasePortTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.getName()).isEqualTo("Pizza Margherita");
         assertThat(result.getItemDescription()).isEqualTo("Pizza com molho de tomate e mussarela");
         assertThat(result.getItemPrice()).isEqualTo("25.90");
         verify(menuItemsUseCasePort).save(menuItem1);
@@ -79,7 +79,7 @@ class MenuItemsUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemsUseCasePort).update(1L, menuItem1);
     }
 
@@ -108,7 +108,7 @@ class MenuItemsUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemsUseCasePort).getById(1L);
     }
 
@@ -137,7 +137,7 @@ class MenuItemsUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemsUseCasePort).deleteById(1L);
     }
 

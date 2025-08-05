@@ -34,7 +34,7 @@ class RestaurantMapperTest {
     @BeforeEach
     void setUp() {
         addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apto 45",
                 123,
@@ -51,9 +51,9 @@ class RestaurantMapperTest {
         );
 
         restaurantRequestDto = new RestaurantRequestDto(
-                "Restaurante do João",
+                "Restaurant do João",
                 "Brasileira",
-                "joao@restaurante.com",
+                "joao@restaurant.com",
                 Arrays.asList(addressDto),
                 Arrays.asList(businessHoursDto)
         );
@@ -67,21 +67,21 @@ class RestaurantMapperTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Restaurante do João", result.getName());
+        assertEquals("Restaurant do João", result.getName());
         assertEquals("Brasileira", result.getKitchenType());
-        assertEquals("joao@restaurante.com", result.getEmail());
+        assertEquals("joao@restaurant.com", result.getEmail());
         
         // Validar endereço
         assertNotNull(result.getAddress());
         assertEquals(1, result.getAddress().size());
         Address mappedAddress = result.getAddress().get(0);
-        assertEquals("Rua das Flores", mappedAddress.getRua());
-        assertEquals(123, mappedAddress.getNumero());
-        assertEquals("Apto 45", mappedAddress.getComplemento());
-        assertEquals("Centro", mappedAddress.getBairro());
-        assertEquals("São Paulo", mappedAddress.getCidade());
-        assertEquals("SP", mappedAddress.getEstado());
-        assertEquals("01234567", mappedAddress.getCep());
+        assertEquals("Street das Flores", mappedAddress.getStreet());
+        assertEquals(123, mappedAddress.getNumber());
+        assertEquals("Apto 45", mappedAddress.getComplement());
+        assertEquals("Centro", mappedAddress.getDistrict());
+        assertEquals("São Paulo", mappedAddress.getCity());
+        assertEquals("SP", mappedAddress.getState());
+        assertEquals("01234567", mappedAddress.getPostCode());
         
         // Validar horário de funcionamento
         assertNotNull(result.getBusinessHours());
@@ -123,14 +123,14 @@ class RestaurantMapperTest {
         assertEquals(2, result.getAddress().size());
         
         Address firstAddress = result.getAddress().get(0);
-        assertEquals("Rua das Flores", firstAddress.getRua());
-        assertEquals(123, firstAddress.getNumero());
+        assertEquals("Street das Flores", firstAddress.getStreet());
+        assertEquals(123, firstAddress.getNumber());
         
         Address secondMappedAddress = result.getAddress().get(1);
-        assertEquals("Avenida Paulista", secondMappedAddress.getRua());
-        assertEquals(1000, secondMappedAddress.getNumero());
-        assertEquals("Loja 15", secondMappedAddress.getComplemento());
-        assertEquals("Bela Vista", secondMappedAddress.getBairro());
+        assertEquals("Avenida Paulista", secondMappedAddress.getStreet());
+        assertEquals(1000, secondMappedAddress.getNumber());
+        assertEquals("Loja 15", secondMappedAddress.getComplement());
+        assertEquals("Bela Vista", secondMappedAddress.getDistrict());
     }
 
     @Test
@@ -175,7 +175,7 @@ class RestaurantMapperTest {
     void deveMapearRestaurantSemEnderecosQuandoListaEstiverVazia() {
         // Arrange
         RestaurantRequestDto restaurantWithoutAddresses = new RestaurantRequestDto(
-                "Restaurante Virtual",
+                "Restaurant Virtual",
                 "Delivery",
                 "virtual@delivery.com",
                 Collections.emptyList(),
@@ -187,7 +187,7 @@ class RestaurantMapperTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Restaurante Virtual", result.getName());
+        assertEquals("Restaurant Virtual", result.getName());
         assertEquals("Delivery", result.getKitchenType());
         assertEquals("virtual@delivery.com", result.getEmail());
         assertNotNull(result.getAddress());
@@ -200,7 +200,7 @@ class RestaurantMapperTest {
     void deveMapearRestaurantSemHorariosFuncionamentoQuandoListaEstiverVazia() {
         // Arrange
         RestaurantRequestDto restaurantWithoutHours = new RestaurantRequestDto(
-                "Restaurante 24h",
+                "Restaurant 24h",
                 "Fast Food",
                 "24h@fastfood.com",
                 Arrays.asList(addressDto),
@@ -212,7 +212,7 @@ class RestaurantMapperTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Restaurante 24h", result.getName());
+        assertEquals("Restaurant 24h", result.getName());
         assertEquals("Fast Food", result.getKitchenType());
         assertEquals("24h@fastfood.com", result.getEmail());
         assertEquals(1, result.getAddress().size());
@@ -221,11 +221,11 @@ class RestaurantMapperTest {
     }
 
     @Test
-    @DisplayName("Deve mapear endereço sem complemento corretamente")
+    @DisplayName("Deve mapear endereço sem complement corretamente")
     void deveMapearEnderecoSemComplementoCorretamente() {
         // Arrange
         AddressDto addressWithoutComplement = new AddressDto(
-                "Rua da Praia",
+                "Street da Praia",
                 "Copacabana",
                 null,
                 456,
@@ -249,13 +249,13 @@ class RestaurantMapperTest {
         assertNotNull(result);
         assertEquals(1, result.getAddress().size());
         Address mappedAddress = result.getAddress().get(0);
-        assertEquals("Rua da Praia", mappedAddress.getRua());
-        assertEquals(456, mappedAddress.getNumero());
-        assertNull(mappedAddress.getComplemento());
-        assertEquals("Copacabana", mappedAddress.getBairro());
-        assertEquals("Rio de Janeiro", mappedAddress.getCidade());
-        assertEquals("RJ", mappedAddress.getEstado());
-        assertEquals("22070900", mappedAddress.getCep());
+        assertEquals("Street da Praia", mappedAddress.getStreet());
+        assertEquals(456, mappedAddress.getNumber());
+        assertNull(mappedAddress.getComplement());
+        assertEquals("Copacabana", mappedAddress.getDistrict());
+        assertEquals("Rio de Janeiro", mappedAddress.getCity());
+        assertEquals("RJ", mappedAddress.getState());
+        assertEquals("22070900", mappedAddress.getPostCode());
     }
 
     @Test
@@ -270,7 +270,7 @@ class RestaurantMapperTest {
         );
 
         RestaurantRequestDto restaurantWithHoursWithoutObservations = new RestaurantRequestDto(
-                "Restaurante Domingo",
+                "Restaurant Domingo",
                 "Familiar",
                 "domingo@familiar.com",
                 Arrays.asList(addressDto),
@@ -302,7 +302,7 @@ class RestaurantMapperTest {
         );
 
         RestaurantRequestDto restaurantWithPreciseHours = new RestaurantRequestDto(
-                "Restaurante Preciso",
+                "Restaurant Preciso",
                 "Internacional",
                 "preciso@internacional.com",
                 Arrays.asList(addressDto),

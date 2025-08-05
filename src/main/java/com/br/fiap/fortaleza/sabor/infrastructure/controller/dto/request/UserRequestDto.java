@@ -11,7 +11,7 @@ public record UserRequestDto(
         @NotBlank
         @Size(min = 2, max = 50)
         @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ ]+$", message = "The name must contain only letters")
-        String nome,
+        String name,
 
         @NotNull
         @NotBlank
@@ -26,13 +26,13 @@ public record UserRequestDto(
         @NotNull
         @NotBlank
         @Size(min = 8, max = 100)
-        String senha,
+        String password,
 
-        LocalDate dataAlteracao,
+        LocalDate changeDate,
 
         @NotNull
         @NotBlank
-        String tipo,
+        String type,
 
         @NotNull
         @Size(min = 1) 

@@ -53,7 +53,7 @@ Tech Challenge FIAP - Arquitetura de Software
 Na região, um grupo de restaurantes decidiu contratar estudantes para construir um **sistema de gestão compartilhado**, visando:
 - ✅ Reduzir custos operacionais
 - ✅ Melhorar eficiência operacional  
-- ✅ Permitir escolha de restaurantes por tipo de comida
+- ✅ Permitir escolha de restaurantes por type de comida
 - ✅ Facilitar gestão centralizada de operações
 
 ### Objetivo do Projeto
@@ -184,11 +184,11 @@ DatabaseConfig  - PostgreSQL/H2
 #### 🍽️ Gestão de Restaurantes (`/restaurants`)
 | Método | Endpoint                   | Descrição                        |
 |--------|----------------------------|----------------------------------|
-| POST   | /restaurants               | Criar restaurante                |
+| POST   | /restaurants               | Criar restaurant                |
 | GET    | /restaurants               | Listar restaurantes              |
-| GET    | /restaurants/{id}          | Buscar restaurante por ID        |
-| PUT    | /restaurants/{idRestaurant}| Atualizar restaurante            |
-| DELETE | /restaurants/{id}          | Remover restaurante              |
+| GET    | /restaurants/{id}          | Buscar restaurant por ID        |
+| PUT    | /restaurants/{idRestaurant}| Atualizar restaurant            |
+| DELETE | /restaurants/{id}          | Remover restaurant              |
 | PATCH  | /restaurants/owner/{id}    | Atualizar proprietário           |
 
 #### 🍕 Gestão de Cardápio (`/cardapio`)
@@ -203,17 +203,17 @@ DatabaseConfig  - PostgreSQL/H2
 #### ⚙️ Tipos de Usuários (`/type-users`)
 | Método | Endpoint            | Descrição                |
 |--------|---------------------|--------------------------|
-| POST   | /type-users         | Criar tipo de usuário    |
+| POST   | /type-users         | Criar type de usuário    |
 | GET    | /type-users         | Listar tipos             |
-| GET    | /type-users/{id}    | Buscar tipo por ID       |
-| PUT    | /type-users/{id}    | Atualizar tipo           |
-| DELETE | /type-users/{id}    | Remover tipo             |
+| GET    | /type-users/{id}    | Buscar type por ID       |
+| PUT    | /type-users/{id}    | Atualizar type           |
+| DELETE | /type-users/{id}    | Remover type             |
 
 #### 🔐 Autenticação (`/auth`)
 | Método | Endpoint         | Descrição                |
 |--------|------------------|--------------------------|
 | POST   | /auth/login      | Login                    |
-| PATCH  | /auth/password   | Alterar senha            |
+| PATCH  | /auth/password   | Alterar password            |
 
 ## 🛠️ 3. Tecnologias Utilizadas
 
@@ -251,7 +251,7 @@ services:
   app:
     build:
       context: .                    # Build da aplicação (multi-stage)
-    container_name: fortaleza-app   # Nome do container
+    container_name: fortaleza-app   # Name do container
     depends_on:
       - database                    # Garante ordem de inicialização
     environment:
@@ -267,11 +267,11 @@ services:
 
   database:
     image: postgres:15-alpine       # PostgreSQL otimizado
-    container_name: fortaleza-db    # Nome do container
+    container_name: fortaleza-db    # Name do container
     environment:
       - POSTGRES_USER=postgres      # Usuário do banco
-      - POSTGRES_PASSWORD=postgres  # Senha do banco
-      - POSTGRES_DB=postgres        # Nome do database
+      - POSTGRES_PASSWORD=postgres  # Password do banco
+      - POSTGRES_DB=postgres        # Name do database
     ports:
       - "5432:5432"                # Banco acessível localmente
     volumes:
@@ -400,7 +400,7 @@ O **Fortaleza de Sabor API** representa uma solução **robusta, escalável e be
 O projeto possui uma cobertura completa de testes unitários, incluindo:
 
 #### Testes de Use Cases
-- `AuthUseCaseTest`: Validação de autenticação e operações de senha
+- `AuthUseCaseTest`: Validação de autenticação e operações de password
 - `CreateUseCaseTest`: Criação de novos usuários
 - `DeleteUseCaseTest`: Remoção de usuários
 - `GetUseCaseTest`: Busca e listagem de usuários
@@ -455,7 +455,7 @@ Após a build, o projeto gera os seguintes artefatos:
 **Solução Implementada**:
 - Correção das variáveis de ambiente no docker-compose.yml
 - Adição da variável `SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver`
-- Padronização do nome do serviço de banco (`db`)
+- Padronização do name do serviço de banco (`db`)
 
 ### 6.3. Driver PostgreSQL Explícito
 **Problema Identificado**: Faltou informar `spring.datasource.driver-class-name=org.postgresql.Driver`.

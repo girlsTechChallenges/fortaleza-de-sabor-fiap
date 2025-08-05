@@ -55,7 +55,7 @@ Consulte detalhes completos sobre endpoints, exemplos de payloads, cobertura de 
 - **Conversões de Dados**: Preservação durante transformações
 - **Bean Validation**: Testes completos para @NotNull, @NotBlank, @Size, @Pattern, @Email, @Positive
 - **Tratamento de Null**: Verificação em todos os cenários
-- **Formatos Complexos**: Regex de preços, emails, CEP, padrões de nome
+- **Formatos Complexos**: Regex de preços, emails, CEP, padrões de name
 - **Objetos Aninhados**: Validação com @Valid em listas e objetos
 
 

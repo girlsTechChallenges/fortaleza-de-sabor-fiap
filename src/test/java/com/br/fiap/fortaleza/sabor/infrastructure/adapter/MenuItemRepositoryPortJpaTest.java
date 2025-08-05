@@ -88,7 +88,7 @@ class MenuItemRepositoryPortJpaTest {
     @DisplayName("Should save menu item successfully when item does not exist")
     void shouldSaveMenuItemSuccessfully() {
         // Arrange
-        when(menuItemRepositoryAdapter.findByNome(anyString())).thenReturn(Optional.empty());
+        when(menuItemRepositoryAdapter.findByName(anyString())).thenReturn(Optional.empty());
         when(mapper.toMenuItemsEntity(any(MenuItem.class))).thenReturn(menuItemEntity);
         when(menuItemRepositoryAdapter.save(any(MenuItemsEntity.class))).thenReturn(menuItemEntity);
         when(mapper.toMenuItemDomain(any(MenuItemsEntity.class))).thenReturn(menuItem);
@@ -98,8 +98,8 @@ class MenuItemRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("Pizza Margherita");
-        verify(menuItemRepositoryAdapter).findByNome("Pizza Margherita");
+        assertThat(result.getName()).isEqualTo("Pizza Margherita");
+        verify(menuItemRepositoryAdapter).findByName("Pizza Margherita");
         verify(mapper).toMenuItemsEntity(menuItem);
         verify(menuItemRepositoryAdapter).save(menuItemEntity);
         verify(mapper).toMenuItemDomain(menuItemEntity);
@@ -109,14 +109,14 @@ class MenuItemRepositoryPortJpaTest {
     @DisplayName("Should throw MenuAlreadyRegisteredException when trying to save existing menu item")
     void shouldThrowExceptionWhenSavingExistingMenuItem() {
         // Arrange
-        when(menuItemRepositoryAdapter.findByNome(anyString())).thenReturn(Optional.of(menuItemEntity));
+        when(menuItemRepositoryAdapter.findByName(anyString())).thenReturn(Optional.of(menuItemEntity));
 
         // Act & Assert
         assertThatThrownBy(() -> menuItemRepositoryPortJpa.save(menuItem))
                 .isInstanceOf(MenuAlreadyRegisteredException.class)
                 .hasMessage("This item already exists.");
 
-        verify(menuItemRepositoryAdapter).findByNome("Pizza Margherita");
+        verify(menuItemRepositoryAdapter).findByName("Pizza Margherita");
         verify(mapper, never()).toMenuItemsEntity(any());
         verify(menuItemRepositoryAdapter, never()).save(any());
     }
@@ -136,7 +136,7 @@ class MenuItemRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita Especial");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita Especial");
         verify(menuItemRepositoryAdapter).findById(1L);
         verify(menuItemRepositoryAdapter).save(menuItemEntity);
         verify(mapper).toMenuItemDomain(menuItemEntity);
@@ -169,7 +169,7 @@ class MenuItemRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemRepositoryAdapter).findById(1L);
         verify(mapper).toMenuItemDomain(menuItemEntity);
     }
@@ -201,7 +201,7 @@ class MenuItemRepositoryPortJpaTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemRepositoryAdapter, times(2)).findById(1L);
         verify(menuItemRepositoryAdapter).deleteById(1L);
         verify(mapper).toMenuItemDomain(menuItemEntity);

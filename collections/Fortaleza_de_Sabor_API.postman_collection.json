@@ -17,13 +17,13 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@email.com\",\n  \"password\": \"senha\"\n}"
+              "raw": "{\n  \"email\": \"user@email.com\",\n  \"password\": \"password\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
           }
         },
         {
-          "name": "Alterar Senha",
+          "name": "Alterar Password",
           "request": {
             "method": "PATCH",
             "header": [
@@ -96,7 +96,7 @@
       "name": "Restaurantes",
       "item": [
         {
-          "name": "Criar Restaurante",
+          "name": "Criar Restaurant",
           "request": {
             "method": "POST",
             "header": [
@@ -104,7 +104,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // dados do restaurante\n}"
+              "raw": "{\n  // dados do restaurant\n}"
             },
             "url": { "raw": "{{baseUrl}}/restaurants", "host": ["{{baseUrl}}"], "path": ["restaurants"] }
           }
@@ -117,14 +117,14 @@
           }
         },
         {
-          "name": "Buscar Restaurante por ID",
+          "name": "Buscar Restaurant por ID",
           "request": {
             "method": "GET",
             "url": { "raw": "{{baseUrl}}/restaurants/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", ":id"] }
           }
         },
         {
-          "name": "Atualizar Restaurante",
+          "name": "Atualizar Restaurant",
           "request": {
             "method": "PUT",
             "header": [
@@ -138,14 +138,14 @@
           }
         },
         {
-          "name": "Deletar Restaurante",
+          "name": "Deletar Restaurant",
           "request": {
             "method": "DELETE",
             "url": { "raw": "{{baseUrl}}/restaurants/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", ":id"] }
           }
         },
         {
-          "name": "Atualizar Dono do Restaurante",
+          "name": "Atualizar Dono do Restaurant",
           "request": {
             "method": "PATCH",
             "header": [
@@ -153,7 +153,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"owner\": \"nome\",\n  \"email\": \"email@exemplo.com\"\n}"
+              "raw": "{\n  \"owner\": \"name\",\n  \"email\": \"email@exemplo.com\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/restaurants/owner/:id", "host": ["{{baseUrl}}"], "path": ["restaurants", "owner", ":id"] }
           }
@@ -218,7 +218,7 @@
       "name": "Tipos de Usuário",
       "item": [
         {
-          "name": "Criar Tipo de Usuário",
+          "name": "Criar Type de Usuário",
           "request": {
             "method": "POST",
             "header": [
@@ -226,7 +226,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // dados do tipo\n}"
+              "raw": "{\n  // dados do type\n}"
             },
             "url": { "raw": "{{baseUrl}}/type-users", "host": ["{{baseUrl}}"], "path": ["type-users"] }
           }
@@ -239,14 +239,14 @@
           }
         },
         {
-          "name": "Buscar Tipo por ID",
+          "name": "Buscar Type por ID",
           "request": {
             "method": "GET",
             "url": { "raw": "{{baseUrl}}/type-users/:id", "host": ["{{baseUrl}}"], "path": ["type-users", ":id"] }
           }
         },
         {
-          "name": "Atualizar Tipo de Usuário",
+          "name": "Atualizar Type de Usuário",
           "request": {
             "method": "PUT",
             "header": [
@@ -260,7 +260,7 @@
           }
         },
         {
-          "name": "Deletar Tipo de Usuário",
+          "name": "Deletar Type de Usuário",
           "request": {
             "method": "DELETE",
             "url": { "raw": "{{baseUrl}}/type-users/:id", "host": ["{{baseUrl}}"], "path": ["type-users", ":id"] }

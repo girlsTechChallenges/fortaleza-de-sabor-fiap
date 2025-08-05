@@ -43,7 +43,7 @@ class MenuItemRequestDtoTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is null")
+    @DisplayName("Should fail validation when name is null")
     void shouldFailValidationWhenNomeIsNull() {
         // Arrange
         MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
@@ -59,11 +59,11 @@ class MenuItemRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is blank")
+    @DisplayName("Should fail validation when name is blank")
     void shouldFailValidationWhenNomeIsBlank() {
         // Arrange
         MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
@@ -79,11 +79,11 @@ class MenuItemRequestDtoTest {
 
         // Assert
         assertThat(violations).hasSize(1);
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too short")
+    @DisplayName("Should fail validation when name is too short")
     void shouldFailValidationWhenNomeIsTooShort() {
         // Arrange
         MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
@@ -99,11 +99,11 @@ class MenuItemRequestDtoTest {
 
         // Assert
         assertThat(violations).hasSize(1);
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome is too long")
+    @DisplayName("Should fail validation when name is too long")
     void shouldFailValidationWhenNomeIsTooLong() {
         // Arrange
         String longName = "A".repeat(51);
@@ -120,11 +120,11 @@ class MenuItemRequestDtoTest {
 
         // Assert
         assertThat(violations).hasSize(1);
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     @Test
-    @DisplayName("Should fail validation when nome contains numbers")
+    @DisplayName("Should fail validation when name contains numbers")
     void shouldFailValidationWhenNomeContainsNumbers() {
         // Arrange
         MenuItemRequestDto menuItemDto = new MenuItemRequestDto(
@@ -140,7 +140,7 @@ class MenuItemRequestDtoTest {
 
         // Assert
         assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
+        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
         assertThat(violations).anyMatch(v -> v.getMessage().contains("The name must contain only letters"));
     }
 

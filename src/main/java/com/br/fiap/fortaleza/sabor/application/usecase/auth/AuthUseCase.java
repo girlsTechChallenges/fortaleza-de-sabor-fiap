@@ -37,7 +37,7 @@ public class AuthUseCase implements AuthUseCasePort {
 
         var now = Instant.now();
         var expiresIn = 300L;
-        var scope = user.stream().map(User::getTipo).collect(Collectors.joining(" "));
+        var scope = user.stream().map(User::getType).collect(Collectors.joining(" "));
 
         var claims = JwtClaimsSet.builder()
                 .issuer("BackendFortalezaSabor")
@@ -55,7 +55,7 @@ public class AuthUseCase implements AuthUseCasePort {
     }
 
     private boolean isLoginCorrect(String email, String password, PasswordEncoder passwordEncoder) {
-        var userPassword = usersRepositoryPort.findByEmail(email).stream().map(User::getSenha).collect(Collectors.joining());
+        var userPassword = usersRepositoryPort.findByEmail(email).stream().map(User::getPassword).collect(Collectors.joining());
         return passwordEncoder.matches(password, userPassword);
     }
 }

@@ -111,7 +111,7 @@ public class E2ETestDataFactory {
      */
     public static UpdateRequestDto createUpdateUserRequest(String uniqueId) {
         return new UpdateRequestDto(
-                "Nome Atualizado " + uniqueId,
+                "Name Atualizado " + uniqueId,
                 createUniqueEmail(uniqueId),
                 "novaSenha123",
                 "CUSTOMER",
@@ -124,7 +124,7 @@ public class E2ETestDataFactory {
      */
     private static AddressDto createValidAddress() {
         return new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apartamento 123",
                 456,
@@ -167,19 +167,19 @@ public class E2ETestDataFactory {
         
         public static UserRequestDto createInvalidUserRequest() {
             return new UserRequestDto(
-                    "", // Nome vazio
+                    "", // Name vazio
                     "email-invalido", // Email inválido
                     "a", // Login muito curto
-                    "123", // Senha muito curta
+                    "123", // Password muito curta
                     LocalDate.now(),
-                    "", // Tipo vazio
+                    "", // Type vazio
                     List.of() // Lista de endereços vazia
             );
         }
         
         public static MenuItemRequestDto createInvalidMenuItemRequest() {
             return new MenuItemRequestDto(
-                    "", // Nome vazio
+                    "", // Name vazio
                     "", // Descrição vazia
                     "preco-invalido", // Preço inválido
                     null, // Disponibilidade nula
@@ -193,8 +193,8 @@ public class E2ETestDataFactory {
         
         public static RestaurantRequestDto createInvalidRestaurantRequest() {
             return new RestaurantRequestDto(
-                    "", // Nome vazio
-                    "", // Tipo de cozinha vazio
+                    "", // Name vazio
+                    "", // Type de cozinha vazio
                     "email-invalido", // Email inválido
                     List.of(), // Lista de endereços vazia
                     List.of() // Lista de horários vazia

@@ -28,7 +28,7 @@ class RestaurantRequestDtoTest {
         validator = factory.getValidator();
         
         validAddress = List.of(
-            new AddressDto("Rua das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
+            new AddressDto("Street das Flores", "Centro", "Apt 123", 123, "SP", "São Paulo", "01234567")
         );
         
         validBusinessHours = List.of(
@@ -41,9 +41,9 @@ class RestaurantRequestDtoTest {
     void shouldPassValidationWithValidRestaurantRequest() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -62,7 +62,7 @@ class RestaurantRequestDtoTest {
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
             null,
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -82,7 +82,7 @@ class RestaurantRequestDtoTest {
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
             "   ",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -102,7 +102,7 @@ class RestaurantRequestDtoTest {
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
             "A",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -120,9 +120,9 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenKitchenTypeIsNull() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             null,
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -140,9 +140,9 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenKitchenTypeIsTooShort() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "It",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
@@ -160,7 +160,7 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenEmailIsNull() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
             null,
             validAddress,
@@ -180,7 +180,7 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenEmailFormatIsInvalid() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
             "email-invalido",
             validAddress,
@@ -200,9 +200,9 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenAddressListIsEmpty() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             List.of(),
             validBusinessHours
         );
@@ -220,9 +220,9 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenBusinessHoursListIsEmpty() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             List.of()
         );
@@ -240,9 +240,9 @@ class RestaurantRequestDtoTest {
     void shouldFailValidationWhenAddressListIsNull() {
         // Arrange
         RestaurantRequestDto restaurantDto = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             null,
             validBusinessHours
         );
@@ -260,30 +260,30 @@ class RestaurantRequestDtoTest {
     void shouldValidateRecordPropertiesCorrectly() {
         // Arrange
         RestaurantRequestDto restaurant1 = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
         
         RestaurantRequestDto restaurant2 = new RestaurantRequestDto(
-            "Restaurante Exemplo",
+            "Restaurant Exemplo",
             "Italiana",
-            "restaurante@email.com",
+            "restaurant@email.com",
             validAddress,
             validBusinessHours
         );
 
         // Act & Assert
-        assertThat(restaurant1.name()).isEqualTo("Restaurante Exemplo");
+        assertThat(restaurant1.name()).isEqualTo("Restaurant Exemplo");
         assertThat(restaurant1.kitchenType()).isEqualTo("Italiana");
-        assertThat(restaurant1.email()).isEqualTo("restaurante@email.com");
+        assertThat(restaurant1.email()).isEqualTo("restaurant@email.com");
         assertThat(restaurant1.address()).isEqualTo(validAddress);
         assertThat(restaurant1.businessHours()).isEqualTo(validBusinessHours);
         
         assertThat(restaurant1).isEqualTo(restaurant2);
         assertThat(restaurant1.hashCode()).isEqualTo(restaurant2.hashCode());
-        assertThat(restaurant1.toString()).contains("Restaurante Exemplo");
+        assertThat(restaurant1.toString()).contains("Restaurant Exemplo");
     }
 }

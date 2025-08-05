@@ -56,7 +56,7 @@ public class AuthenticationE2ETest extends E2ETestConfiguration {
         // Step 3: Attempt login with created credentials (may fail if user creation failed)
         var loginRequest = E2ETestDataFactory.createValidCredentials(
                 userRequest.email(), 
-                userRequest.senha()
+                userRequest.password()
         );
         
         given()

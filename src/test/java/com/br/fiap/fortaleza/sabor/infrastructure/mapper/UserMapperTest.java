@@ -37,7 +37,7 @@ class UserMapperTest {
     @BeforeEach
     void setUp() {
         addressDto = new AddressDto(
-                "Rua das Flores",
+                "Street das Flores",
                 "Centro",
                 "Apt 45",
                 123,
@@ -75,24 +75,24 @@ class UserMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("João Silva");
+        assertThat(result.getName()).isEqualTo("João Silva");
         assertThat(result.getEmail()).isEqualTo("joao.silva@test.com");
         assertThat(result.getLogin()).isEqualTo("joaosilva");
-        assertThat(result.getSenha()).isEqualTo("password123");
-        assertThat(result.getDataAlteracao()).isEqualTo(userRequestDto.dataAlteracao());
-        assertThat(result.getTipo()).isEqualTo("CLIENTE");
+        assertThat(result.getPassword()).isEqualTo("password123");
+        assertThat(result.getChangeDate()).isEqualTo(userRequestDto.changeDate());
+        assertThat(result.getType()).isEqualTo("CLIENTE");
         
         assertThat(result.getAddress()).isNotNull();
         assertThat(result.getAddress()).hasSize(1);
         
         Address mappedAddress = result.getAddress().get(0);
-        assertThat(mappedAddress.getRua()).isEqualTo("Rua das Flores");
-        assertThat(mappedAddress.getBairro()).isEqualTo("Centro");
-        assertThat(mappedAddress.getComplemento()).isEqualTo("Apt 45");
-        assertThat(mappedAddress.getNumero()).isEqualTo(123);
-        assertThat(mappedAddress.getEstado()).isEqualTo("SP");
-        assertThat(mappedAddress.getCidade()).isEqualTo("São Paulo");
-        assertThat(mappedAddress.getCep()).isEqualTo("12345678");
+        assertThat(mappedAddress.getStreet()).isEqualTo("Street das Flores");
+        assertThat(mappedAddress.getDistrict()).isEqualTo("Centro");
+        assertThat(mappedAddress.getComplement()).isEqualTo("Apt 45");
+        assertThat(mappedAddress.getNumber()).isEqualTo(123);
+        assertThat(mappedAddress.getState()).isEqualTo("SP");
+        assertThat(mappedAddress.getCity()).isEqualTo("São Paulo");
+        assertThat(mappedAddress.getPostCode()).isEqualTo("12345678");
     }
 
     @Test
@@ -103,22 +103,22 @@ class UserMapperTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getNome()).isEqualTo("João Silva Atualizado");
+        assertThat(result.getName()).isEqualTo("João Silva Atualizado");
         assertThat(result.getEmail()).isEqualTo("joao.updated@test.com");
-        assertThat(result.getSenha()).isEqualTo("newpassword123");
-        assertThat(result.getTipo()).isEqualTo("ADMIN");
+        assertThat(result.getPassword()).isEqualTo("newpassword123");
+        assertThat(result.getType()).isEqualTo("ADMIN");
         
         assertThat(result.getAddress()).isNotNull();
         assertThat(result.getAddress()).hasSize(1);
         
         Address mappedAddress = result.getAddress().get(0);
-        assertThat(mappedAddress.getRua()).isEqualTo("Rua das Flores");
-        assertThat(mappedAddress.getBairro()).isEqualTo("Centro");
-        assertThat(mappedAddress.getComplemento()).isEqualTo("Apt 45");
-        assertThat(mappedAddress.getNumero()).isEqualTo(123);
-        assertThat(mappedAddress.getEstado()).isEqualTo("SP");
-        assertThat(mappedAddress.getCidade()).isEqualTo("São Paulo");
-        assertThat(mappedAddress.getCep()).isEqualTo("12345678");
+        assertThat(mappedAddress.getStreet()).isEqualTo("Street das Flores");
+        assertThat(mappedAddress.getDistrict()).isEqualTo("Centro");
+        assertThat(mappedAddress.getComplement()).isEqualTo("Apt 45");
+        assertThat(mappedAddress.getNumber()).isEqualTo(123);
+        assertThat(mappedAddress.getState()).isEqualTo("SP");
+        assertThat(mappedAddress.getCity()).isEqualTo("São Paulo");
+        assertThat(mappedAddress.getPostCode()).isEqualTo("12345678");
     }
 
     @Test
@@ -154,12 +154,12 @@ class UserMapperTest {
         assertThat(result.getAddress()).hasSize(2);
         
         Address firstAddress = result.getAddress().get(0);
-        assertThat(firstAddress.getRua()).isEqualTo("Rua das Flores");
-        assertThat(firstAddress.getCep()).isEqualTo("12345678");
+        assertThat(firstAddress.getStreet()).isEqualTo("Street das Flores");
+        assertThat(firstAddress.getPostCode()).isEqualTo("12345678");
         
         Address secondAddress = result.getAddress().get(1);
-        assertThat(secondAddress.getRua()).isEqualTo("Avenida Paulista");
-        assertThat(secondAddress.getCep()).isEqualTo("01310200");
+        assertThat(secondAddress.getStreet()).isEqualTo("Avenida Paulista");
+        assertThat(secondAddress.getPostCode()).isEqualTo("01310200");
     }
 
     @Test
@@ -185,7 +185,7 @@ class UserMapperTest {
     }
 
     @Test
-    @DisplayName("Should handle null dataAlteracao when converting UserRequestDto")
+    @DisplayName("Should handle null changeDate when converting UserRequestDto")
     void shouldHandleNullDataAlteracaoWhenConvertingUserRequestDto() {
         // Arrange
         UserRequestDto userWithNullDate = new UserRequestDto(
@@ -202,8 +202,8 @@ class UserMapperTest {
         User result = userMapper.toUserDomain(userWithNullDate);
 
         // Assert
-        assertThat(result.getDataAlteracao()).isNull();
-        assertThat(result.getNome()).isEqualTo("Ana Costa");
+        assertThat(result.getChangeDate()).isNull();
+        assertThat(result.getName()).isEqualTo("Ana Costa");
         assertThat(result.getEmail()).isEqualTo("ana@test.com");
     }
 
@@ -212,7 +212,7 @@ class UserMapperTest {
     void shouldPreserveAddressComplementAsNullWhenNotProvided() {
         // Arrange
         AddressDto addressWithoutComplement = new AddressDto(
-                "Rua Principal",
+                "Street Principal",
                 "Centro",
                 null,
                 456,
@@ -236,9 +236,9 @@ class UserMapperTest {
 
         // Assert
         Address mappedAddress = result.getAddress().get(0);
-        assertThat(mappedAddress.getComplemento()).isNull();
-        assertThat(mappedAddress.getRua()).isEqualTo("Rua Principal");
-        assertThat(mappedAddress.getNumero()).isEqualTo(456);
+        assertThat(mappedAddress.getComplement()).isNull();
+        assertThat(mappedAddress.getStreet()).isEqualTo("Street Principal");
+        assertThat(mappedAddress.getNumber()).isEqualTo(456);
     }
 
     @Test
@@ -246,8 +246,8 @@ class UserMapperTest {
     void shouldConvertUpdateRequestDtoWithDifferentAddressData() {
         // Arrange
         AddressDto differentAddress = new AddressDto(
-                "Rua Nova",
-                "Novo Bairro",
+                "Street Nova",
+                "Novo District",
                 "Casa",
                 789,
                 "MG",
@@ -256,7 +256,7 @@ class UserMapperTest {
         );
         
         UpdateRequestDto updateWithDifferentAddress = new UpdateRequestDto(
-                "Novo Nome",
+                "Novo Name",
                 "novo@test.com",
                 "novasenha",
                 "PROPRIETARIO",
@@ -267,14 +267,14 @@ class UserMapperTest {
         User result = userMapper.updateToUserDomain(updateWithDifferentAddress);
 
         // Assert
-        assertThat(result.getNome()).isEqualTo("Novo Nome");
+        assertThat(result.getName()).isEqualTo("Novo Name");
         assertThat(result.getEmail()).isEqualTo("novo@test.com");
-        assertThat(result.getTipo()).isEqualTo("PROPRIETARIO");
+        assertThat(result.getType()).isEqualTo("PROPRIETARIO");
         
         Address mappedAddress = result.getAddress().get(0);
-        assertThat(mappedAddress.getRua()).isEqualTo("Rua Nova");
-        assertThat(mappedAddress.getBairro()).isEqualTo("Novo Bairro");
-        assertThat(mappedAddress.getEstado()).isEqualTo("MG");
-        assertThat(mappedAddress.getCidade()).isEqualTo("Belo Horizonte");
+        assertThat(mappedAddress.getStreet()).isEqualTo("Street Nova");
+        assertThat(mappedAddress.getDistrict()).isEqualTo("Novo District");
+        assertThat(mappedAddress.getState()).isEqualTo("MG");
+        assertThat(mappedAddress.getCity()).isEqualTo("Belo Horizonte");
     }
 }

@@ -35,13 +35,13 @@ class RestaurantUseCasePortTest {
 
     @BeforeEach
     void setUp() {
-        Address address1 = new Address("Rua das Flores", "Centro", "Loja 1", 100, "SP", "São Paulo", "01234-567");
+        Address address1 = new Address("Street das Flores", "Centro", "Loja 1", 100, "SP", "São Paulo", "01234-567");
         Address address2 = new Address("Av. Paulista", "Bela Vista", "Andar 2", 1000, "SP", "São Paulo", "01310-100");
 
         BusinessHours hours1 = new BusinessHours(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(18, 0), "Funcionamento normal");
         BusinessHours hours2 = new BusinessHours(DayOfWeek.TUESDAY, LocalTime.of(8, 0), LocalTime.of(18, 0), "Funcionamento normal");
 
-        restaurant1 = new Restaurant(1L, "Restaurante Sabor", "Italiana", "sabor@email.com", "João Silva", 
+        restaurant1 = new Restaurant(1L, "Restaurant Sabor", "Italiana", "sabor@email.com", "João Silva", 
                                    Arrays.asList(address1), Arrays.asList(hours1));
         restaurant2 = new Restaurant(2L, "Cantina da Nonna", "Italiana", "nonna@email.com", "Maria Santos", 
                                    Arrays.asList(address2), Arrays.asList(hours2));
@@ -58,7 +58,7 @@ class RestaurantUseCasePortTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.getName()).isEqualTo("Restaurant Sabor");
         assertThat(result.getKitchenType()).isEqualTo("Italiana");
         assertThat(result.getEmail()).isEqualTo("sabor@email.com");
         verify(restaurantUseCasePort).create(restaurant1);
@@ -75,7 +75,7 @@ class RestaurantUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantUseCasePort).update(1L, restaurant1);
     }
 
@@ -104,7 +104,7 @@ class RestaurantUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantUseCasePort).getById(1L);
     }
 
@@ -133,7 +133,7 @@ class RestaurantUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantUseCasePort).deleteById(1L);
     }
 
@@ -179,7 +179,7 @@ class RestaurantUseCasePortTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Restaurante Sabor");
+        assertThat(result.get().getName()).isEqualTo("Restaurant Sabor");
         verify(restaurantUseCasePort).updateOwner(1L, "Novo Proprietário", "novo@email.com");
     }
 

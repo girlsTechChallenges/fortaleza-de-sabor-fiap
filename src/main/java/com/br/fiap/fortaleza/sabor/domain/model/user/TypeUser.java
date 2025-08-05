@@ -10,8 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TypeUser {
-
     private Long id;
     private String type;
-
 }

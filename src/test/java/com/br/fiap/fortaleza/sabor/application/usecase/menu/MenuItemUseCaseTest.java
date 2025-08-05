@@ -34,13 +34,13 @@ class MenuItemUseCaseTest {
     @BeforeEach
     void setUp() {
         menuItem = new MenuItem();
-        menuItem.setNome("Pizza Margherita");
+        menuItem.setName("Pizza Margherita");
         menuItem.setItemDescription("Traditional Italian pizza with tomato, mozzarella and basil");
         menuItem.setItemPrice("29.90");
         menuItem.setAvailability(true);
 
         anotherMenuItem = new MenuItem();
-        anotherMenuItem.setNome("Pasta Carbonara");
+        anotherMenuItem.setName("Pasta Carbonara");
         anotherMenuItem.setItemDescription("Classic pasta with eggs, cheese, pancetta and pepper");
         anotherMenuItem.setItemPrice("24.50");
         anotherMenuItem.setAvailability(true);
@@ -89,7 +89,7 @@ class MenuItemUseCaseTest {
 
         // Assert
         assertThat(savedMenuItem).isNotNull();
-        assertThat(savedMenuItem.getNome()).isEqualTo("Pizza Margherita");
+        assertThat(savedMenuItem.getName()).isEqualTo("Pizza Margherita");
         assertThat(savedMenuItem.getItemDescription()).isEqualTo("Traditional Italian pizza with tomato, mozzarella and basil");
         assertThat(savedMenuItem.getItemPrice()).isEqualTo("29.90");
         assertThat(savedMenuItem.getAvailability()).isTrue();
@@ -102,7 +102,7 @@ class MenuItemUseCaseTest {
         // Arrange
         Long menuItemId = 1L;
         MenuItem updatedMenuItem = new MenuItem();
-        updatedMenuItem.setNome("Updated Pizza");
+        updatedMenuItem.setName("Updated Pizza");
         updatedMenuItem.setItemDescription("Updated description");
         updatedMenuItem.setItemPrice("35.90");
         updatedMenuItem.setAvailability(false);
@@ -114,7 +114,7 @@ class MenuItemUseCaseTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getNome()).isEqualTo("Updated Pizza");
+        assertThat(result.get().getName()).isEqualTo("Updated Pizza");
         assertThat(result.get().getItemDescription()).isEqualTo("Updated description");
         assertThat(result.get().getItemPrice()).isEqualTo("35.90");
         assertThat(result.get().getAvailability()).isFalse();
@@ -149,7 +149,7 @@ class MenuItemUseCaseTest {
         // Assert
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(menuItem);
-        assertThat(result.get().getNome()).isEqualTo("Pizza Margherita");
+        assertThat(result.get().getName()).isEqualTo("Pizza Margherita");
         verify(menuItemsRepositoryPort, times(1)).getById(menuItemId);
     }
 

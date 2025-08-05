@@ -11,37 +11,37 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rua;
+    private String street;
 
-    private String bairro;
+    private String district;
 
-    private String complemento;
+    private String complement;
 
-    private int numero;
+    private int number;
 
-    private String estado;
+    private String state;
 
-    private String cidade;
+    private String city;
 
-    private String cep;
+    private String postCode;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UserEntity usuario;
+    private UserEntity userEntity;
 
     @ManyToOne
     @JoinColumn(name = "restaurante_id")
-    private RestaurantEntity restaurante;
+    private RestaurantEntity restaurant;
 
 
-    public AddressEntity(String rua, String bairro, String complemento, int numero, String estado, String cidade, String cep) {
-        this.rua = rua;
-        this.bairro = bairro;
-        this.complemento = complemento;
-        this.numero = numero;
-        this.estado = estado;
-        this.cidade = cidade;
-        this.cep = cep;
+    public AddressEntity(String street, String district, String complement, int number, String state, String city, String postCode) {
+        this.street = street;
+        this.district = district;
+        this.complement = complement;
+        this.number = number;
+        this.state = state;
+        this.city = city;
+        this.postCode = postCode;
     }
 
     public AddressEntity() {
@@ -55,63 +55,63 @@ public class AddressEntity {
         this.id = id;
     }
 
-    public String getRua() {
-        return rua;
+    public String getStreet() {
+        return street;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getDistrict() {
+        return district;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public String getComplemento() {
-        return complemento;
+    public String getComplement() {
+        return complement;
     }
 
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
+    public void setComplement(String complement) {
+        this.complement = complement;
     }
 
-    public int getNumero() {
-        return numero;
+    public int getNumber() {
+        return number;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getState() {
+        return state;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getCity() {
+        return city;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCep() {
-        return cep;
+    public String getPostCode() {
+        return postCode;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 
-    public RestaurantEntity getRestaurante() {return restaurante; }
+    public RestaurantEntity getRestaurant() {return restaurant; }
 
-    public void setRestaurante(RestaurantEntity restaurante) { this.restaurante = restaurante; }
+    public void setRestaurant(RestaurantEntity restaurant) { this.restaurant = restaurant; }
 }

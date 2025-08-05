@@ -78,7 +78,7 @@ public class RestaurantControllerIntegrationTest extends BaseIntegrationTest {
     void shouldHandleMissingRequiredFields() {
         given()
                 .contentType(ContentType.JSON)
-                .body("{\"nome\": \"\"}")
+                .body("{\"name\": \"\"}")
         .when()
                 .post("/restaurantes")
         .then()

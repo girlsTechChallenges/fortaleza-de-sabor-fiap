@@ -40,12 +40,12 @@ class UserUseCaseTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setNome("John Doe");
+        user.setName("John Doe");
         user.setEmail("john.doe@test.com");
         user.setLogin("johndoe");
-        user.setSenha(rawPassword);
-        user.setDataAlteracao(LocalDate.now());
-        user.setTipo("CLIENTE");
+        user.setPassword(rawPassword);
+        user.setChangeDate(LocalDate.now());
+        user.setType("CLIENTE");
     }
 
     @Test
@@ -70,12 +70,12 @@ class UserUseCaseTest {
     void shouldSaveUserWithEncodedPasswordWhenSaveIsCalled() {
         // Arrange
         User expectedUser = new User();
-        expectedUser.setNome(user.getNome());
+        expectedUser.setName(user.getName());
         expectedUser.setEmail(user.getEmail());
         expectedUser.setLogin(user.getLogin());
-        expectedUser.setSenha(encodedPassword);
-        expectedUser.setDataAlteracao(user.getDataAlteracao());
-        expectedUser.setTipo(user.getTipo());
+        expectedUser.setPassword(encodedPassword);
+        expectedUser.setChangeDate(user.getChangeDate());
+        expectedUser.setType(user.getType());
 
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
         when(usersRepositoryPort.save(any(User.class))).thenReturn(expectedUser);
@@ -85,8 +85,8 @@ class UserUseCaseTest {
 
         // Assert
         assertThat(actualUser).isNotNull();
-        assertThat(actualUser.getSenha()).isEqualTo(encodedPassword);
-        assertThat(user.getSenha()).isEqualTo(encodedPassword); // Verify password was encoded in original object
+        assertThat(actualUser.getPassword()).isEqualTo(encodedPassword);
+        assertThat(user.getPassword()).isEqualTo(encodedPassword); // Verify password was encoded in original object
         verify(passwordEncoder, times(1)).encode(rawPassword);
         verify(usersRepositoryPort, times(1)).save(user);
     }
@@ -97,9 +97,9 @@ class UserUseCaseTest {
         // Arrange
         Long userId = 1L;
         User updatedUser = new User();
-        updatedUser.setNome("Updated Name");
+        updatedUser.setName("Updated Name");
         updatedUser.setEmail("updated@test.com");
-        updatedUser.setSenha(encodedPassword);
+        updatedUser.setPassword(encodedPassword);
         
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
         when(usersRepositoryPort.update(userId, user)).thenReturn(Optional.of(updatedUser));
@@ -109,8 +109,8 @@ class UserUseCaseTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getSenha()).isEqualTo(encodedPassword);
-        assertThat(user.getSenha()).isEqualTo(encodedPassword); // Verify password was encoded in original object
+        assertThat(result.get().getPassword()).isEqualTo(encodedPassword);
+        assertThat(user.getPassword()).isEqualTo(encodedPassword); // Verify password was encoded in original object
         verify(passwordEncoder, times(1)).encode(rawPassword);
         verify(usersRepositoryPort, times(1)).update(userId, user);
     }
