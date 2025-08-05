@@ -89,9 +89,16 @@ public class UserRepositoryPortJpa implements UsersRepositoryPort {
         userRepositoryAdapter.findById(idUser)
                 .orElseThrow(() -> new UserNotFoundException(idUser));
 
-        Optional<UserEntity> user = userRepositoryAdapter.findById(idUser);
-        userRepositoryAdapter.deleteById(idUser);
-        return user.map(mapper::toUserDomain);
+        try {
+            log.info("Deleting user with ID: {}", idUser);
+            Optional<UserEntity> user = userRepositoryAdapter.findById(idUser);
+            userRepositoryAdapter.deleteById(idUser);
+            return user.map(mapper::toUserDomain);
+
+        } catch (Exception e) {
+            log.error("Error deleting user with ID: {}", idUser, e);
+            throw new  UserAlreadyRegisteredException("Cannot delete user who is an owner of a restaurant.");
+        }
     }
 
     @Override

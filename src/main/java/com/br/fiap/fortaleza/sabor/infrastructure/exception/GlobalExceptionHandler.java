@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorMessage> handleUserAlreadyRegisteredException(UserAlreadyRegisteredException ex) {
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put(ERROR, List.of("User already registered"));
+        errors.put(ERROR, List.of("CONFLICT"));
         errors.put(MESSAGE_ERROR, List.of(ex.getMessage()));
 
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.CONFLICT, errors);

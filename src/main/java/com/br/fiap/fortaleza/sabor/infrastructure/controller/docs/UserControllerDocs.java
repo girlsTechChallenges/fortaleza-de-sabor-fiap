@@ -73,6 +73,8 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "204", description = "User deleted successfully."),
             @ApiResponse(responseCode = "404", description = "User not found.", 
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Conflict.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", 
                     content = @Content(schema = @Schema(implementation = ApiErrorMessage.class)))
     })
