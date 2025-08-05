@@ -360,4 +360,21 @@ class UserRepositoryPortJpaTest {
         
         verify(userRepositoryAdapter, times(1)).findByEmail("joao@test.com");
     }
+
+    @Test
+    @DisplayName("Shoudl expect IllegalArgumentException when deleting user who is an owner of a restaurant")
+    void shouldExpectIllegalArgumentExceptionWhenDeletingUserWhoIsOwnerOfRestaurant() {
+        // Arrange
+        Long userId = 1L;
+        when(userRepositoryAdapter.findById(userId)).thenReturn(Optional.of(userEntity));
+        doThrow(new UserAlreadyRegisteredException("Cannot delete user who is an owner of a restaurant."))
+                .when(userRepositoryAdapter).deleteById(userId);
+
+        // Act & Assert
+        assertThatThrownBy(() -> userRepositoryPortJpa.deleteById(userId))
+                .isInstanceOf(UserAlreadyRegisteredException.class)
+                .hasMessage("Cannot delete user who is an owner of a restaurant.");
+
+        verify(userRepositoryAdapter, times(1)).deleteById(userId);
+    }
 }
